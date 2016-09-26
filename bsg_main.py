@@ -1,6 +1,7 @@
 from flask import *
 import random
 
+# Papa Phillipo is a real dank meme
 app = Flask(__name__)
 
 
