@@ -10,20 +10,28 @@ class Galaxy(object):
 		self.galaxy_size = galaxy_size
 		self.planet_abundance = 'Placeholder'
 		self.cylon_intensity = 'placeholder'
-		self.system_list = {}
+		self.system_list = {0: (-2, -2)}
 
 	def galaxy_generation(self):
 		system_generated = 1
 
 		for x in range(self.galaxy_size):
 			for y in range(self.galaxy_size):
-				z = random.randint(1,20)
+				z = random.randint(1,15)
 				if z == 5:
-					self.system_list[system_generated] = (x, y)
-					print(self.system_list[system_generated])
-					system_generated += 1
+					planet_too_close = False
+					for planet in self.system_list:
+						if -1 <= x - self.system_list[planet][0] <= 1:
+							if -1 <= y - self.system_list[planet][1] <= 1:
+								planet_too_close = True
+					if planet_too_close:
+						print("planet not generated at: (" + str(x) + "," , str(y) )
+					else:
+						self.system_list[system_generated] = (x, y)
+						print(self.system_list[system_generated])
+						system_generated += 1
 
-player_galaxy = Galaxy(10)
+player_galaxy = Galaxy(20)
 
 
 @app.route('/', methods=['GET', 'POST'])

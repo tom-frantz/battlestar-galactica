@@ -13,7 +13,7 @@
         </div>
 
         <div class="col-md-12">
-            <table class="table">
+            <table class="table table-bordered">
                 {% for y in range(player_galaxy.galaxy_size) %}
                     <tr>
                     {% for x in range(player_galaxy.galaxy_size) %}
@@ -21,10 +21,10 @@
                             <!-- {{ x }}, {{ y }} -->
                             {% for system in player_galaxy.system_list %}
                                 {% if player_galaxy.system_list[system][0] == x and player_galaxy.system_list[system][1] == y %}
-                                    |
+                                    O
                                 {% endif %}
                             {% endfor %}
-                            .
+                            <p style="font-size: 7px">{{ x }}, {{ y }}</p>
                         </td>
                     {% endfor %}
                     </tr>
