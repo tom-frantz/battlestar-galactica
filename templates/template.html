@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <!-- Bootstrap stylesheet -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome stylesheet -->
+    <link href="/static/font-awesome-4.6.1/css/font-awesome.min.css" rel="stylesheet">
+    <!-- Custom stylesheet -->
+    <link href="/static/css/custom-css.css" rel="stylesheet">
+
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <!-- Allows for fluid container for the navbar to stretch across the header. -->
+        <div class="container-fluid">
+            <!-- Will always be there in even when nav is collapsed -->
+            <div class="navbar-header">
+                <!-- Navbar dropdown button -->
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+                     <span class="sr-only">Toggle navigation</span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                     <span class="icon-bar"></span>
+                </button>
+                <!-- FontAwesome insert (If wanted, direct to home)-->
+            </div>
+            <!-- Toggleable Area -->
+            <div class="collapse navbar-collapse" id="navbar">
+                <!-- Nav links -->
+                <ul class="nav navbar-nav">
+                    <li><a href="/"><span class="text-primary">Index</span></a></li>
+                    <li><a href="/map">Map</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {#<li><p class="navbar-text">Dur: <span class="text-primary">{{ player_empire["resources"]["Durotanium"] }}</span></p></li>
+                    <li><p class="navbar-text">Plu: <span class="text-primary">{{ player_empire["resources"]["Plutonic Tylium"] }}</span></p></li>
+                    <li><p class="navbar-text">Mac: <span class="text-primary">{{ player_empire["resources"]["Macronesium"] }}</span></p></li>
+                    <li><p class="navbar-text">Cre: <span class="text-primary">{{ player_empire["resources"]["Credits"] }}</span></p></li>#}
+                    <form method="POST" class="navbar-form navbar-right">
+                        <li><button type="submit" name="submit" value="next_turn" class="btn btn-primary" style="margin-right: 15px;">Next Turn</button></li>
+                    </form>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+    {% block body %}{% endblock %}
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/static/js/jquery-2.2.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/static/js/bootstrap.min.js"></script>
+    <!-- Jquery Validate Library -->
+    <script src="/static/js/jquery_validate/jquery.validate.js"></script>
+    {% block script %}{% endblock %}
+</body>
+</html>
