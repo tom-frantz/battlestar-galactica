@@ -5,11 +5,11 @@ def seed(given_seed):
 	given_seed = int(given_seed)
 	if given_seed < 0:
 		given_seed = -given_seed
-	while given_seed < 1000000000:
+	while given_seed < 10000000000:
 		given_seed *= 10
-	if given_seed > 10000000000:
+	if given_seed > 100000000000:
 		given_seed = str(given_seed)
-		given_seed = given_seed[0:10]
+		given_seed = given_seed[0:11]
 	print(given_seed)
 
 
