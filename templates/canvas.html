@@ -2,20 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Map</title>
     {% extends "template.html" %}
 </head>
 <body>
-    {% block body %}
-        <canvas>
+{% block body %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Map</h1>
+        </div>
 
-        </canvas>
-    {% endblock %}
+        <div class="col-md-12">
+            <table class="table table-bordered">
+                {% for y in range(-100, 100) -%}
+                    <tr>
+                    {% for x in range(-100, 100) -%}
+                        <td>
+                            <!-- {{ x }}, {{ y }} -->
+                            {% for system in player_galaxy.system_list %}
+                                {% if player_galaxy.system_list[system][0] == x and player_galaxy.system_list[system][1] == y -%}
+                                    O
+                                {%- endif %}
+                            {%- endfor %}
+                            <p style="font-size: 7px">{{ x }}, {{ y }}</p>
+                        </td>
+                    {%- endfor %}
+                    </tr>
+                {%- endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
 
-    {% block script %}
-        <script>
+{% block script %}
+    <script>
 
-        </script>
-    {% endblock %}
+    </script>
+{% endblock %}
 </body>
 </html>

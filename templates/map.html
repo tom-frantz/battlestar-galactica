@@ -2,42 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Map</title>
+    <title>Title</title>
     {% extends "template.html" %}
 </head>
 <body>
-{% block body %}
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Map</h1>
+    {% block body %}
+        <div style="width: 500px; height: 500px; overflow: scroll;">
+            <div style="width: 1000px; height: 1000px;">
+                <div style="position: relative;">
+
+                </div>
+            </div>
         </div>
+    {% endblock %}
 
-        <div class="col-md-12">
-            <table class="table table-bordered">
-                {% for y in range(player_galaxy.galaxy_size) %}
-                    <tr>
-                    {% for x in range(player_galaxy.galaxy_size) %}
-                        <td>
-                            <!-- {{ x }}, {{ y }} -->
-                            {% for system in player_galaxy.system_list %}
-                                {% if player_galaxy.system_list[system][0] == x and player_galaxy.system_list[system][1] == y %}
-                                    O
-                                {% endif %}
-                            {% endfor %}
-                            <p style="font-size: 7px">{{ x }}, {{ y }}</p>
-                        </td>
-                    {% endfor %}
-                    </tr>
-                {% endfor %}
-            </table>
-        </div>
-    </div>
-{% endblock %}
+    {% block script %}
+        <script>
 
-{% block script %}
-    <script>
-
-    </script>
-{% endblock %}
+        </script>
+    {% endblock %}
 </body>
 </html>
