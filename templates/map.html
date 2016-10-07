@@ -101,8 +101,8 @@ $(document).ready(function(){
     ctx.fillStyle = pat;
     ctx.fill();
 
-    starmap.scrollLeft(201);
-    starmap.scrollTop(340);
+    starmap.scrollLeft((starmap[0].scrollWidth - starmap[0].clientWidth) / 2);
+    starmap.scrollTop((starmap[0].scrollHeight - starmap[0].clientHeight)/ 2);
 });
 
 </script>
