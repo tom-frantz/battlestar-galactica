@@ -1,7 +1,6 @@
 from flask import *
 import random
 
-# Papa Phillipo is a real dank meme
 app = Flask(__name__)
 
 
@@ -11,7 +10,7 @@ class Galaxy(object):
 		self.galaxy_y_axis = [-100, 100]
 		self.planet_abundance = 'Placeholder'
 		self.cylon_intensity = 'placeholder'
-		self.system_list = {0: (-2, -2)}
+		self.system_list = {0: (-0, -0)}
 
 	def galaxy_generation(self):
 		system_generated = 1
@@ -24,10 +23,7 @@ class Galaxy(object):
 						if -1 <= x - self.system_list[planet][0] <= 1:
 							if -1 <= y - self.system_list[planet][1] <= 1:
 								planet_too_close = True
-					if planet_too_close:
-						pass
-						# print("planet not generated at: (" + str(x) + "," , str(y) )
-					else:
+					if not planet_too_close:
 						self.system_list[system_generated] = [x, y]
 						# print(self.system_list[system_generated])
 						system_generated += 1
