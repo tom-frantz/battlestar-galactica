@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Map</title>
+    {% extends "template.html" %}
+</head>
+<body>
+{% block images %}
+    <img src="/static/images/Tile_32.png" alt="star_tile" id="star_tile">
+{% endblock %}
+{% block body %}
+
+    <div class="row">
+        <div class="col-lg-8" id="header">
+            <h1>Map Page</h1>
+            <hr>
+        </div>
+
+        <div class="col-lg-8">
+            <div id="star-map" style="overflow: scroll; position: relative;" >
+                <canvas id="starCanvas" width="2016" height="2016"></canvas>
+                <!-- Location = (32 * x) + 32 | x = [0, 60] for perfect 16 pixel gaps between 16 pixel sprites. Midpoint is 992, 992 -->
+                <!-- <img src="/static/images/stars/B_G_1.png" alt="star" style="position: absolute; top: 32px; left: 32px;" data-toggle="tooltip" title="(0, 0)" data-container="body"> -->
+                {% for sys in player_galaxy.system_list %}
+                    <img src="/static/images/stars/Y_M_1.png" alt="star" style="position: absolute; top: {{- (player_galaxy.system_list[sys].global_position[1] + 30 - player_galaxy.current_position[1]) * 32 + 32 -}}px; left: {{- (player_galaxy.system_list[sys].global_position[0] + 30 - player_galaxy.current_position[0]) * 32 + 32 -}}px;" data-toggle="tooltip" title="({{- (player_galaxy.system_list[sys].global_position[0] + 30 - player_galaxy.current_position[0]) -}}, {{- (player_galaxy.system_list[sys].global_position[1] + 30 - player_galaxy.current_position[1]) -}})" data-container="body">
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-lg-4" id="side-bar" style="bottom: 100px;">
+
+            <h1>System Info</h1>
+            <h4><small>System Name: </small>Sol</h4>
+            <h4><small>Global Coordinates: </small>(-358, 285)</h4>
+            <h4><small>Local Coordinates: </small>(20, 20)</h4>
+            <h4><small>Star Type: </small>Yellow Dwarf</h4>
+            <hr class="margin-right-15">
+            <h2>Celestial Bodies</h2>
+            <h3>Planets:</h3>
+            <div style="margin-left: 15px">
+                <a href="#mercury" data-toggle="collapse" aria-expanded="false" aria-controls="mercury"><h4>Mercury</h4></a>
+                <div class="collapse" id="mercury" style="margin-right: 30px">
+                    <div class="well text-small">
+                        <h5 style="margin-top: 0px"><small>Planet Type: </small>Barren</h5>
+                        <h5><small>Planet Size: </small>Tiny</h5>
+                        <h5><small>Planet Gravity: </small>Small</h5>
+                        <h5 style="margin-bottom: 0px;">Resources</h5>
+                        <div style="margin-left: 15px;">
+                            <h5 class="no-margin"><small>Carbon: </small>20</h5>
+                            <h5 class="no-margin"><small>Iron: </small>50</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-left: 15px">
+                <a href="#venus" data-toggle="collapse" aria-expanded="false" aria-controls="venus"><h4>Venus</h4></a>
+                <div class="collapse" id="venus" style="margin-right: 30px">
+                    <div class="well text-small">
+                        <h5 style="margin-top: 0px"><small>Planet Type: </small>Volcanic</h5>
+                        <h5><small>Planet Size: </small>Small</h5>
+                        <h5><small>Planet Gravity: </small>Small</h5>
+                        <h5 style="margin-bottom: 0px;">Resources</h5>
+                        <div style="margin-left: 15px;">
+                            <h5 class="no-margin"><small>Carbon: </small>2</h5>
+                            <h5 class="no-margin"><small>Iron: </small>5</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-12">
+
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block script %}
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+
+    var c = document.getElementById("starCanvas");
+    var ctx = c.getContext("2d");
+    var img = document.getElementById("star_tile");
+    var pat = ctx.createPattern(img, "repeat");
+    var remainder = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - $("#navbar").height() - $("#header").height() - 30;
+    var starmap = $("#star-map");
+
+    if (remainder > 2016) {
+        starmap.height(2016)
+    } else {
+        starmap.height(remainder)
+    }
+
+    ctx.rect(0, 0, c.width, c.height);
+    ctx.fillStyle = pat;
+    ctx.fill();
+
+    starmap.scrollLeft((starmap[0].scrollWidth - starmap[0].clientWidth) / 2);
+    starmap.scrollTop((starmap[0].scrollHeight - starmap[0].clientHeight)/ 2);
+});
+
+</script>
+{% endblock %}
+</body>
+</html>
