@@ -7,7 +7,7 @@
 </head>
 <body>
 {% block images %}
-    <img src="/static/images/Tile_32.png" alt="star_tile" id="star_tile" width="600" height="600">
+    <img src="/static/images/Tile_32.png" alt="star_tile" id="star_tile">
 {% endblock %}
 {% block body %}
 
@@ -19,12 +19,12 @@
 
         <div class="col-lg-8">
             <div id="star-map" style="overflow: scroll; position: relative;" >
-                <canvas id="starCanvas" width="1280" height="1280"></canvas>
-                <!-- Location = (32 * x) + 16 for perfect 16 pixel gaps between 16 pixel sprites. -->
-                <img src="/static/images/stars/B_G_1.png" alt="star" style="position: absolute; top: 32px; left: 96px;" data-toggle="tooltip" title="(0, 1)" data-container="body">
-                <img src="/static/images/stars/R_D_1.png" alt="star" style="position: absolute; top: 128px; left: 32px;" data-toggle="tooltip" title="Tooltip" data-container="body">
+                <canvas id="starCanvas" width="2016" height="2016"></canvas>
+                <!-- Location = (32 * x) + 32 | x = [0, 60] for perfect 16 pixel gaps between 16 pixel sprites. Midpoint is 992, 992 -->
+                <img src="/static/images/stars/B_G_1.png" alt="star" style="position: absolute; top: 32px; left: 32px;" data-toggle="tooltip" title="(0, 0)" data-container="body">
+                <img src="/static/images/stars/R_D_1.png" alt="star" style="position: absolute; top: 1952px; left: 1952px;" data-toggle="tooltip" title="(60, 60)" data-container="body">
                 <img src="/static/images/stars/Y_M_1.png" alt="star" style="position: absolute; top: 128px; left: 64px;" data-toggle="tooltip" title="Tooltip" data-container="body">
-                <img src="/static/images/stars/R_M_1.png" alt="star" style="position: absolute; top: 640px; left: 640px;" data-toggle="tooltip" title="(20,20)" data-container="body">
+                <img src="/static/images/stars/R_M_1.png" alt="star" style="position: absolute; top: 992px; left: 992px;" data-toggle="tooltip" title="(30, 30)" data-container="body">
             </div>
         </div>
 
@@ -91,8 +91,8 @@ $(document).ready(function(){
     var remainder = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - $("#navbar").height() - $("#header").height() - 30;
     var starmap = $("#star-map");
 
-    if (remainder > 1260) {
-        starmap.height(1260)
+    if (remainder > 2016) {
+        starmap.height(2016)
     } else {
         starmap.height(remainder)
     }
