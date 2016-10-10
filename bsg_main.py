@@ -6,6 +6,10 @@ app = Flask(__name__)
 player_galaxy = world_gen.Galaxy()
 
 
+def next_turn():
+	pass
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
 	if request.method == 'POST':
