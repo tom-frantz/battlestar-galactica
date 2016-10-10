@@ -1,4 +1,5 @@
 import random
+import math
 
 SYSTEM_NAMES = ('Abydos', 'Aegis', 'Aldebaran', 'Amel', 'Aurelia', 'Balaho', 'Ballybran', 'Belzagor', 'Chiron', 'Chthon', 'Corneria', 'Cyteen', 'Demeter', 'Deucalion', 'Dosadi', 'Eayn', 'Erna', 'Etheria', 'Fhloston', 'Finisterre', 'Furya', 'Gallifrey', 'Gor', "Gorta")
 SYSTEM_NAMES_PREFIXES = ('Al', 'Omi', 'Bah')
@@ -22,12 +23,11 @@ class SolarSystem(object):
 
 class Galaxy(object):
 	def __init__(self):
-		self.galaxy_x_bounds = (-30, 30)
-		self.galaxy_y_bounds = (-30, 30)
+		self.chunks_loaded = [[0, 0]]
 		self.planet_abundance = 'Placeholder'
 		self.cylon_intensity = 'placeholder'
 		self.system_list = {}
-		self.current_position = (0, 0)
+		self.current_position = [0, 0]
 
 	def galaxy_generation(self):
 		total_count = 1
@@ -58,10 +58,14 @@ class Galaxy(object):
 
 	def galaxy_segment_generation(self):
 		# top bottom first
-		if self.current_position[1] / 30 > 0.5:
-			pass
-		elif self.current_position[1] / 30 < 0.5:
-			pass
-
-		if True:
-			pass
+		current_chunk = [math.floor(self.current_position[0]/30), math.floor(self.current_position[1]/30)]
+		x_chunk = (current_chunk[0] - 1, current_chunk[0] + 1)
+		y_chunk = (current_chunk[1] - 1, current_chunk[1] + 1)
+		gen_list = []
+		for x in range(x_chunk[0], x_chunk[1] + 1):
+			for y in range(y_chunk[0], x_chunk[1] + 1):
+				gen_list.append([x, y])
+		gen_list.remove([current_chunk[0], current_chunk[1]])
+		for chunk in gen_list:
+			if chunk in self.chunks_loaded:
+				gen_list.remove(chunk)
