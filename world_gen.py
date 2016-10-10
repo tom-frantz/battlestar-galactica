@@ -23,17 +23,16 @@ class SolarSystem(object):
 
 class Galaxy(object):
 	def __init__(self):
-		self.chunks_loaded = [[0, 0]]
+		self.chunks_loaded = [[-1, 1], [-1, 0], [-1, 1], [0, -1], [0, 0], [0, 1], [1, -1], [1, 0], [1, 1]]
 		self.planet_abundance = 'Placeholder'
 		self.cylon_intensity = 'placeholder'
 		self.system_list = {}
 		self.current_position = [0, 0]
 
 	def galaxy_generation(self):
-		total_count = 1
 		self.system_list = {}
 		self.system_list['Helios Alpha'] = SolarSystem((0, 0), "Helios Alpha", 4)
-		self.create_solar_systems([-30, 30], [-30, 30])
+		self.create_solar_systems([-90, 90], [-90, 90])
 
 	def galaxy_segment_generation(self):
 		current_chunk = [math.floor(self.current_position[0]/30), math.floor(self.current_position[1]/30)]
@@ -57,12 +56,12 @@ class Galaxy(object):
 						if -1 <= x - self.system_list[system].global_position[0] <= 1 and -1 <= y - self.system_list[system].global_position[1] <= 1:
 							system_too_close = True
 					if not system_too_close:
-						a = random.randint(1, 20)
-						if a == 10:
+						name_chance = random.randint(1, 20)
+						if name_chance == 10:
 							system_name = random.choice(SYSTEM_NAMES_PREFIXES) + ' ' + random.choice(SYSTEM_NAMES) + ' ' + random.choice(SYSTEM_NAMES_SUFFIXES)
-						elif a == 9:
+						elif name_chance == 9:
 							system_name = random.choice(SYSTEM_NAMES_PREFIXES) + ' ' + random.choice(SYSTEM_NAMES)
-						elif a == 8:
+						elif name_chance == 8:
 							system_name = random.choice(SYSTEM_NAMES) + ' ' + random.choice(SYSTEM_NAMES_SUFFIXES)
 						else:
 							system_name = random.choice(SYSTEM_NAMES)
