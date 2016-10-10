@@ -7,6 +7,7 @@ player_galaxy = world_gen.Galaxy()
 
 
 def next_turn():
+	player_galaxy.galaxy_segment_generation()
 	pass
 
 
@@ -23,6 +24,7 @@ def star_map():
 	player_galaxy.galaxy_generation()
 	if request.method == 'POST':
 		if request.form['submit'] == 'next_turn':
+			# Execute next turn
 			pass
 	system_list = {}
 	for system in player_galaxy.system_list:
