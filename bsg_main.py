@@ -16,7 +16,7 @@ def index():
 	if request.method == 'POST':
 		if request.form['submit'] == 'next_turn':
 			pass
-	return render_template('index.html')
+	return render_template('template.html')
 
 
 @app.route('/map', methods=['GET', 'POST'])
