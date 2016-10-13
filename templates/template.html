@@ -139,30 +139,29 @@
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
 
-            var system_list = {{ system_list|tojson|safe }}
+            var player_galaxy = {{ player_galaxy|tojson|safe }}
 
-            var c = document.getElementById("starCanvas");
+            var c = document.getElementById("star-canvas");
             var ctx = c.getContext("2d");
             var img = document.getElementById("star_tile");
             var pat = ctx.createPattern(img, "repeat");
             var remainder = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - $("#navbar").height() - $("#header").height() - 30;
             var starmap = $("#star-map");
 
+            {# fill and make canvas. #}
             if (remainder > 2016) {
                 starmap.height(2016)
             } else {
                 starmap.height(remainder)
             }
-
+            starmap.scrollLeft((starmap[0].scrollWidth - starmap[0].clientWidth) / 2);
+            starmap.scrollTop((starmap[0].scrollHeight - starmap[0].clientHeight)/ 2);
             ctx.rect(0, 0, c.width, c.height);
             ctx.fillStyle = pat;
             ctx.fill();
 
-            starmap.scrollLeft((starmap[0].scrollWidth - starmap[0].clientWidth) / 2);
-            starmap.scrollTop((starmap[0].scrollHeight - starmap[0].clientHeight)/ 2);
-
-            for (sys in system_list) {
-                $('#index-container').append('<h1>MEMES<h1>')
+            for (chunk in player_galaxy.chunks_loaded) {
+                $('#index-container').append('<div>chunk</div>')
             }
         });
     </script>
