@@ -23,7 +23,7 @@
                 <!-- Location = (32 * x) + 32 | x = [0, 60] for perfect 16 pixel gaps between 16 pixel sprites. Midpoint is 992, 992 -->
                 <!-- <img src="/static/images/stars/B_G_1.png" alt="star" style="position: absolute; top: 32px; left: 32px;" data-toggle="tooltip" title="(0, 0)" data-container="body"> -->
                 {% for sys in system_list %}
-                    <img src="/static/images/stars/Y_M_1.png" alt="star" style="position: absolute; top: {{- (system_list[sys].global_position[1] + 30 - current_position[1]) * 32 + 32 -}}px; left: {{- (system_list[sys].global_position[0] + 30 -current_position[0]) * 32 + 32 -}}px;" data-toggle="tooltip" title="({{- (system_list[sys].global_position[0] + 30 - current_position[0]) -}}, {{- (system_list[sys].global_position[1] + 30 -current_position[1]) -}})" data-container="body">
+                    <img src="/static/images/stars/Y_M_1.png" alt="star" style="position: absolute; top: {{- (system_list[sys].global_position[1] + 30 - current_position[1]) * 32 + 32 -}}px; left: {{- (system_list[sys].global_position[0] + 30 -current_position[0]) * 32 + 32 -}}px;" data-toggle="tooltip" title="({{- (system_list[sys].global_position[0] + 30 - current_position[0]) -}}, {{- (system_list[sys].global_position[1] + 30 - current_position[1]) -}})" data-container="body">
                 {% endfor %}
             </div>
         </div>
@@ -103,6 +103,10 @@ $(document).ready(function(){
 
     starmap.scrollLeft((starmap[0].scrollWidth - starmap[0].clientWidth) / 2);
     starmap.scrollTop((starmap[0].scrollHeight - starmap[0].clientHeight)/ 2);
+
+    $('#index-link').on('click', function() {
+
+    });
 });
 
 </script>
