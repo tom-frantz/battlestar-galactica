@@ -3,7 +3,13 @@ import math
 
 SYSTEM_NAMES = ('Abydos', 'Aegis', 'Aldebaran', 'Amel', 'Aurelia', 'Balaho', 'Ballybran', 'Belzagor', 'Chiron', 'Chthon', 'Corneria', 'Cyteen', 'Demeter', 'Deucalion', 'Dosadi', 'Eayn', 'Erna', 'Etheria', 'Fhloston', 'Finisterre', 'Furya', 'Gallifrey', 'Gor', "Gorta")
 SYSTEM_NAMES_PREFIXES = ('Al', 'Omi', 'Bah')
-SYSTEM_NAMES_SUFFIXES = ('Prime', 'Alpha', 'Beta', 'Delta', 'Gamma', 'Minor', '')
+SYSTEM_NAMES_SUFFIXES = ('Prime', 'Alpha', 'Beta', 'Delta', 'Gamma', 'Minor')
+STARS = (
+	['Blue Dwarf', 'B_D_1.png'],
+	['Blue Giant', 'B_G_1.png'],
+	['Blue Main', 'B_M_1.png']
+)
+
 
 
 class SolarSystem(object):
@@ -15,6 +21,9 @@ class SolarSystem(object):
 			self.total_planets = total_planets
 		self.planets = {}
 		self.name = name
+		star = random.choice(STARS)
+		self.star_type = star[0]
+		self.star_file = star[1]
 
 	def generate_planets(self):
 		# Execute when system is jumped into.
