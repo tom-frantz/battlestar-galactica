@@ -47,14 +47,20 @@
         </div>
     </nav>
 
+    <!-- Hidden Images -->
     <div hidden="hidden">
         <img src="/static/images/Tile_32.png" alt="star_tile" id="star_tile">
     </div>
 
+    <!-- Fluid container for body -->
     <div class="container-fluid">
-        <div id="index-container">
+
+        <!-- Index page -->
+        <div id="index-container" hidden="hidden">
 
         </div>
+
+        <!-- Map page -->
         <div id="map-container">
             <div class="row">
                 <div class="col-lg-8" id="header">
@@ -64,7 +70,7 @@
 
                 <div class="col-lg-8">
                     <div id="star-map" style="overflow: scroll; position: relative;" >
-                        <canvas id="starCanvas" width="2016" height="2016"></canvas>
+                        <canvas id="star-canvas" width="2016" height="2016"></canvas>
                         <!-- Location = (32 * x) + 32 | x = [0, 60] for perfect 16 pixel gaps between 16 pixel sprites. Midpoint is 992, 992 -->
                         <img src="/static/images/stars/B_G_1.png" alt="star" style="position: absolute; top: 32px; left: 32px;" data-toggle="tooltip" title="(0, 0)" data-container="body">
                         <img src="/static/images/stars/R_D_1.png" alt="star" style="position: absolute; top: 1952px; left: 1952px;" data-toggle="tooltip" title="(60, 60)" data-container="body">
@@ -83,6 +89,7 @@
                     <hr class="margin-right-15">
                     <h2>Celestial Bodies</h2>
                     <h3>Planets:</h3>
+
                     <div style="margin-left: 15px">
                         <a href="#mercury" data-toggle="collapse" aria-expanded="false" aria-controls="mercury"><h4>Mercury</h4></a>
                         <div class="collapse" id="mercury" style="margin-right: 30px">
@@ -118,6 +125,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -130,6 +138,8 @@
     <script>
         $(document).ready(function(){
             $('[data-toggle="tooltip"]').tooltip();
+
+            var system_list = {{ system_list|tojson|safe }}
 
             var c = document.getElementById("starCanvas");
             var ctx = c.getContext("2d");
@@ -151,9 +161,9 @@
             starmap.scrollLeft((starmap[0].scrollWidth - starmap[0].clientWidth) / 2);
             starmap.scrollTop((starmap[0].scrollHeight - starmap[0].clientHeight)/ 2);
 
-            $('.navbarclsseswqhath').on('click', function(e) {
-                e.preventDefault()
-            });
+            for (sys in system_list) {
+                $('#index-container').append('<h1>MEMES<h1>')
+            }
         });
     </script>
 </body>
