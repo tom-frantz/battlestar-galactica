@@ -33,8 +33,6 @@ class SolarSystem(object):
 class Galaxy(object):
 	def __init__(self):
 		self.chunks_loaded = [[-1, 1], [-1, 0], [-1, 1], [0, -1], [0, 0], [0, 1], [1, -1], [1, 0], [1, 1]]
-		self.planet_abundance = 'Placeholder'
-		self.cylon_intensity = 'placeholder'
 		self.system_list = {}
 		self.current_position = [0, 0]
 
@@ -78,3 +76,20 @@ class Galaxy(object):
 						print(self.system_list[system_name].name, self.system_list[system_name].global_position)
 						total_count += 1
 		print('Total Count:', total_count)
+
+	def dictionary_ify(self):
+		galaxy_dict = {
+			'chunks_loaded': self.chunks_loaded,
+			'current_position': self.current_position,
+			'system_list': {}
+		}
+		for sys in self.system_list:
+			galaxy_dict['system_list'][sys] = {
+				'name': self.system_list[sys].name,
+				'global_position': self.system_list[sys].global_position,
+				'total_planets': self.system_list[sys].total_planets,
+				'star_type': self.system_list[sys].star_type,
+				'star_file': self.system_list[sys].star_file,
+				'planets': self.system_list[sys].planets
+			}
+		return galaxy_dict
