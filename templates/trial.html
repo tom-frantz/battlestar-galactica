@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trial</title>
+</head>
+<body>
+    <div id="trial-div"></div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="/static/js/jquery-2.2.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="/static/js/bootstrap.min.js"></script>
+    <!-- Jquery Validate Library -->
+    <script src="/static/js/jquery_validate/jquery.validate.js"></script>
+
+    <script>
+        $(document).ready( function () {
+            var player_galaxy = {{ player_galaxy|tojson|safe }};
+
+            var trial_div =  $('#trial-div');
+            for (sys in player_galaxy.system_list) {
+                trial_div.append('<p>(' + player_galaxy.system_list[sys].global_position[0] + ", " + player_galaxy.system_list[sys].global_position[1] + ")</p>")
+            }
+        });
+    </script>
+</body>
+</html>
