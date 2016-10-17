@@ -5,25 +5,28 @@ SYSTEM_NAMES = ('Abydos', 'Aegis', 'Aldebaran', 'Amel', 'Aurelia', 'Balaho', 'Ba
 SYSTEM_NAMES_PREFIXES = ('Al', 'Omi', 'Bah')
 SYSTEM_NAMES_SUFFIXES = ('Prime', 'Alpha', 'Beta', 'Delta', 'Gamma', 'Minor')
 STARS = (
-	['Blue Dwarf', 'B_D_1.png'],
-	['Blue Giant', 'B_G_1.png'],
-	['Blue Main', 'B_M_1.png']
+	['Blue Dwarf', '/static/images/stars/B_D_1.png'],
+	['Blue Giant', '/static/images/stars/B_G_1.png'],
+	['Blue Main', '/static/images/stars/B_M_1.png'],
+	['Red Dwarf', '/static/images/stars/R_D_1.png'],
+	['Red Giant', '/static/images/stars/R_G_1.png'],
+	['Red Main', '/static/images/stars/R_M_1.png'],
+	['Red Super-Giant', '/static/images/stars/R_SG_1.png'],
+	['Yellow Main', '/static/images/stars/Y_M_1.png']
 )
 
 
 
 class SolarSystem(object):
-	def __init__(self, position, name, total_planets=False):
+	def __init__(self, position, name, **kwargs):
 		self.global_position = position
-		if not total_planets and total_planets != 0:
-			self.total_planets = random.randint(0, 8)
-		else:
-			self.total_planets = total_planets
+		self.total_planets = random.randint(0, 8)
 		self.planets = {}
 		self.name = name
 		star = random.choice(STARS)
 		self.star_type = star[0]
 		self.star_file = star[1]
+		self.__dict__.update(kwargs)
 
 	def generate_planets(self):
 		# Execute when system is jumped into.
@@ -38,7 +41,7 @@ class Galaxy(object):
 
 	def galaxy_generation(self):
 		self.system_list = {}
-		self.system_list['Helios Alpha'] = SolarSystem((0, 0), "Helios Alpha", 4)
+		self.system_list['Helios Alpha'] = SolarSystem((0, 0), "Helios Alpha", total_planets=4)
 		self.create_solar_systems([-90, 90], [-90, 90])
 
 	def galaxy_segment_generation(self):
