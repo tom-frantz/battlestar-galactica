@@ -1,7 +1,3 @@
-{% for sys in player_galaxy.system_list %}
-    <img src="/static/images/stars/Y_M_1.png" alt="star" style="position: absolute; top: {{- (player_galaxy.system_list[sys].global_position[1] + 30 - player_galaxy.current_position[1]) * 32 + 32 -}}px; left: {{- (player_galaxy.system_list[sys].global_position[0] + 30 - player_galaxy.current_position[0]) * 32 + 32 -}}px;" data-toggle="tooltip" title="({{- (player_galaxy.system_list[sys].global_position[0] + 30 - player_galaxy.current_position[0]) * 32 + 32 -}}, {{- (player_galaxy.system_list[sys].global_position[1] + 30 - player_galaxy.current_position[1]) * 32 + 32 -}})" data-container="body">
-{% endfor %}
-
 {{- (player_galaxy.system_list[sys].global_position[0] + 30 - player_galaxy.current_position[0]) * 32 + 32 -}}
 
 {{- (player_galaxy.system_list[sys].global_position[1] + 30 - player_galaxy.current_position[1]) * 32 + 32 -}}
