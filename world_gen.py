@@ -11,7 +11,7 @@ STARS = (
 	['Red Dwarf', '/static/images/stars/R_D_1.png'],
 	['Red Giant', '/static/images/stars/R_G_1.png'],
 	['Red Main', '/static/images/stars/R_M_1.png'],
-	['Red Super-Giant', '/static/images/stars/R_SG_1.png'],
+	['Red Super Giant', '/static/images/stars/R_SG_1.png'],
 	['Yellow Main', '/static/images/stars/Y_M_1.png']
 )
 
@@ -38,6 +38,7 @@ class Galaxy(object):
 		self.chunks_loaded = [[-1, 1], [-1, 0], [-1, 1], [0, -1], [0, 0], [0, 1], [1, -1], [1, 0], [1, 1]]
 		self.system_list = {}
 		self.current_position = [0, 0]
+		self.current_chunk = [0, 0]
 
 	def galaxy_generation(self):
 		self.system_list = {}
@@ -45,10 +46,9 @@ class Galaxy(object):
 		self.create_solar_systems([-90, 90], [-90, 90])
 
 	def galaxy_segment_generation(self):
-		current_chunk = [math.floor(self.current_position[0]/30), math.floor(self.current_position[1]/30)]
 		gen_list = []
-		for x in range(current_chunk[0] - 1, current_chunk[0] + 2):
-			for y in range(current_chunk[1] - 1, current_chunk[1] + 2):
+		for x in range(self.current_chunk[0] - 1, self.current_chunk[0] + 2):
+			for y in range(self.current_chunk[1] - 1, self.current_chunk[1] + 2):
 				gen_list.append([x, y])
 		for chunk in gen_list:
 			if chunk not in self.chunks_loaded:
@@ -84,7 +84,8 @@ class Galaxy(object):
 		galaxy_dict = {
 			'chunks_loaded': self.chunks_loaded,
 			'current_position': self.current_position,
-			'system_list': {}
+			'system_list': {},
+			'current_chunk': self.current_chunk
 		}
 		for sys in self.system_list:
 			galaxy_dict['system_list'][sys] = {
