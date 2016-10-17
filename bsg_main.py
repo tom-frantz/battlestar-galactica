@@ -1,14 +1,18 @@
 from flask import *
-import world_gen, json
+import world_gen, math
 
 app = Flask(__name__)
 
 player_galaxy = world_gen.Galaxy()
 player_galaxy.galaxy_generation()
+player_galaxy.current_position = [10, 10]
 
 
 def next_turn():
-	player_galaxy.galaxy_segment_generation()
+	current_chunk = [math.floor((player_galaxy.current_position[0] + 30) / 60), math.floor((player_galaxy.current_position[1] + 30) / 60)]
+	if current_chunk != player_galaxy.current_chunk:
+		player_galaxy.current_chunk = current_chunk
+		player_galaxy.galaxy_segment_generation()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -27,4 +31,4 @@ def trial():
 	return render_template('trial.html', player_galaxy=dict_player_galaxy, trim_blocks=True, lstrip_blocks=True)
 
 if __name__ == '__main__':
-	app.run(debug=False)
+	app.run(debug=True)
