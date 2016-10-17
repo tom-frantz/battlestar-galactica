@@ -41,7 +41,7 @@ class Galaxy(object):
 
 	def galaxy_generation(self):
 		self.system_list = {}
-		self.system_list['Helios Alpha'] = SolarSystem((0, 0), "Helios Alpha", total_planets=4)
+		self.system_list['(0, 0)'] = SolarSystem((0, 0), "Helios Alpha", total_planets=4)
 		self.create_solar_systems([-90, 90], [-90, 90])
 
 	def galaxy_segment_generation(self):
@@ -55,7 +55,7 @@ class Galaxy(object):
 				self.create_solar_systems([chunk[0] * 60 - 30, chunk[0] * 60 + 30], [chunk[1] * 60 - 30, chunk[1] * 60 + 30])
 				self.chunks_loaded.append(chunk)
 
-	def create_solar_systems(self, x_bounds, y_bounds, chance=10):
+	def create_solar_systems(self, x_bounds, y_bounds, chance=20):
 		total_count = 0
 		for x in range(x_bounds[0], x_bounds[1]):
 			for y in range(y_bounds[0], y_bounds[1]):
@@ -75,8 +75,8 @@ class Galaxy(object):
 							system_name = random.choice(SYSTEM_NAMES) + ' ' + random.choice(SYSTEM_NAMES_SUFFIXES)
 						else:
 							system_name = random.choice(SYSTEM_NAMES)
-						self.system_list[system_name] = SolarSystem((x, y), system_name)
-						print(self.system_list[system_name].name, self.system_list[system_name].global_position)
+						self.system_list["(" + str(x) + ", " + str(y) + ")"] = SolarSystem((x, y), system_name)
+						print(self.system_list["(" + str(x) + ", " + str(y) + ")"].name, self.system_list["(" + str(x) + ", " + str(y) + ")"].global_position)
 						total_count += 1
 		print('Total Count:', total_count)
 
