@@ -19,6 +19,7 @@
             var player_galaxy = {{ player_galaxy|tojson|safe }};
 
             var trial_div =  $('#trial-div');
+
             for (sys in player_galaxy.system_list) {
                 trial_div.append('<p>(' + player_galaxy.system_list[sys].global_position[0] + ", " + player_galaxy.system_list[sys].global_position[1] + ")</p>")
             }
