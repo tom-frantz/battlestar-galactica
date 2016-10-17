@@ -137,9 +137,7 @@
 
     <script>
         $(document).ready(function(){
-            $('[data-toggle="tooltip"]').tooltip();
-
-            var player_galaxy = {{ player_galaxy|tojson|safe }}
+            var player_galaxy = {{ player_galaxy|tojson|safe }};
 
             var c = document.getElementById("star-canvas");
             var ctx = c.getContext("2d");
@@ -160,9 +158,32 @@
             ctx.fillStyle = pat;
             ctx.fill();
 
-            for (sys in player_galaxy.system_list)< {
-                $('#index-container').append('<div>chunk</div>')
+            var current_position = player_galaxy.current_position;
+
+            for (sys in player_galaxy.system_list) {
+                var global_position = player_galaxy.system_list[sys].global_position;
+                var local_position = [global_position[0] - current_position[0], global_position[1] - current_position[1]];
+
+                var src = player_galaxy.system_list[sys].star_file;
+                src.split(' ').join('_');
+
+                if ( local_position[0] >= -30 && local_position[0] <= 30 && local_position[1] >= -30 && local_position[1] <= 30) {
+                    var el = $("<img>").attr({
+                        src: src,
+                        alt: "star",
+                        "data-toggle": "tooltip",
+                        "data-container": "body",
+                        title: "",
+                        "data-original-title": "(" + global_position[0] + ", " + global_position[1] + ")"
+                    }).css({
+                        position: 'absolute',
+                        left: (global_position[0] + 30) * 32 + 32,
+                        top: (local_position[1] + 30) * 32 + 32
+                    });
+                    starmap.append(el);
+                }
             }
+            $('[data-toggle="tooltip"]').tooltip();
         });
     </script>
 </body>
