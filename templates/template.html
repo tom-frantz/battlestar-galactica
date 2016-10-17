@@ -32,16 +32,12 @@
             <div class="collapse navbar-collapse" id="navbar">
                 <!-- Nav links -->
                 <ul class="nav navbar-nav">
-                    <li><a href="#index" id="index-link"><span class="text-primary">Index</span></a></li>
-                    <li><a href="#map" id="map-link">Map</a></li>
+                    <li><a id="index-link"><span class="text-primary">Index</span></a></li>
+                    <li><a id="map-link">Map</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <form method="POST" class="navbar-form navbar-right">
-                        <li><button type="submit" name="submit" value="next_turn" class="btn btn-primary" style="margin-right: 30px;">Next Turn</button></li>
-                    </form>
-                    <form method="POST" class="navbar-form navbar-right">
-                        <li><button type="submit" name="submit" value="warp" class="btn btn-default" disabled="disabled">Warp</button></li>
-                    </form>
+                    <li><button type="submit" name="submit" value="warp" class="btn btn-default navbar-btn" style="margin-right: 30px;" disabled="disabled">Warp</button></li>
+                    <li><button type="submit" name="submit" value="next_turn" class="btn btn-primary navbar-btn" style="margin-right: 30px;">Next Turn</button></li>
                 </ul>
             </div>
         </div>
@@ -49,7 +45,7 @@
 
     <!-- Hidden Images -->
     <div hidden="hidden">
-        <img src="/static/images/Tile_32.png" alt="star_tile" id="star_tile">
+        <img src="/static/images/2016_tile.png" alt="star_tile" id="star_tile">
     </div>
 
     <!-- Fluid container for body -->
@@ -72,20 +68,16 @@
                     <div id="star-map" style="overflow: scroll; position: relative;" >
                         <canvas id="star-canvas" width="2016" height="2016"></canvas>
                         <!-- Location = (32 * x) + 32 | x = [0, 60] for perfect 16 pixel gaps between 16 pixel sprites. Midpoint is 992, 992 -->
-                        <img src="/static/images/stars/B_G_1.png" alt="star" style="position: absolute; top: 32px; left: 32px;" data-toggle="tooltip" title="(0, 0)" data-container="body">
-                        <img src="/static/images/stars/R_D_1.png" alt="star" style="position: absolute; top: 1952px; left: 1952px;" data-toggle="tooltip" title="(60, 60)" data-container="body">
-                        <img src="/static/images/stars/Y_M_1.png" alt="star" style="position: absolute; top: 128px; left: 64px;" data-toggle="tooltip" title="Tooltip" data-container="body">
-                        <img src="/static/images/stars/R_M_1.png" alt="star" style="position: absolute; top: 992px; left: 992px;" data-toggle="tooltip" title="(30, 30)" data-container="body">
                     </div>
                 </div>
 
                 <div class="col-lg-4" id="side-bar" style="bottom: 100px;">
 
                     <h1>System Info</h1>
-                    <h4><small>System Name: </small>Sol</h4>
-                    <h4><small>Global Coordinates: </small>(-358, 285)</h4>
-                    <h4><small>Local Coordinates: </small>(20, 20)</h4>
-                    <h4><small>Star Type: </small>Yellow Dwarf</h4>
+                    <h4><small>System Name: </small><span id="system-name">Sol</span></h4>
+                    <h4><small>Global Coordinates: </small><span id="system-global-position">(-358, 285)</span></h4>
+                    <h4><small>Local Coordinates: </small><span id="system-local-position">(20, 20)</span></h4>
+                    <h4><small>Star Type: </small><span id="system-star-type">Yellow Dwarf</span></h4>
                     <hr class="margin-right-15">
                     <h2>Celestial Bodies</h2>
                     <h3>Planets:</h3>
@@ -164,6 +156,8 @@
                 var global_position = player_galaxy.system_list[sys].global_position;
                 var local_position = [global_position[0] - current_position[0], global_position[1] - current_position[1]];
 
+                player_galaxy.system_list[sys].local_position = local_position;
+
                 var src = player_galaxy.system_list[sys].star_file;
                 src.split(' ').join('_');
 
@@ -171,19 +165,29 @@
                     var el = $("<img>").attr({
                         src: src,
                         alt: "star",
+                        class: "solar-system",
                         "data-toggle": "tooltip",
                         "data-container": "body",
                         title: "",
-                        "data-original-title": "(" + global_position[0] + ", " + global_position[1] + ")"
+                        "data-original-title": "(" + local_position[0] + ", " + local_position[1] + ")",
+                        id: "(" + global_position[0] + ", " + global_position[1] + ")"
                     }).css({
                         position: 'absolute',
-                        left: (global_position[0] + 30) * 32 + 32,
+                        left: (local_position[0] + 30) * 32 + 32,
                         top: (local_position[1] + 30) * 32 + 32
                     });
                     starmap.append(el);
                 }
             }
             $('[data-toggle="tooltip"]').tooltip();
+
+            $('.solar-system').on("click", function(e) {
+                var system = player_galaxy.system_list[$(this).attr('id')];
+                $('#system-name').text(system.name);
+                $('#system-global-position').text("(" + system.global_position[0] + ", " + system.global_position[1] + ")");
+                $('#system-local-position').text("(" + system.local_position[0] + ", " + system.local_position[1] + ")");
+                $('#system-star-type').text(system.star_type)
+            });
         });
     </script>
 </body>
