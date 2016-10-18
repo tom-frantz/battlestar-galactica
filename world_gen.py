@@ -57,10 +57,10 @@ class Galaxy(object):
 
 	def create_solar_systems(self, x_bounds, y_bounds, chance=20):
 		total_count = 0
-		for x in range(x_bounds[0], x_bounds[1]):
-			for y in range(y_bounds[0], y_bounds[1]):
-				system_chance = random.randint(1, chance)
-				if system_chance == 1:
+		for x in range(x_bounds[0], x_bounds[1] + 1):
+			for y in range(y_bounds[0], y_bounds[1] + 1):
+				system_chance = random.randint(0, chance)
+				if system_chance == 0:
 					system_too_close = False
 					for system in self.system_list:
 						if -1 <= x - self.system_list[system].global_position[0] <= 1 and -1 <= y - self.system_list[system].global_position[1] <= 1:
@@ -75,8 +75,9 @@ class Galaxy(object):
 							system_name = random.choice(SYSTEM_NAMES) + ' ' + random.choice(SYSTEM_NAMES_SUFFIXES)
 						else:
 							system_name = random.choice(SYSTEM_NAMES)
-						self.system_list["(" + str(x) + ", " + str(y) + ")"] = SolarSystem((x, y), system_name)
-						print(self.system_list["(" + str(x) + ", " + str(y) + ")"].name, self.system_list["(" + str(x) + ", " + str(y) + ")"].global_position)
+						system_id = "(" + str(x) + ", " + str(y) + ")"
+						self.system_list[system_id] = SolarSystem((x, y), system_name)
+						print(self.system_list[system_id].name, self.system_list["(" + str(x) + ", " + str(y) + ")"].global_position)
 						total_count += 1
 		print('Total Count:', total_count)
 
