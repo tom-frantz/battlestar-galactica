@@ -1,9 +1,11 @@
 from flask import *
-import world_gen, math
+import world_gen as world
+import navigation as nav
+import math
 
 app = Flask(__name__)
 
-player_galaxy = world_gen.Galaxy()
+player_galaxy = world.Galaxy()
 player_galaxy.galaxy_generation()
 
 
@@ -25,13 +27,14 @@ def trial():
 def next_turn():
 	jquery_data = request.get_json()
 
-	player_galaxy.current_position = jquery_data['selected_position']
-	current_chunk = [math.floor((player_galaxy.current_position[0] + 30) / 60), math.floor((player_galaxy.current_position[1] + 30) / 60)]
-	if current_chunk != player_galaxy.current_chunk:
-		player_galaxy.current_chunk = current_chunk
-		player_galaxy.galaxy_segment_generation()
+	if jquery_data['next_turn_type'] == 'warp':
+		player_galaxy.current_position = jquery_data['selected_position']
+		current_chunk = [math.floor((player_galaxy.current_position[0] + 30) / 60), math.floor((player_galaxy.current_position[1] + 30) / 60)]
+		if current_chunk != player_galaxy.current_chunk:
+			player_galaxy.current_chunk = current_chunk
+			player_galaxy.galaxy_segment_generation()
 
 	return jsonify(refresh=True)
 
 if __name__ == '__main__':
-	app.run(debug=False)
+	app.run(debug=True)
