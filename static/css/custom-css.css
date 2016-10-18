@@ -38,3 +38,7 @@ a:hover, a:active, a:visited, a:focus  {
     margin-top: 1px;
     margin-bottom: 1px;
 }
+
+.next-turn {
+    margin-right: 30px;
+}
