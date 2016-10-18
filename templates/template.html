@@ -37,8 +37,8 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li><p id="warp-coords" class="next-turn navbar-text" hidden="hidden">Warp Coords</p></li>
-                    <li><button id="warp" value="warp" class="btn btn-default navbar-btn next-turn" disabled="disabled">Warp</button></li>
-                    <li><button id="next-turn" value="next_turn" class="btn btn-primary navbar-btn next-turn">Next Turn</button></li>
+                    <li><button id="warp" class="btn btn-default navbar-btn next-turn" disabled="disabled">Warp</button></li>
+                    <li><button id="next-turn" class="btn btn-primary navbar-btn next-turn">Next Turn</button></li>
                 </ul>
             </div>
         </div>
@@ -72,7 +72,7 @@
                     <hr>
                 </div>
 
-                <div class="col-lg-8">
+                <div class="col-lg-8" id="map-canvas">
                     <div id="star-map" style="overflow: scroll; position: relative; margin-bottom: 15px;" >
                         <canvas id="star-canvas" width="2016" height="2016"></canvas>
                         <!-- Location = (32 * x) + 32 | x = [0, 60] for perfect 16 pixel gaps between 16 pixel sprites. Midpoint is 992, 992 -->
@@ -82,45 +82,16 @@
                 <div class="col-lg-4" id="map-side-bar" style="bottom: 100px; margin-top: 100px;">
 
                     <h1>System Info</h1>
-                    <h4><small>System Name: </small><span id="system-name">Sol</span></h4>
-                    <h4><small>Global Coordinates: </small><span id="system-global-position">(-358, 285)</span></h4>
-                    <h4><small>Local Coordinates: </small><span id="system-local-position">(20, 20)</span></h4>
-                    <h4><small>Star Type: </small><span id="system-star-type">Yellow Dwarf</span></h4>
+                    <h4><small>System Name: </small><span id="system-name"></span></h4>
+                    <h4><small>Global Coordinates: </small><span id="system-global-position"></span></h4>
+                    <h4><small>Local Coordinates: </small><span id="system-local-position"></span></h4>
+                    <h4><small>Star Type: </small><span id="system-star-type"></span></h4>
+                    <h4><small>Warp Chance: </small><span id="system-warp-chance"></span></h4>
+
                     <hr class="margin-right-15">
+
                     <h2>Celestial Bodies</h2>
                     <h3>Planets:</h3>
-
-                    <div style="margin-left: 15px">
-                        <a href="#mercury" data-toggle="collapse" aria-expanded="false" aria-controls="mercury"><h4>Mercury</h4></a>
-                        <div class="collapse" id="mercury" style="margin-right: 30px">
-                            <div class="well text-small">
-                                <h5 style="margin-top: 0px"><small>Planet Type: </small>Barren</h5>
-                                <h5><small>Planet Size: </small>Tiny</h5>
-                                <h5><small>Planet Gravity: </small>Small</h5>
-                                <h5 style="margin-bottom: 0px;">Resources</h5>
-                                <div style="margin-left: 15px;">
-                                    <h5 class="no-margin"><small>Carbon: </small>20</h5>
-                                    <h5 class="no-margin"><small>Iron: </small>50</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="margin-left: 15px">
-                        <a href="#venus" data-toggle="collapse" aria-expanded="false" aria-controls="venus"><h4>Venus</h4></a>
-                        <div class="collapse" id="venus" style="margin-right: 30px">
-                            <div class="well text-small">
-                                <h5 style="margin-top: 0px"><small>Planet Type: </small>Volcanic</h5>
-                                <h5><small>Planet Size: </small>Small</h5>
-                                <h5><small>Planet Gravity: </small>Small</h5>
-                                <h5 style="margin-bottom: 0px;">Resources</h5>
-                                <div style="margin-left: 15px;">
-                                    <h5 class="no-margin"><small>Carbon: </small>2</h5>
-                                    <h5 class="no-margin"><small>Iron: </small>5</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <button id='btn-destination' class="btn btn-default btn-block">Set Destination</button>
 
@@ -159,8 +130,7 @@
             } else {
                 starmap.height(remainder)
             }
-            starmap.scrollLeft((starmap[0].scrollWidth - starmap[0].clientWidth) / 2);
-            starmap.scrollTop((starmap[0].scrollHeight - starmap[0].clientHeight)/ 2);
+
             ctx.rect(0, 0, c.width, c.height);
             ctx.fillStyle = pat;
             ctx.fill();
@@ -189,11 +159,12 @@
                     }).css({
                         position: 'absolute',
                         left: (local_position[0] + 30) * 32 + 32,
-                        top: (local_position[1] + 30) * 32 + 32
+                        top: (-local_position[1] + 30) * 32 + 32
                     });
                     starmap.append(el);
                 }
             }
+
             $('[data-toggle="tooltip"]').tooltip();
 
             $('.nav-div-links').on('click', function(e) {
@@ -209,6 +180,7 @@
                 $('#system-global-position').text("(" + system.global_position[0] + ", " + system.global_position[1] + ")");
                 $('#system-local-position').text("(" + system.local_position[0] + ", " + system.local_position[1] + ")");
                 $('#system-star-type').text(system.star_type);
+                $('#system-warp-chance').text(Math.sqrt(Math.pow(system.local_position[0], 2) + Math.pow(system.local_position[1], 2)));
             });
 
             $('#btn-destination').on('click', function(e) {
@@ -222,7 +194,7 @@
                     type: 'POST',
                     url: '/next_turn',
                     data: JSON.stringify({
-                        'next_turn_type': $(this).attr('value'),
+                        'next_turn_type': $(this).attr('id'),
                         'selected_position': selected_position
                     }),
                     dataType: 'json',
@@ -233,7 +205,7 @@
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        alert('Error: Unable to load page :' + thrownError);
+                        alert('Error: Unable to load page: ' + thrownError);
                     }
                 })
             });
