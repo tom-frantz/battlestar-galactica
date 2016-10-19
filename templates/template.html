@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="col-lg-8" id="map-canvas">
-                    <div id="star-map" style="overflow: scroll; position: relative; margin-bottom: 15px;" >
+                    <div id="star-map" style="overflow: scroll; position: relative; margin-bottom: 15px;" class="dragscroll" >
                         <canvas id="star-canvas" width="2016" height="2016"></canvas>
                         <!-- Location = (32 * x) + 32 | x = [0, 60] for perfect 16 pixel gaps between 16 pixel sprites. Midpoint is 992, 992 -->
                     </div>
@@ -107,6 +107,8 @@
     <script src="/static/js/bootstrap.min.js"></script>
     <!-- Jquery Validate Library -->
     <script src="/static/js/jquery_validate/jquery.validate.js"></script>
+    <!-- Drag Scroll Library -->
+    <script src="/static/js/dragscroll/dragscroll.js"></script>
 
     <script>
         /** @namespace player_galaxy.system_list */
