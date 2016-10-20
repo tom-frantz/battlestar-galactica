@@ -1,11 +1,11 @@
 from flask import *
-import world_gen as world
+import galaxy_gen as galaxy
 import navigation as nav
 import math
 
 app = Flask(__name__)
 
-player_galaxy = world.Galaxy()
+player_galaxy = galaxy.Galaxy()
 player_galaxy.galaxy_generation()
 
 
