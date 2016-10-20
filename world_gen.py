@@ -5,14 +5,14 @@ SYSTEM_NAMES = ('Abydos', 'Aegis', 'Aldebaran', 'Amel', 'Aurelia', 'Balaho', 'Ba
 SYSTEM_NAMES_PREFIXES = ('Al', 'Omi', 'Bah')
 SYSTEM_NAMES_SUFFIXES = ('Prime', 'Alpha', 'Beta', 'Delta', 'Gamma', 'Minor')
 STARS = (
-	['Blue Dwarf', '/static/images/stars/B_D_1.png'],
-	['Blue Giant', '/static/images/stars/B_G_1.png'],
-	['Blue Main', '/static/images/stars/B_M_1.png'],
-	['Red Dwarf', '/static/images/stars/R_D_1.png'],
-	['Red Giant', '/static/images/stars/R_G_1.png'],
-	['Red Main', '/static/images/stars/R_M_1.png'],
-	['Red Super Giant', '/static/images/stars/R_SG_1.png'],
-	['Yellow Main', '/static/images/stars/Y_M_1.png']
+	['Blue Dwarf', ['/static/images/stars/B_D_1.png']],
+	['Blue Giant', ['/static/images/stars/B_G_1.png']],
+	['Blue Main', ['/static/images/stars/B_M_1.png']],
+	['Red Dwarf', ['/static/images/stars/R_D_1.png']],
+	['Red Giant', ['/static/images/stars/R_G_1.png']],
+	['Red Main', ['/static/images/stars/R_M_1.png']],
+	['Red Super Giant', ['/static/images/stars/R_SG_1.png']],
+	['Yellow Main', ['/static/images/stars/Y_M_1.png'] ]
 )
 
 
@@ -25,7 +25,8 @@ class SolarSystem(object):
 		self.name = name
 		star = random.choice(STARS)
 		self.star_type = star[0]
-		self.star_file = star[1]
+		# Currently embedded for when multiple star files come into play.
+		self.star_file = random.choice(star[1])
 		self.__dict__.update(kwargs)
 
 	def generate_planets(self):
@@ -57,6 +58,7 @@ class Galaxy(object):
 
 	def create_solar_systems(self, x_bounds, y_bounds, chance=20):
 		total_count = 0
+		# Need the plus one to add on the extra realm of the generation.
 		for x in range(x_bounds[0], x_bounds[1] + 1):
 			for y in range(y_bounds[0], y_bounds[1] + 1):
 				system_chance = random.randint(0, chance)
