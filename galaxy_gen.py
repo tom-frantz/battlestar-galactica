@@ -41,9 +41,11 @@ class Galaxy(object):
 		self.current_position = [0, 0]
 		self.current_chunk = [0, 0]
 
+	# put in some x_bounds and y_bounds params when world object is completed
 	def galaxy_generation(self):
 		self.system_list = {}
 		self.system_list['(0, 0)'] = SolarSystem((0, 0), "Helios Alpha", total_planets=4)
+		# install x_bounds and y_bounds here when world object is at some point.
 		self.create_solar_systems([-90, 90], [-90, 90])
 
 	def galaxy_segment_generation(self):
@@ -100,3 +102,19 @@ class Galaxy(object):
 				'planets': self.system_list[sys].planets
 			}
 		return galaxy_dict
+
+
+class SolarSystem(object):
+	def __init__(self, position, name, **kwargs):
+		self.global_position = position
+		self.total_planets = random.randint(0, 8)
+		self.planets = {}
+		self.name = name
+		star = random.choice(STARS)
+		self.star_type = star[0]
+		self.star_file = star[1]
+		self.__dict__.update(kwargs)
+
+	def generate_planets(self):
+		# Execute when system is jumped into.
+		pass
