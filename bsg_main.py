@@ -1,5 +1,3 @@
-# dank
-
 from flask import *
 import world_gen as world
 import navigation as nav
