@@ -112,12 +112,63 @@ class SolarSystem(object):
 		# Execute when system is jumped into.
 		pass
 
-class Planet(object):
-	def __init__(self, name, **kwargs):
+
+# Basis for Comets, Asteroids, Planets, Moons or any other object located within a system.
+# THIS IS AN ABSTRACT CLASS, DO NOT INSTANTIATE IT!
+class SolarBody(object):
+	def __init__(self, name):
 		self.name = name
-		planet = random.choice(PLANETS)
-		self.planet_type = planet[0]
-		self.planet_file = random.choice(planet[1])
-		self.resources = {}
+		# for resources, [Abundance, Amount available]. Can increase amount available from planets and moons.
+		self.resources = {
+			'water': [random.randint(0, 1), 100],
+			'food': [random.randint(0, 1), 100],
+			'tylium_ore': [random.randint(0, 1), 100],
+			'aluminium': [random.randint(0, 1), 100],
+			'copper': [random.randint(0, 1), 100],
+			'iron': [random.randint(0, 1), 100],
+			'uranium': [random.randint(0, 1), 100],
+			'carbon': [random.randint(0, 1), 100],
+			'oils': [random.randint(0, 1), 100],
+			'isotopic_minerals': [random.randint(0, 1), 100]
+		}
+
+
+# Basis for Planets and Moons
+# THIS IS AN ABSTRACT CLASS, DO NOT INSTANTIATE IT!
+class TerrestialBody(SolarBody):
+	def __init__(self, name):
+		super().__init__(name)
 		self.visited = 'never'
+		# Need code to generate anomaly here.
+
+
+class Planet(TerrestialBody):
+	def __init__(self, name, **kwargs):
+		super().__init__(name)
+		# planet = random.choice(PLANETS)
+		# self.planet_type = planet[0]
+		# self.planet_file = random.choice(planet[1])
 		self.__dict__.update(kwargs)
+
+
+class Moon(TerrestialBody):
+	def __init__(self, name, **kwargs):
+		super().__init__(name)
+		# moon = random.choice(MOONS)
+		# self.moon_type = moon[0]
+		# self.moon_type = random.choice(moon[1])
+		self.__dict__.update(kwargs)
+
+
+class AsteroidBelt(SolarBody):
+	def __init__(self, name, **kwargs):
+		super().__init__(name)
+		self.__dict__.update(kwargs)
+		# Just need an asteroid file now
+
+
+class Comet(SolarBody):
+	def __init__(self, name, **kwargs):
+		super().__init__(name)
+		self.__dict__.update(kwargs)
+		# Just need the files for comet graphics now
