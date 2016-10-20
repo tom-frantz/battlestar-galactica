@@ -6,7 +6,7 @@ import math
 app = Flask(__name__)
 
 player_galaxy = galaxy.Galaxy()
-player_galaxy.galaxy_generation()
+player_galaxy.initial_galaxy_generation()
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -32,7 +32,7 @@ def next_turn():
 		current_chunk = [math.floor((player_galaxy.current_position[0] + 30) / 60), math.floor((player_galaxy.current_position[1] + 30) / 60)]
 		if current_chunk != player_galaxy.current_chunk:
 			player_galaxy.current_chunk = current_chunk
-			player_galaxy.galaxy_segment_generation()
+			player_galaxy.galaxy_chunk_generation()
 
 	return jsonify(refresh=True)
 
