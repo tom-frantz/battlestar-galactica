@@ -15,23 +15,9 @@ STARS = (
 	['Yellow Main', ['/static/images/stars/Y_M_1.png'] ]
 )
 
-
-
-class SolarSystem(object):
-	def __init__(self, position, name, **kwargs):
-		self.global_position = position
-		self.total_planets = random.randint(0, 8)
-		self.planets = {}
-		self.name = name
-		star = random.choice(STARS)
-		self.star_type = star[0]
-		# Currently embedded for when multiple star files come into play.
-		self.star_file = random.choice(star[1])
-		self.__dict__.update(kwargs)
-
-	def generate_planets(self):
-		# Execute when system is jumped into.
-		pass
+PLANETS = (
+	['dummy', ['/fucking/path.fucku']]
+)
 
 
 class Galaxy(object):
@@ -42,33 +28,37 @@ class Galaxy(object):
 		self.current_chunk = [0, 0]
 
 	# put in some x_bounds and y_bounds params when world object is completed
-	def galaxy_generation(self):
+	def initial_galaxy_generation(self):
 		self.system_list = {}
 		self.system_list['(0, 0)'] = SolarSystem((0, 0), "Helios Alpha", total_planets=4)
 		# install x_bounds and y_bounds here when world object is at some point.
-		self.create_solar_systems([-90, 90], [-90, 90])
+		self.__create_solar_systems([-90, 90], [-90, 90])
 
-	def galaxy_segment_generation(self):
+	def galaxy_chunk_generation(self):
 		gen_list = []
+		# -1 and +2 are to ensure that the range works properly from the current chunk and does not cut out the border chunks.
 		for x in range(self.current_chunk[0] - 1, self.current_chunk[0] + 2):
 			for y in range(self.current_chunk[1] - 1, self.current_chunk[1] + 2):
 				gen_list.append([x, y])
+
 		for chunk in gen_list:
 			if chunk not in self.chunks_loaded:
-				self.create_solar_systems([chunk[0] * 60 - 30, chunk[0] * 60 + 30], [chunk[1] * 60 - 30, chunk[1] * 60 + 30])
+				self.__create_solar_systems([chunk[0] * 60 - 30, chunk[0] * 60 + 30], [chunk[1] * 60 - 30, chunk[1] * 60 + 30])
 				self.chunks_loaded.append(chunk)
 
-	def create_solar_systems(self, x_bounds, y_bounds, chance=20):
+	def __create_solar_systems(self, x_bounds, y_bounds, chance=20):
 		total_count = 0
-		# Need the plus one to add on the extra realm of the generation.
+		# +1 is to ensure that the range works properly and does not cut out the extra border.
 		for x in range(x_bounds[0], x_bounds[1] + 1):
 			for y in range(y_bounds[0], y_bounds[1] + 1):
 				system_chance = random.randint(0, chance)
 				if system_chance == 0:
+
 					system_too_close = False
 					for system in self.system_list:
 						if -1 <= x - self.system_list[system].global_position[0] <= 1 and -1 <= y - self.system_list[system].global_position[1] <= 1:
 							system_too_close = True
+
 					if not system_too_close:
 						name_chance = random.randint(1, 20)
 						if name_chance == 10:
@@ -83,6 +73,7 @@ class Galaxy(object):
 						self.system_list[system_id] = SolarSystem((x, y), system_name)
 						print(self.system_list[system_id].name, self.system_list["(" + str(x) + ", " + str(y) + ")"].global_position)
 						total_count += 1
+
 		print('Total Count:', total_count)
 
 	def dictionary_ify(self):
@@ -99,7 +90,8 @@ class Galaxy(object):
 				'total_planets': self.system_list[sys].total_planets,
 				'star_type': self.system_list[sys].star_type,
 				'star_file': self.system_list[sys].star_file,
-				'planets': self.system_list[sys].planets
+				'planets': self.system_list[sys].planets,
+				'visited': self.system_list[sys].visited
 			}
 		return galaxy_dict
 
@@ -113,8 +105,19 @@ class SolarSystem(object):
 		star = random.choice(STARS)
 		self.star_type = star[0]
 		self.star_file = star[1]
+		self.visited = 'never'
 		self.__dict__.update(kwargs)
 
 	def generate_planets(self):
 		# Execute when system is jumped into.
 		pass
+
+class Planet(object):
+	def __init__(self, name, **kwargs):
+		self.name = name
+		planet = random.choice(PLANETS)
+		self.planet_type = planet[0]
+		self.planet_file = random.choice(planet[1])
+		self.resources = {}
+		self.visited = 'never'
+		self.__dict__.update(kwargs)
