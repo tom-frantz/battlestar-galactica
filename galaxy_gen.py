@@ -4,6 +4,7 @@ import math
 SYSTEM_NAMES = ('Abydos', 'Aegis', 'Aldebaran', 'Amel', 'Aurelia', 'Balaho', 'Ballybran', 'Belzagor', 'Chiron', 'Chthon', 'Corneria', 'Cyteen', 'Demeter', 'Deucalion', 'Dosadi', 'Eayn', 'Erna', 'Etheria', 'Fhloston', 'Finisterre', 'Furya', 'Gallifrey', 'Gor', "Gorta")
 SYSTEM_NAMES_PREFIXES = ('Al', 'Omi', 'Bah')
 SYSTEM_NAMES_SUFFIXES = ('Prime', 'Alpha', 'Beta', 'Delta', 'Gamma', 'Minor')
+
 STARS = (
 	['Blue Dwarf', ['/static/images/stars/B_D_1.png']],
 	['Blue Giant', ['/static/images/stars/B_G_1.png']],
@@ -30,6 +31,17 @@ ASTEROIDS = (
 COMETS = (
 	['dummy', ['/fucking/path.fucku']]
 )
+
+
+def roman_numeralize(number):
+	ints = (1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+	nums = ('M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I')
+	result = ""
+	for i in range(len(ints)):
+		count = int(number / ints[i])
+	result += nums[i] * count
+	number -= ints[i] * count
+	return result
 
 
 class Galaxy(object):
@@ -112,7 +124,7 @@ class SolarSystem(object):
 	def __init__(self, position, name, **kwargs):
 		self.global_position = position
 		self.total_planets = random.randint(0, 8)
-		self.planets = {}
+		self.bodies = []
 		self.name = name
 		star = random.choice(STARS)
 		self.type = star[0]
@@ -120,13 +132,17 @@ class SolarSystem(object):
 		self.visited = 'never'
 		self.__dict__.update(kwargs)
 
-	def generate_planets(self):
-		# Execute when system is jumped into.
-		pass
+	def generate_bodies(self, asteroid_chance = 10):
+		for orbit_index in range(1, self.total_planets + 1):
+			body_name = self.name + ''
+			if random.randint(1, asteroid_chance) == 1:
+				self.bodies.append(CelestialBody())
+			else:
+				pass
 
 
 # Basis for Comets, Asteroids, Planets, Moons or any other object located within a system.
-# THIS IS AN ABSTRACT CLASS, DO NOT INSTANTIATE IT!
+# Instantiate this for asteroid belts and for comets.
 class CelestialBody(object):
 	def __init__(self, name, BODY):
 		self.name = name
@@ -146,6 +162,8 @@ class CelestialBody(object):
 		body = random.choice(BODY)
 		self.type = body[0]
 		self.file = random.choice(body[1])
+		# 1 to n for objects that orbit sun (Planets and asteroid belts), and -1 for comets. Moons have 1 to n for their orbits around planet.
+		self.orbit = -1
 
 
 # Basis for Planets and Moons
@@ -167,16 +185,5 @@ class Planet(TerrestrialBody):
 class Moon(TerrestrialBody):
 	def __init__(self, name, **kwargs):
 		super().__init__(name, MOONS)
-		self.__dict__.update(kwargs)
-
-
-class AsteroidBelt(CelestialBody):
-	def __init__(self, name, **kwargs):
-		super().__init__(name, ASTEROIDS)
-		self.__dict__.update(kwargs)
-
-
-class Comet(CelestialBody):
-	def __init__(self, name, **kwargs):
-		super().__init__(name, COMETS)
+		self.parent_planet = 'Caprica'
 		self.__dict__.update(kwargs)
