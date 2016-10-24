@@ -17,19 +17,19 @@ STARS = (
 )
 
 PLANETS = (
-	['dummy', ['/fucking/path.fucku']]
+	['Barren', ['/static/images/planets/BAR_1.png']]
 )
 
 MOONS = (
-	['dummy', ['/fucking/path.fucku']]
+	['Rocky', ['/static/images/moons/ROC_1.png']]
 )
 
 ASTEROIDS = (
-	['dummy', ['/fucking/path.fucku']]
+	['Small Belt', ['/static/images/asteroids/SMA_1.png']]
 )
 
 COMETS = (
-	['dummy', ['/fucking/path.fucku']]
+	['Ice', ['/static/images/comets/ICE.png']]
 )
 
 
@@ -132,19 +132,21 @@ class SolarSystem(object):
 		self.visited = 'never'
 		self.__dict__.update(kwargs)
 
-	def generate_bodies(self, asteroid_chance = 10):
+	def generate_bodies(self, asteroid_chance=10):
 		for orbit_index in range(1, self.total_planets + 1):
 			body_name = self.name + ''
 			if random.randint(1, asteroid_chance) == 1:
-				self.bodies.append(CelestialBody())
+				self.bodies.append(CelestialBody(body_name, ASTEROIDS, orbit_index))
 			else:
-				pass
+				planet = TerrestrialBody(body_name, PLANETS, orbit_index)
+				self.bodies.append(planet)
+				planet.create_moons()
 
 
 # Basis for Comets, Asteroids, Planets, Moons or any other object located within a system.
 # Instantiate this for asteroid belts and for comets.
 class CelestialBody(object):
-	def __init__(self, name, BODY):
+	def __init__(self, name, BODY, orbit):
 		self.name = name
 		# for resources, [Abundance, Amount available]. Can increase amount available from planets and moons.
 		self.resources = {
@@ -163,27 +165,19 @@ class CelestialBody(object):
 		self.type = body[0]
 		self.file = random.choice(body[1])
 		# 1 to n for objects that orbit sun (Planets and asteroid belts), and -1 for comets. Moons have 1 to n for their orbits around planet.
-		self.orbit = -1
+		self.parent_body = 'Star'
+		self.orbit = orbit
 
 
 # Basis for Planets and Moons
-# THIS IS AN ABSTRACT CLASS, DO NOT INSTANTIATE IT!
+# Instantiate this for planets and moons
 class TerrestrialBody(CelestialBody):
-	def __init__(self, name, BODY):
-		super().__init__(name, BODY)
+	def __init__(self, name, BODY, orbit):
+		super().__init__(name, BODY, orbit)
 		self.visited = 'never'
 		# code for anomaly.
 
-
-class Planet(TerrestrialBody):
-	def __init__(self, name, **kwargs):
-		super().__init__(name, PLANETS)
-		self.moons = {}
-		self.__dict__.update(kwargs)
-
-
-class Moon(TerrestrialBody):
-	def __init__(self, name, **kwargs):
-		super().__init__(name, MOONS)
-		self.parent_planet = 'Caprica'
-		self.__dict__.update(kwargs)
+	def create_moons(self):
+		self.moons = []
+		for i in range(1, random.randint(1, 4)):
+			pass
