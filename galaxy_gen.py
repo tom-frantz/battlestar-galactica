@@ -19,6 +19,18 @@ PLANETS = (
 	['dummy', ['/fucking/path.fucku']]
 )
 
+MOONS = (
+	['dummy', ['/fucking/path.fucku']]
+)
+
+ASTEROIDS = (
+	['dummy', ['/fucking/path.fucku']]
+)
+
+COMETS = (
+	['dummy', ['/fucking/path.fucku']]
+)
+
 
 class Galaxy(object):
 	def __init__(self):
@@ -103,8 +115,8 @@ class SolarSystem(object):
 		self.planets = {}
 		self.name = name
 		star = random.choice(STARS)
-		self.star_type = star[0]
-		self.star_file = star[1]
+		self.type = star[0]
+		self.file = star[1]
 		self.visited = 'never'
 		self.__dict__.update(kwargs)
 
@@ -115,8 +127,8 @@ class SolarSystem(object):
 
 # Basis for Comets, Asteroids, Planets, Moons or any other object located within a system.
 # THIS IS AN ABSTRACT CLASS, DO NOT INSTANTIATE IT!
-class SolarBody(object):
-	def __init__(self, name):
+class CelestialBody(object):
+	def __init__(self, name, BODY):
 		self.name = name
 		# for resources, [Abundance, Amount available]. Can increase amount available from planets and moons.
 		self.resources = {
@@ -131,44 +143,40 @@ class SolarBody(object):
 			'oils': [random.randint(0, 1), 100],
 			'isotopic_minerals': [random.randint(0, 1), 100]
 		}
+		body = random.choice(BODY)
+		self.type = body[0]
+		self.file = random.choice(body[1])
 
 
 # Basis for Planets and Moons
 # THIS IS AN ABSTRACT CLASS, DO NOT INSTANTIATE IT!
-class TerrestialBody(SolarBody):
-	def __init__(self, name):
-		super().__init__(name)
+class TerrestrialBody(CelestialBody):
+	def __init__(self, name, BODY):
+		super().__init__(name, BODY)
 		self.visited = 'never'
-		# Need code to generate anomaly here.
+		# code for anomaly.
 
 
-class Planet(TerrestialBody):
+class Planet(TerrestrialBody):
 	def __init__(self, name, **kwargs):
-		super().__init__(name)
-		# planet = random.choice(PLANETS)
-		# self.planet_type = planet[0]
-		# self.planet_file = random.choice(planet[1])
+		super().__init__(name, PLANETS)
+		self.moons = {}
 		self.__dict__.update(kwargs)
 
 
-class Moon(TerrestialBody):
+class Moon(TerrestrialBody):
 	def __init__(self, name, **kwargs):
-		super().__init__(name)
-		# moon = random.choice(MOONS)
-		# self.moon_type = moon[0]
-		# self.moon_type = random.choice(moon[1])
+		super().__init__(name, MOONS)
 		self.__dict__.update(kwargs)
 
 
-class AsteroidBelt(SolarBody):
+class AsteroidBelt(CelestialBody):
 	def __init__(self, name, **kwargs):
-		super().__init__(name)
+		super().__init__(name, ASTEROIDS)
 		self.__dict__.update(kwargs)
-		# Just need an asteroid file now
 
 
-class Comet(SolarBody):
+class Comet(CelestialBody):
 	def __init__(self, name, **kwargs):
-		super().__init__(name)
+		super().__init__(name, COMETS)
 		self.__dict__.update(kwargs)
-		# Just need the files for comet graphics now
