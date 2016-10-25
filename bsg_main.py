@@ -3,26 +3,27 @@ import galaxy_gen as galaxy
 import navigation as nav
 import math
 
+# The Flask initialization.
 app = Flask(__name__)
 
+# Create the galaxy, need to assign to it to a world class eventually with other ai and shit.
 player_galaxy = galaxy.Galaxy()
 player_galaxy.initial_galaxy_generation()
 
 
+# The code that happens for a page load for the base page
 @app.route('/', methods=['GET', 'POST'])
 def index():
-	if request.method == 'POST':
-		if request.form['submit'] == 'next_turn':
-			# Execute the next turn.
-			pass
 	return render_template('template.html', player_galaxy=player_galaxy.dictionary_ify(), trim_blocks=True, lstrip_blocks=True)
 
 
+# A dummy page for any element we're trialing.
 @app.route('/trial')
 def trial():
 	return render_template('trial.html', player_galaxy=player_galaxy.dictionary_ify(), trim_blocks=True, lstrip_blocks=True)
 
 
+# Code for a AJAX call for the next turn functions.
 @app.route('/next_turn', methods=['POST'])
 def next_turn():
 	jquery_data = request.get_json()
