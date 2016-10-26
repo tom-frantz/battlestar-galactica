@@ -1,5 +1,6 @@
 import random
 import math
+import roman
 
 
 # STATIC VARS.
@@ -7,6 +8,7 @@ SYSTEM_NAMES = ('Abydos', 'Aegis', 'Aldebaran', 'Amel', 'Aurelia', 'Balaho', 'Ba
 SYSTEM_NAMES_PREFIXES = ('Al', 'Omi', 'Bah')
 SYSTEM_NAMES_SUFFIXES = ('Prime', 'Alpha', 'Beta', 'Delta', 'Gamma', 'Minor')
 
+# There needs to be at least two entries per var to make sure the random.choice works properly
 STARS = (
 	['Blue Dwarf', ['/static/images/stars/B_D_1.png']],
 	['Blue Giant', ['/static/images/stars/B_G_1.png']],
@@ -15,22 +17,26 @@ STARS = (
 	['Red Giant', ['/static/images/stars/R_G_1.png']],
 	['Red Main', ['/static/images/stars/R_M_1.png']],
 	['Red Super Giant', ['/static/images/stars/R_SG_1.png']],
-	['Yellow Main', ['/static/images/stars/Y_M_1.png'] ]
+	['Yellow Main', ['/static/images/stars/Y_M_1.png']]
 )
 
 PLANETS = (
+	['Barren', ['/static/images/planets/BAR_1.png']],
 	['Barren', ['/static/images/planets/BAR_1.png']]
 )
 
 MOONS = (
+	['Rocky', ['/static/images/moons/ROC_1.png']],
 	['Rocky', ['/static/images/moons/ROC_1.png']]
 )
 
 ASTEROIDS = (
+	['Small Belt', ['/static/images/asteroids/SMA_1.png']],
 	['Small Belt', ['/static/images/asteroids/SMA_1.png']]
 )
 
 COMETS = (
+	['Ice', ['/static/images/comets/ICE.png']],
 	['Ice', ['/static/images/comets/ICE.png']]
 )
 
@@ -47,6 +53,7 @@ class Galaxy(object):
 		# Generate the initial 3x3 chunk
 		self.system_list = []
 		self.system_list.append(SolarSystem((0, 0), "Helios Alpha", total_planets=4))
+		self.system_list[0].generate_bodies()
 		self.__create_solar_systems([-90, 90], [-90, 90])
 
 	def galaxy_chunk_generation(self):
@@ -135,15 +142,15 @@ class SolarSystem(object):
 
 	def generate_bodies(self, asteroid_chance=10):
 		# Generate planets and asteroids for a solar system. Call when necessary, not on generation of the system.
-		for orbit_index in range(1, self.total_planets + 1):
-			body_name = self.name + ''
+		for orbit_index in range(0, self.total_planets):
+			body_name = self.name + " " + roman.toRoman(orbit_index + 1)
 			if random.randint(1, asteroid_chance) == 1:
 				# Generate asteroids
 				self.bodies.append(CelestialBody(body_name, ASTEROIDS, orbit_index))
 			else:
 				# generate planet
-				planet = TerrestrialBody(body_name, PLANETS, orbit_index)
-				self.bodies.append(planet)
+				self.bodies.append(Planet(body_name, PLANETS, orbit_index))
+			print(self.bodies[orbit_index].name)
 
 
 # Basis for Comets, Asteroids, Planets, Moons or any other object located within a system.
@@ -171,7 +178,7 @@ class CelestialBody(object):
 		self.type = body[0]
 		self.file = random.choice(body[1])
 
-		# 1 to n for objects that orbit sun (Planets and asteroid belts), and -1 for comets. Moons have 1 to n for their orbits around parent planet.
+		# 0 to n for objects that orbit sun (Planets and asteroid belts), and -1 for comets. Moons have 0 to n for their orbits around parent planet.
 		self.parent_body = 'Star'
 		self.orbit = orbit
 		self.__dict__.update(kwargs)
@@ -180,11 +187,14 @@ class CelestialBody(object):
 # Basis for Planets and Moons
 # Instantiate this for moons
 class TerrestrialBody(CelestialBody):
-	def __init__(self, name, BODY, orbit, **kwargs):
+	def __init__(self, name, BODY, orbit, anomaly_chance=10, **kwargs):
 		super().__init__(name, BODY, orbit)
 		self.visited = 'never'
 
 		# code for anomaly. Generate inside __init__ function
+		# base one in ten chance of creating anomaly.
+		if random.randint(1, anomaly_chance) == 1:
+			pass
 
 		self.__dict__.update(kwargs)
 
@@ -195,7 +205,9 @@ class Planet(TerrestrialBody):
 
 		# Moon Generation
 		self.moons = []
-		for i in range(1, random.randint(1, 4)):
-			pass
+		for orbit_index in range(0, random.randint(0, 4)):
+			# Need to fix moon naming.
+			name = self.name + " MOON " + str(orbit_index)
+			self.moons.append(TerrestrialBody(name, MOONS, orbit_index))
 
 		self.__dict__.update(kwargs)
