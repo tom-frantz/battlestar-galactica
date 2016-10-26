@@ -48,13 +48,39 @@ class Galaxy(object):
 		self.system_list = []
 		self.current_position = [0, 0]
 		self.current_chunk = [0, 0]
+		self.initiated = False
 
-	def initial_galaxy_generation(self):
+	def initial_galaxy_generation(self, default=True):
 		# Generate the initial 3x3 chunk
 		self.system_list = []
-		self.system_list.append(SolarSystem((0, 0), "Helios Alpha", total_planets=4))
-		self.system_list[0].generate_bodies()
+		# Generates the base planets if selected to do so.
+		if default:
+			self.system_list.append(SolarSystem((0, 0), "Helios Alpha", total_planets=8, bodies=[
+				Planet('Icarus', 0),
+				Planet('Picon', 1),
+				Planet('Caprica', 2),
+				Planet('Gemenon', 3),
+				Planet('Tauron', 4, moons=[TerrestrialBody('Minos', MOONS, 0)]),
+				CelestialBody('Eberos Asteroid Belt', ASTEROIDS, 5),
+				Planet('Zeus', 6),
+				Planet('Persephone', 7)
+			]))
+			self.system_list.append(SolarSystem((1, 1), "Helios Beta", total_planets=6, bodies=[
+				Planet('Troy', 0),
+				Planet('Leonis', 1),
+				Planet('Pallas', 2),
+				CelestialBody('Ouranos Asteroid Belt', ASTEROIDS, 3),
+				Planet('Virgon', 4, moons=[TerrestrialBody('Hibernia', MOONS, 0)]),
+				Planet('Hera', 5)
+			]))
+			self.system_list.append(SolarSystem((-2, 2), "Helios Gamma", total_planets=6, bodies=[
+
+			]))
+			self.system_list.append(SolarSystem((-3, 3), "Helios Delta", total_planets=7, bodies=[
+
+			]))
 		self.__create_solar_systems([-90, 90], [-90, 90])
+		self.initiated = True
 
 	def galaxy_chunk_generation(self):
 		gen_list = []
@@ -149,7 +175,10 @@ class SolarSystem(object):
 				self.bodies.append(CelestialBody(body_name, ASTEROIDS, orbit_index))
 			else:
 				# generate planet
-				self.bodies.append(Planet(body_name, PLANETS, orbit_index))
+				planet = Planet(body_name, PLANETS, orbit_index)
+				planet.generate_moons()
+				self.bodies.append(planet)
+
 			print(self.bodies[orbit_index].name)
 
 
@@ -200,12 +229,12 @@ class TerrestrialBody(CelestialBody):
 
 
 class Planet(TerrestrialBody):
-	def __init__(self, name, BODY, orbit, **kwargs):
-		super().__init__(name, BODY, orbit)
-
+	def __init__(self, name, orbit, **kwargs):
+		super().__init__(name, PLANETS, orbit)
 		self.moons = []
+		self.__dict__.update(kwargs)
+
+	def generate_moons(self):
 		for orbit_index in range(0, random.randint(0, 4)):
 			name = self.name + " - Moon " + str(orbit_index + 1)
 			self.moons.append(TerrestrialBody(name, MOONS, orbit_index))
-
-		self.__dict__.update(kwargs)
