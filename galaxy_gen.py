@@ -203,11 +203,9 @@ class Planet(TerrestrialBody):
 	def __init__(self, name, BODY, orbit, **kwargs):
 		super().__init__(name, BODY, orbit)
 
-		# Moon Generation
 		self.moons = []
 		for orbit_index in range(0, random.randint(0, 4)):
-			# Need to fix moon naming.
-			name = self.name + " MOON " + str(orbit_index)
+			name = self.name + " - Moon " + str(orbit_index + 1)
 			self.moons.append(TerrestrialBody(name, MOONS, orbit_index))
 
 		self.__dict__.update(kwargs)
