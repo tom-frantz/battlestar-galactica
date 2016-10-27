@@ -27,13 +27,13 @@ def menu():
 def index():
 	if not player_world.galaxy.initiated:
 		return redirect('/menu')
-	return render_template('template.html', player_galaxy=player_world.galaxy.dictionary_ify(), trim_blocks=True, lstrip_blocks=True)
+	return render_template('template.html', player_galaxy=player_world.galaxy.galaxy_serialize(), trim_blocks=True, lstrip_blocks=True)
 
 
 # A dummy page for any element we're trialing.
 @app.route('/trial')
 def trial():
-	return render_template('trial.html', player_galaxy=player_world.galaxy.dictionary_ify(), trim_blocks=True, lstrip_blocks=True)
+	return render_template('trial.html', player_galaxy=player_world.galaxy.galaxy_serialize(), trim_blocks=True, lstrip_blocks=True)
 
 
 # Code for a AJAX call for the next turn functions.
