@@ -119,7 +119,7 @@
         /** @namespace player_galaxy.system_list[sys].global_position */
 
         $(document).ready(function(){
-            var player_galaxy = {{ player_galaxy|tojson|safe }};
+            var player_galaxy = {{ player_world['galaxy']|tojson|safe }};
             var system;
 
             var c = document.getElementById("star-canvas");

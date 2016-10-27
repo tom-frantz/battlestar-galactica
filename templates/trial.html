@@ -12,7 +12,10 @@
     <link href="/static/css/custom-css.css" rel="stylesheet">
 </head>
 <body>
-    <div id="trial-div"></div>
+    <div hidden="hidden"><img src="/static/images/2016_tile.png" alt="star_tile" id="star_tile"></div>
+    <div id="trial-div">
+        <canvas id="star-canvas" width="2016" height="2016"></canvas>
+    </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="/static/js/jquery-2.2.1.min.js"></script>
@@ -21,15 +24,12 @@
     <!-- Jquery Validate Library -->
     <script src="/static/js/jquery_validate/jquery.validate.js"></script>
 
+    <!-- Main JS file -->
+    <script src="/static/js/bsg_main.js"></script>
+
     <script>
         $(document).ready( function () {
-            var player_galaxy = {{ player_galaxy|tojson|safe }};
-
-            var trial_div =  $('#trial-div');
-
-            for (sys in player_galaxy.system_list) {
-                trial_div.append('<p>(' + player_galaxy.system_list[sys].global_position[0] + ", " + player_galaxy.system_list[sys].global_position[1] + ")</p>")
-            }
+            world.canvas_fill('star-canvas', 'star_tile');
         });
     </script>
 </body>
