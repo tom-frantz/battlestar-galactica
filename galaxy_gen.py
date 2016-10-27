@@ -74,10 +74,21 @@ class Galaxy(object):
 				Planet('Hera', 5)
 			]))
 			self.system_list.append(SolarSystem((-2, 2), "Helios Gamma", total_planets=6, bodies=[
-
+				Planet('Thanatos', 0),
+				CelestialBody('Acheron Asteroid Belt', ASTEROIDS, 1),
+				Planet('Libran', 2, moons=[TerrestrialBody('Herse', MOONS, 0), TerrestrialBody('Pandrossos', MOONS, 1)]),
+				Planet('Scorpia', 3),
+				Planet('Sagittaron', 4),
+				Planet('Ophion', 5)
 			]))
 			self.system_list.append(SolarSystem((-3, 3), "Helios Delta", total_planets=7, bodies=[
-
+				Planet('Phoebe', 0),
+				Planet('Styx', 1),
+				CelestialBody('Aeolus Asteroid Belt', ASTEROIDS, 2),
+				Planet('Aerilon', 3),
+				Planet('Hestia', 4),
+				Planet('Canceron', 5),
+				Planet('Aquaria', 6)
 			]))
 		self.__create_solar_systems([-90, 90], [-90, 90])
 		self.initiated = True
@@ -197,9 +208,9 @@ class CelestialBody(object):
 			'copper': [random.randint(0, 1), 100],
 			'iron': [random.randint(0, 1), 100],
 			'uranium': [random.randint(0, 1), 100],
-			'carbon': [random.randint(0, 1), 100],
+			'graphene': [random.randint(0, 1), 100],
 			'oils': [random.randint(0, 1), 100],
-			'isotopic_minerals': [random.randint(0, 1), 100]
+			'hydrocarbons': [random.randint(0, 1), 100]
 		}
 
 		# Assigning what body it will be. (Aster, Comet, Planet, Moon)
