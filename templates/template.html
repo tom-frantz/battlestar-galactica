@@ -114,105 +114,35 @@
     <script src="/static/js/bsg_main.js"></script>
 
     <script>
-        /** @namespace player_galaxy.system_list */
-        /** @namespace player_galaxy.current_position */
-        /** @namespace player_galaxy.system_list[sys].global_position */
 
         $(document).ready(function(){
-            var player_galaxy = {{ player_world['galaxy']|tojson|safe }};
+            var player_world = {{ player_world|tojson|safe }};
             var system;
+            var star_map = $('#star-map');
 
-            var c = document.getElementById("star-canvas");
-            var ctx = c.getContext("2d");
-            var img = document.getElementById("star_tile");
-            var pat = ctx.createPattern(img, "repeat");
-            var remainder = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) - $("#navbar").height() - $("#map-header").height() - 30;
-            var starmap = $("#star-map");
+            world.init(player_world);
 
-            {# fill and make canvas. #}
-            if (remainder > 2016) {
-                starmap.height(2016)
-            } else {
-                starmap.height(remainder)
-            }
-
-            ctx.rect(0, 0, c.width, c.height);
-            ctx.fillStyle = pat;
-            ctx.fill();
-
-            var current_position = player_galaxy.current_position;
-            var selected_position = current_position;
-
-            for (var sys in player_galaxy.system_list) {
-                var global_position = player_galaxy.system_list[sys].global_position;
-                var local_position = [global_position[0] - current_position[0], global_position[1] - current_position[1]];
-
-                player_galaxy.system_list[sys].local_position = local_position;
-
-                var src = player_galaxy.system_list[sys].star_file;
-                src.split(' ').join('_');
-
-                if ( local_position[0] >= -30 && local_position[0] <= 30 && local_position[1] >= -30 && local_position[1] <= 30) {
-                    var el = $("<img>").attr({
-                        src: src,
-                        alt: "star",
-                        class: "solar-system",
-                        "data-toggle": "tooltip",
-                        "data-container": "body",
-                        title: "(" + local_position[0] + ", " + local_position[1] + ")",
-                        id: "(" + global_position[0] + ", " + global_position[1] + ")"
-                    }).css({
-                        position: 'absolute',
-                        left: (local_position[0] + 30) * 32 + 32,
-                        top: (-local_position[1] + 30) * 32 + 32
-                    });
-                    starmap.append(el);
-                }
-            }
+            /* Generates the webpage's canvas, the viewport for the canvas, and the height */
+            world.canvas_fill('star-canvas', 'star_tile');
+            world.starmap_height(star_map);
+            world.generate_stars(star_map);
 
             $('[data-toggle="tooltip"]').tooltip();
 
             $('.nav-div-links').on('click', function(e) {
-                setTimeout(function(){
-                    starmap.scrollLeft((starmap[0].scrollWidth - starmap[0].clientWidth) / 2);
-                    starmap.scrollTop((starmap[0].scrollHeight - starmap[0].clientHeight)/ 2);
-                }, 1);
+                world.nav_div_links(e, star_map)
             });
 
             $('.solar-system').on("click", function(e) {
-                system = player_galaxy.system_list[$(this).attr('id')];
-                $('#system-name').text(system.name);
-                $('#system-global-position').text("(" + system.global_position[0] + ", " + system.global_position[1] + ")");
-                $('#system-local-position').text("(" + system.local_position[0] + ", " + system.local_position[1] + ")");
-                $('#system-star-type').text(system.star_type);
-                $('#system-warp-chance').text(Math.sqrt(Math.pow(system.local_position[0], 2) + Math.pow(system.local_position[1], 2)));
+                world.solar_system(e, this)
             });
 
             $('#btn-destination').on('click', function(e) {
-                selected_position = system.global_position;
-                $('#warp').attr({'disabled': false});
-                $('#warp-coords').attr({'hidden': false}).text('Warp Coords: ' + selected_position);
+                world.set_destination(e)
             });
 
             $('.next-turn').on("click", function(e) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/next_turn',
-                    data: JSON.stringify({
-                        'next_turn_type': $(this).attr('id'),
-                        'selected_position': selected_position
-                    }),
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    success: function(server_data){
-                        if (server_data['refresh'] === true) {
-                            location.reload();
-                        }
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        alert('Error: Unable to load page: ' + thrownError);
-                    }
-                })
+                world.next_turn(e, this)
             });
         });
     </script>
