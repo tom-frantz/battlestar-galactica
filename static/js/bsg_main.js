@@ -12,7 +12,7 @@ var world = ( function() {
         galaxy = World['galaxy'];
     }
 
-    function canvas_fill(canvas_id, tile_id) {
+    function __canvas_fill(canvas_id, tile_id) {
         var c = document.getElementById(canvas_id);
         var ctx = c.getContext("2d");
         var img = document.getElementById(tile_id);
@@ -23,7 +23,7 @@ var world = ( function() {
         ctx.fill();
     }
 
-    function starmap_height(star_map) {
+    function __starmap_height(star_map) {
         var window_height = $(window).height() - 180;
         if (window_height > 2016) {
             star_map.height(2016);
@@ -32,7 +32,7 @@ var world = ( function() {
         }
     }
 
-    function generate_stars(star_map) {
+    function __generate_stars(star_map) {
         for (var sys in galaxy['system_list']) {
             var local_position = [galaxy['system_list'][sys]['global_position'][0] - galaxy['current_position'][0], galaxy['system_list'][sys]['global_position'][1] - galaxy['current_position'][1]];
             galaxy['system_list'][sys].local_position = local_position
@@ -59,6 +59,12 @@ var world = ( function() {
                 star_map.append(el);
             }
         }
+    }
+
+    function generate_canvas_and_stars(canvas_id, tile_id, star_map) {
+        __canvas_fill(canvas_id, tile_id);
+        __starmap_height(star_map);
+        __generate_stars(star_map);
     }
 
     function nav_div_links_onclick(e, star_map) {
@@ -110,11 +116,37 @@ var world = ( function() {
         })
     }
 
+    function run_event(e) {
+        var options = $('#options').html('');
+        if (current_path[0] === 'dialogs') {
+            for (var option in event[current_path[0]][current_path[1]]['options']) {
+                var el = $('<button></button>').attr({
+                    type: 'button',
+                    'class': 'btn btn-default btn-options',
+                    'option-path': event[current_path[0]][current_path[1]]['options'][option]['path'],
+                    'option-type': event[current_path[0]][current_path[1]]['options'][option]['type'],
+                    'data-dismiss': 'modal'
+                }).text(event[current_path[0]][current_path[1]]['options'][option]['text']);
+                options.append(el);
+            }
+        }
+
+        $('#modal-text').html("<p>" + event[current_path[0]][current_path[1]]['text'] + "</p>");
+
+        if (current_path[0] === 'outcomes') {
+            for (var outcome in event[current_path[0]][current_path[1]]['outcome']) {
+                el = $('<p></p>').attr({
+                    'class': event[current_path[0]][current_path[1]]['outcome'][outcome][1]
+                }).text(event[current_path[0]][current_path[1]]['outcome'][outcome][0]);
+                $('#modal-effects').append(el)
+            }
+            options.append('<button type="button" class="btn btn-default btn-event-finished" data-dismiss="modal">Close</button>')
+        }
+    }
+
     return {
         init: __init,
-        canvas_fill: canvas_fill,
-        starmap_height: starmap_height,
-        generate_stars: generate_stars,
+        generate_canvas_and_stars: generate_canvas_and_stars,
         nav_div_links: nav_div_links_onclick,
         solar_system: solar_system_onclick,
         set_destination: set_destination,

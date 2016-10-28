@@ -123,9 +123,7 @@
             world.init(player_world);
 
             /* Generates the webpage's canvas, the viewport for the canvas, and the height */
-            world.canvas_fill('star-canvas', 'star_tile');
-            world.starmap_height(star_map);
-            world.generate_stars(star_map);
+            world.generate_canvas_and_stars('star-canvas', 'star_tile', star_map);
 
             $('[data-toggle="tooltip"]').tooltip();
 
