@@ -1,4 +1,5 @@
 anomaly = {
+	'id': '0',
 	'title': 'The Fat Toaster Sings',
 	'dialogs': {
 		'0': {  # It will always load dialog 0 initially.
@@ -30,15 +31,8 @@ anomaly = {
 			'text': 'Flavour text for outcome 0',
 			'outcome': [
 				['Negative effect', 'text-danger'],  # Flavour text, the text class.
-				['Positive effect', 'text-succes']
+				['Positive effect', 'text-success']
 			]  # integration with main for when effects come into play.
 		}
 	}
 }
-
-
-# Standard anomaly run:
-def run_event(event):
-	end_of_event = False
-	while not end_of_event:
-		pass

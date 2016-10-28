@@ -52,5 +52,16 @@ def next_turn():
 
 	return jsonify(refresh=True)
 
+
+# Code for an AJAX call for the end of an event.
+@app.route('/event_finished')
+def event_finished():
+	jquery_data = request.get_json()
+
+
+
+	return jsonify()
+
+
 if __name__ == '__main__':
 	app.run(debug=True)
