@@ -10,11 +10,41 @@
     <link href="/static/font-awesome-4.6.1/css/font-awesome.min.css" rel="stylesheet">
     <!-- Custom stylesheet -->
     <link href="/static/css/custom-css.css" rel="stylesheet">
+
 </head>
 <body>
-    <div hidden="hidden"><img src="/static/images/2016_tile.png" alt="star_tile" id="star_tile"></div>
+    <div hidden="hidden">
+        <img src="/static/images/2016_tile.png" alt="star_tile" id="star_tile">
+    </div>
+
+    <div>
+        <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="modal-title">Modal title</h4>
+                    </div>
+                    <div class="modal-body" id="modal-body">
+                        <div id="modal-text"></div>
+                        <div id="modal-effects" class="text-danger"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <div id="options" style="margin-bottom: 15px;">
+
+                        </div>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+
     <div id="trial-div">
-        <canvas id="star-canvas" width="2016" height="2016"></canvas>
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+            Launch demo modal
+        </button>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -28,8 +58,46 @@
     <script src="/static/js/bsg_main.js"></script>
 
     <script>
-        $(document).ready( function () {
-            world.canvas_fill('star-canvas', 'star_tile');
+        $(document).ready( function() {
+            var event = {{ event|tojson|safe }};
+            var current_path = ['dialogs', '0'];
+            $('#modal-title').text(event['title']);
+
+            function run_event_part(){
+                var options = $('#options').html('');
+                if (current_path[0] === 'dialogs') {
+                    for (var option in event[current_path[0]][current_path[1]]['options']) {
+                        var el = $('<button></button>').attr({
+                            type: 'button',
+                            'class': 'btn btn-default btn-options',
+                            'option-path': event[current_path[0]][current_path[1]]['options'][option]['path'],
+                            'option-type': event[current_path[0]][current_path[1]]['options'][option]['type'],
+                            'data-dismiss': 'modal'
+                        }).text(event[current_path[0]][current_path[1]]['options'][option]['text']);
+                        options.append(el);
+                    }
+                }
+
+                $('#modal-text').html("<p>" + event[current_path[0]][current_path[1]]['text'] + "</p>");
+
+                if (current_path[0] === 'outcomes') {
+                    for (var outcome in event[current_path[0]][current_path[1]]['outcome']) {
+                        el = $('<p></p>').attr({
+                            'class': event[current_path[0]][current_path[1]]['outcome'][outcome][1]
+                        }).text(event[current_path[0]][current_path[1]]['outcome'][outcome][0]);
+                        $('#modal-effects').append(el)
+                    }
+                }
+            }
+
+            run_event_part();
+
+            $(document).on('click', '.btn-options', function() {
+                current_path = [$(this).attr('option-type'), $(this).attr('option-path')];
+                $('#myModal').modal('hide');
+                run_event_part();
+            });
+
         });
     </script>
 </body>

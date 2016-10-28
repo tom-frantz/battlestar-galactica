@@ -1,9 +1,10 @@
 # FOR NOTE: request.form[name] = value
 
 from flask import *
-import world as world
+import world
 import galaxy_gen as galaxy
-import navigation as nav
+import navigation
+import events
 import math
 
 # The Flask initialization.
@@ -33,7 +34,7 @@ def index():
 # A dummy page for any element we're trialing.
 @app.route('/trial')
 def trial():
-	return render_template('trial.html', player_world=player_world.world_serialize(), trim_blocks=True, lstrip_blocks=True)
+	return render_template('trial.html', player_world=player_world.world_serialize(), event=events.fat_event.event_serialize(), trim_blocks=True, lstrip_blocks=True)
 
 
 # Code for a AJAX call for the next turn functions.
