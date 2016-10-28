@@ -129,19 +129,19 @@
 
             $('[data-toggle="tooltip"]').tooltip();
 
-            $('.nav-div-links').on('click', function(e) {
+            $(document).on('click', '.nav-div-links', function(e) {
                 world.nav_div_links(e, star_map)
             });
 
-            $('.solar-system').on("click", function(e) {
+            $(document).on("click", '.solar-system', function(e) {
                 world.solar_system(e, this)
             });
 
-            $('#btn-destination').on('click', function(e) {
+            $(document).on('click', '#btn-destination', function(e) {
                 world.set_destination(e)
             });
 
-            $('.next-turn').on("click", function(e) {
+            $(document).on("click", '.next-turn', function(e) {
                 world.next_turn(e, this)
             });
         });
