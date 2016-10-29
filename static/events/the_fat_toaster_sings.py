@@ -1,4 +1,4 @@
-anomaly = {
+event = {
 	'id': '0',
 	'title': 'The Fat Toaster Sings',
 	'dialogs': {
@@ -36,3 +36,7 @@ anomaly = {
 		}
 	}
 }
+
+
+def function(string):
+	return string

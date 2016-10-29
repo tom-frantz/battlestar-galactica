@@ -34,7 +34,7 @@ def index():
 # A dummy page for any element we're trialing.
 @app.route('/trial')
 def trial():
-	return render_template('trial.html', player_world=player_world.world_serialize(), event=events.fat_event.event_serialize(), trim_blocks=True, lstrip_blocks=True)
+	return render_template('trial.html', player_world=player_world.world_serialize(), trim_blocks=True, lstrip_blocks=True)
 
 
 # Code for a AJAX call for the next turn functions.
@@ -58,7 +58,7 @@ def next_turn():
 def event_finished():
 	jquery_data = request.get_json()
 
-
+	# Do the event id fire thing.
 
 	return jsonify()
 
