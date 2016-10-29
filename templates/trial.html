@@ -53,32 +53,32 @@
     <script>
         $(document).ready( function() {
             var event = {{ event|tojson|safe }};
-            /* Will need to fix for notification style events. (Where there is no branch, just one outcome.) */
-            var current_path = ['dialogs', '0'];
+            var current_path = ['nodes', '0'];
+            var event_history = [['nodes', '0']];
+
             $('#modal-title').text(event['title']);
 
             function run_event_part(){
                 var options = $('#options').html('');
-                if (current_path[0] === 'dialogs') {
-                    for (var option in event[current_path[0]][current_path[1]]['options']) {
+                if (current_path[0] === 'nodes') {
+                    for (var path in event[current_path[0]][current_path[1]]['paths']) {
                         var el = $('<button></button>').attr({
                             type: 'button',
                             'class': 'btn btn-default btn-options',
-                            'option-path': event[current_path[0]][current_path[1]]['options'][option]['path'],
-                            'option-type': event[current_path[0]][current_path[1]]['options'][option]['type'],
+                            'option-path': event[current_path[0]][current_path[1]]['paths'][path]['path'],
                             'data-dismiss': 'modal'
-                        }).text(event[current_path[0]][current_path[1]]['options'][option]['text']);
+                        }).text(event[current_path[0]][current_path[1]]['paths'][path]['button_text']);
                         options.append(el);
                     }
                 }
 
-                $('#modal-text').html("<p>" + event[current_path[0]][current_path[1]]['text'] + "</p>");
+                $('#modal-text').html("<p>" + event[current_path[0]][current_path[1]]['body_text'] + "</p>");
 
                 if (current_path[0] === 'outcomes') {
-                    for (var outcome in event[current_path[0]][current_path[1]]['outcome']) {
+                    for (var effect in event[current_path[0]][current_path[1]]['effects']) {
                         el = $('<p></p>').attr({
-                            'class': event[current_path[0]][current_path[1]]['outcome'][outcome][1]
-                        }).text(event[current_path[0]][current_path[1]]['outcome'][outcome][0]);
+                            'class': event[current_path[0]][current_path[1]]['effects'][effect][1]
+                        }).text(event[current_path[0]][current_path[1]]['effects'][effect][0]);
                         $('#modal-effects').append(el)
                     }
                     options.append('<button type="button" class="btn btn-default btn-event-finished" data-dismiss="modal">Close</button>')
@@ -88,7 +88,7 @@
             run_event_part();
 
             $(document).on('click', '.btn-options', function() {
-                current_path = [$(this).attr('option-type'), $(this).attr('option-path')];
+                current_path = $(this).attr('option-path').split(',');
                 $('#myModal').modal('hide');
                 setTimeout(function(){
                     run_event_part();
@@ -102,7 +102,8 @@
                     url: '/event_finished',
                     data: JSON.stringify({
                         'event': event,
-                        'outcome': current_path
+                        'outcome': current_path,
+                        'event_history': event_history
                     }),
                     dataType: 'json',
                     contentType: 'application/json',

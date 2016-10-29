@@ -9,7 +9,7 @@ import math
 
 # The Flask initialization.
 app = Flask(__name__)
-player_world = world.World(galaxy.Galaxy())
+player_world = world.World(galaxy.Galaxy(), events.EventHandler())
 
 
 @app.route('/menu', methods=['GET', 'POST'])
@@ -34,7 +34,7 @@ def index():
 # A dummy page for any element we're trialing.
 @app.route('/trial')
 def trial():
-	return render_template('trial.html', player_world=player_world.world_serialize(), trim_blocks=True, lstrip_blocks=True)
+	return render_template('trial.html', player_world=player_world.world_serialize(), event=player_world.event_handler.events[0].event_html_serialize(), trim_blocks=True, lstrip_blocks=True)
 
 
 # Code for a AJAX call for the next turn functions.
