@@ -20,7 +20,7 @@ event = {
 			'paths': [{
 				# option 1 for dialog 1
 				'button_text': 'Flavour text for an outcome (0)',
-				'path': ['outcomes','0']
+				'path': ['outcomes', '0']
 			}]
 		},
 
@@ -28,7 +28,7 @@ event = {
 			'body_text': 'Flavour text for option 2',
 			'paths': [{
 				'button_text': 'Flavour Text for an outcome (0)',
-				'path': ['outcomes', 0]
+				'path': ['outcomes', '0']
 			}]
 		}
 	},

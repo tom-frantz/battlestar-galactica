@@ -89,6 +89,7 @@
 
             $(document).on('click', '.btn-options', function() {
                 current_path = $(this).attr('option-path').split(',');
+                event_history.push(current_path);
                 $('#myModal').modal('hide');
                 setTimeout(function(){
                     run_event_part();
@@ -96,7 +97,7 @@
                 }, 500);
             });
 
-            $(document).on('click', 'btn-event-finished', function() {
+            $(document).on('click', '.btn-event-finished', function() {
                 $.ajax({
                     type: 'POST',
                     url: '/event_finished',
@@ -108,7 +109,7 @@
                     dataType: 'json',
                     contentType: 'application/json',
                     success: function(server_data){
-                        if (server_data['refresh'] === true) {
+                        if (server_data['success'] === true) {
                             location.reload();
                         }
                     },

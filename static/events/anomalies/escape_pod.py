@@ -1,0 +1,6 @@
+event = {
+
+}
+
+def function():
+	pass

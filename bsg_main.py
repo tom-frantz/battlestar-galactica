@@ -54,13 +54,14 @@ def next_turn():
 
 
 # Code for an AJAX call for the end of an event.
-@app.route('/event_finished')
+@app.route('/event_finished', methods=['POST'])
 def event_finished():
 	jquery_data = request.get_json()
 
+	print(jquery_data['event_history'])
 	# Do the event id fire thing.
 
-	return jsonify()
+	return jsonify(success=True)
 
 
 if __name__ == '__main__':
