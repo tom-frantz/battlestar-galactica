@@ -108,11 +108,6 @@
                     }),
                     dataType: 'json',
                     contentType: 'application/json',
-                    success: function(server_data){
-                        if (server_data['success'] === true) {
-                            location.reload();
-                        }
-                    },
                     error: function (xhr, ajaxOptions, thrownError) {
                         alert('Error: Unable to load page: ' + thrownError);
                     }
