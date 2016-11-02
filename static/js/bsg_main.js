@@ -5,7 +5,7 @@
 
 var world = ( function() {
 
-    var world, galaxy, system, selected_position;
+    var world, galaxy, system, selected_position, fullscreen_window_height;
 
     function __init(World) {
         world = World;
@@ -24,11 +24,11 @@ var world = ( function() {
     }
 
     function __starmap_height(star_map) {
-        var window_height = $(window).height() - 180;
-        if (window_height > 2016) {
+        fullscreen_window_height = $(window).height() - 180;
+        if (fullscreen_window_height > 2016) {
             star_map.height(2016);
         } else {
-            star_map.height(window_height);
+            star_map.height(fullscreen_window_height);
         }
     }
 
@@ -106,7 +106,7 @@ var world = ( function() {
             dataType: 'json',
             contentType: 'application/json',
             success: function(server_data){
-                if (server_data['refresh'] === true) {
+                if (server_data['success'] === true) {
                     location.reload();
                 }
             },
@@ -114,34 +114,6 @@ var world = ( function() {
                 alert('Error: Unable to load page: ' + thrownError);
             }
         })
-    }
-
-    function run_event(e) {
-        var options = $('#options').html('');
-        if (current_path[0] === 'dialogs') {
-            for (var option in event[current_path[0]][current_path[1]]['options']) {
-                var el = $('<button></button>').attr({
-                    type: 'button',
-                    'class': 'btn btn-default btn-options',
-                    'option-path': event[current_path[0]][current_path[1]]['options'][option]['path'],
-                    'option-type': event[current_path[0]][current_path[1]]['options'][option]['type'],
-                    'data-dismiss': 'modal'
-                }).text(event[current_path[0]][current_path[1]]['options'][option]['text']);
-                options.append(el);
-            }
-        }
-
-        $('#modal-text').html("<p>" + event[current_path[0]][current_path[1]]['text'] + "</p>");
-
-        if (current_path[0] === 'outcomes') {
-            for (var outcome in event[current_path[0]][current_path[1]]['outcome']) {
-                el = $('<p></p>').attr({
-                    'class': event[current_path[0]][current_path[1]]['outcome'][outcome][1]
-                }).text(event[current_path[0]][current_path[1]]['outcome'][outcome][0]);
-                $('#modal-effects').append(el)
-            }
-            options.append('<button type="button" class="btn btn-default btn-event-finished" data-dismiss="modal">Close</button>')
-        }
     }
 
     return {
