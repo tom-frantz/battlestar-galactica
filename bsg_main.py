@@ -2,23 +2,21 @@
 
 from flask import *
 import world
-import galaxy_gen as galaxy
-import navigation
-import events
-import math
+import modules.galaxy_gen as galaxy
+from modules import events, fleets
 
 # The Flask initialization.
 app = Flask(__name__)
-player_world = world.World(galaxy.Galaxy(), events.EventHandler())
+player_world = world.World(galaxy.Galaxy(), events.EventHandler(), fleets.FleetHandler())
 
 
 @app.route('/menu', methods=['GET', 'POST'])
 def menu():
 	if request.method == 'POST':
 		if request.form.get('start_game', None) == 'default':
-			player_world.galaxy.initial_galaxy_generation()
+			player_world.initial_galaxy_generation()
 		elif request.form.get('start_game', None) == 'random':
-			player_world.galaxy.initial_galaxy_generation(False)
+			player_world.initial_galaxy_generation(False)
 		return redirect('/')
 	return render_template('index.html', trim_blocks=True, lstrip_blocks=True)
 
@@ -42,15 +40,9 @@ def trial():
 def next_turn():
 	jquery_data = request.get_json()
 
-	if jquery_data['next_turn_type'] == 'warp':
-		# Generate new chunks
-		player_world.galaxy.current_position = jquery_data['selected_position']
-		current_chunk = [math.floor((player_world.galaxy.current_position[0] + 30) / 60), math.floor((player_world.galaxy.current_position[1] + 30) / 60)]
-		if current_chunk != player_world.galaxy.current_chunk:
-			player_world.galaxy.current_chunk = current_chunk
-			player_world.galaxy.galaxy_chunk_generation()
+	player_world.next_turn(jquery_data)
 
-	return jsonify(refresh=True)
+	return jsonify(success=True)
 
 
 # Code for an AJAX call for the end of an event.
