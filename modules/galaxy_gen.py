@@ -1,5 +1,4 @@
 import random
-import math
 import roman
 
 
@@ -134,8 +133,18 @@ class Galaxy(object):
 						self.system_list.append(solar_system)
 						print(self.system_list[self.system_list.index(solar_system)].name, self.system_list[self.system_list.index(solar_system)].global_position)
 						total_count += 1
-
 		print('Total Count:', total_count)
+
+	def generate_bodies(self, x_bounds, y_bounds, other_bounds):
+		for solar_system in self.system_list:
+			if solar_system.global_position[0] in range(x_bounds[0], x_bounds[1] + 1) \
+			and solar_system.global_position[1] in range(y_bounds[0], y_bounds[1 + 1]):
+				solar_system.generate_bodies()
+			else:
+				for bound in other_bounds:
+					if solar_system.global_position[0] in range(bound[0][0], bound[0][1] + 1) \
+					and solar_system.global_position[1] in range(bound[1][0], bound[1][1] + 1):
+						solar_system.generate_bodies()
 
 	def galaxy_serialize(self):
 		galaxy_dict = {
@@ -153,7 +162,8 @@ class Galaxy(object):
 				'bodies': [],
 				'type': system.type,
 				'file': system.file,
-				'visited': system.visited
+				'visited': system.visited,
+				'bodies_generated': system.bodies_generated
 			}
 			for body in system.bodies:
 				body_dict = {
@@ -190,6 +200,7 @@ class SolarSystem(object):
 		self.global_position = [position[0], position[1]]
 		self.total_planets = random.randint(0, 8)
 		self.bodies = []
+		self.bodies_generated = False
 		self.name = name
 
 		# Choosing a star and assigning it.
@@ -205,18 +216,19 @@ class SolarSystem(object):
 
 	def generate_bodies(self, asteroid_chance=10):
 		# Generate planets and asteroids for a solar system. Call when necessary, not on generation of the system.
-		for orbit_index in range(0, self.total_planets):
-			body_name = self.name + " " + roman.toRoman(orbit_index + 1)
-			if random.randint(1, asteroid_chance) == 1:
-				# Generate asteroids
-				self.bodies.append(CelestialBody(body_name, ASTEROIDS, orbit_index))
-			else:
-				# generate planet
-				planet = Planet(body_name, PLANETS, orbit_index)
-				planet.generate_moons()
-				self.bodies.append(planet)
+		if not self.bodies_generated:
+			for orbit_index in range(0, self.total_planets):
+				body_name = self.name + " " + roman.toRoman(orbit_index + 1)
+				if random.randint(1, asteroid_chance) == 1:
+					# Generate asteroids
+					self.bodies.append(CelestialBody(body_name, ASTEROIDS, orbit_index))
+				else:
+					# generate planet
+					planet = Planet(body_name, orbit_index)
+					planet.generate_moons()
+					self.bodies.append(planet)
 
-			print(self.bodies[orbit_index].name)
+				print(self.bodies[orbit_index].name)
 
 
 # Basis for Comets, Asteroids, Planets, Moons or any other object located within a system.
