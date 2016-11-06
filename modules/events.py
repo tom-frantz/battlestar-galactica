@@ -23,12 +23,3 @@ class Event(object):
 
 	def effects(self, world):
 		self.function(world)
-
-	def event_html_serialize(self):
-		event_dict = {
-			'title': self.title,
-			'nodes': self.nodes,
-			'outcomes': self.outcomes,
-			'ID': self.ID
-		}
-		return event_dict

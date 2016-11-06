@@ -1,11 +1,13 @@
 import math
-
+import random
 
 class World(object):
 	def __init__(self, galaxy, event_handler, fleet_handler):
 		self.galaxy = galaxy
 		self.event_handler = event_handler
 		self.fleet_handler = fleet_handler
+		self.initiated = False
+		self.seed = random.seed(random.randint(-4294967295, 4294967295))
 
 	def next_turn(self, user_data):
 		# user_data = {'selected_position': galaxy.system_list[system].global_coordinates}
@@ -19,13 +21,9 @@ class World(object):
 			self.galaxy.current_chunk = current_chunk
 			self.galaxy.galaxy_chunk_generation()
 
-	def world_serialize(self):
-		world_dict = {
-			'galaxy': self.galaxy.galaxy_serialize()
-		}
-
-		return world_dict
-
-	def initial_galaxy_generation(self, galaxy_gen_default=True):
+	def initial_galaxy_generation(self, seed, galaxy_gen_default=True):
 		self.galaxy.initial_galaxy_generation(galaxy_gen_default)
-		self.fleet_handler.generate_colonial_fleet(galaxy_gen_default)
+		# self.fleet_handler.generate_colonial_fleet(galaxy_gen_default)
+		if seed:
+			self.seed = seed
+		self.initiated = True

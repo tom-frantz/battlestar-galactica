@@ -47,7 +47,6 @@ class Galaxy(object):
 		self.system_list = []
 		self.current_position = [0, 0]
 		self.current_chunk = [0, 0]
-		self.initiated = False
 
 	def initial_galaxy_generation(self, default=True):
 		# Generate the initial 3x3 chunk
@@ -89,8 +88,11 @@ class Galaxy(object):
 				Planet('Canceron', 5),
 				Planet('Aquaria', 6)
 			]))
+		else:
+			solar_system = SolarSystem((0, 0), random.choice(SYSTEM_NAMES))
+			solar_system.generate_bodies()
+			self.system_list.append(solar_system)
 		self.__create_solar_systems([-90, 90], [-90, 90])
-		self.initiated = True
 
 	def galaxy_chunk_generation(self):
 		gen_list = []
@@ -145,53 +147,6 @@ class Galaxy(object):
 					if solar_system.global_position[0] in range(bound[0][0], bound[0][1] + 1) \
 					and solar_system.global_position[1] in range(bound[1][0], bound[1][1] + 1):
 						solar_system.generate_bodies()
-
-	def galaxy_serialize(self):
-		galaxy_dict = {
-			'chunks_loaded': self.chunks_loaded,
-			'current_position': self.current_position,
-			'system_list': [],
-			'current_chunk': self.current_chunk,
-			'initiated': self.initiated
-		}
-		for system in self.system_list:
-			system_dict = {
-				'global_position': system.global_position,
-				'total_planets': system.total_planets,
-				'name': system.name,
-				'bodies': [],
-				'type': system.type,
-				'file': system.file,
-				'visited': system.visited,
-				'bodies_generated': system.bodies_generated
-			}
-			for body in system.bodies:
-				body_dict = {
-					'name': body.name,
-					'resources': body.resources,
-					'type': body.type,
-					'file': body.file,
-					'parent_body': body.parent_body,
-					'orbit': body.orbit
-				}
-				if type(body) is TerrestrialBody or type(body) is Planet:
-					body_dict['visited'] = body.visited
-				if type(body) is Planet:
-					body_dict['moons'] = []
-					for moon in body.moons:
-						moon_dict = {
-							'name': moon.name,
-							'resources': moon.resources,
-							'type': moon.type,
-							'file': moon.file,
-							'parent_body': moon.parent_body,
-							'orbit': moon.orbit,
-							'visited': moon.visited
-						}
-						body_dict['moons'].append(moon_dict)
-				system_dict['bodies'].append(body_dict)
-			galaxy_dict['system_list'].append(system_dict)
-		return galaxy_dict
 
 
 class SolarSystem(object):
