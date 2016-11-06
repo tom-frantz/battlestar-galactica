@@ -9,7 +9,8 @@ var world = ( function() {
 
     function __init(World) {
         world = World;
-        galaxy = World['galaxy'];
+        galaxy = world['galaxy'];
+        console.log(galaxy);
     }
 
     function __canvas_fill(canvas_id, tile_id) {
@@ -24,7 +25,7 @@ var world = ( function() {
     }
 
     function __starmap_height(star_map) {
-        fullscreen_window_height = $(window).height() - 180;
+        fullscreen_window_height = $(window).height() - 210;
         if (fullscreen_window_height > 2016) {
             star_map.height(2016);
         } else {
@@ -91,8 +92,8 @@ var world = ( function() {
 
     function set_destination(e) {
         selected_position = system['global_position'];
-        $('#warp').attr({'disabled': false});
-        $('#warp-coords').attr({'hidden': false}).text('Warp Coords: ' + selected_position);
+        $('#warp').removeClass('disabled').removeClass('text-muted').addClass('text-white');
+        $('#warp-coords').text('Warp Coords: ' + selected_position[0] + ', ' + selected_position[1]).removeClass('text-muted').addClass('text-white');
     }
 
     function next_turn_ajax(e, el) {

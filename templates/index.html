@@ -16,15 +16,22 @@
 
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2 text-center" style="margin-top: 5%">
-                <h1 class="text-center" style="color: #428bca;">Battlestar Galactica</h1>
+            <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-6 offset-sm-3 col-xs-8 offset-xs-2" style="margin-top: 5%">
+                <h1 class="text-center display-1" style="color: #428bca;">Battlestar Galactica</h1>
                 <h3 class="text-center">A game about genocide ... at it's finest.</h3>
-                <hr style="margin-bottom: 5%">
+                <hr style="margin: 5%">
                 <h4>Pick your game style</h4>
-                <hr style="margin-bottom: 2.5%">
                 <form method="POST">
-                    <button type="submit" name="start_game" value="default" class="btn btn-primary btn-block">The True BSG Universe.</button>
-                    <button type="submit" name="start_game" value="random" class="btn btn-default btn-block">Completely random.</button>
+                    <button type="submit" name="start_game" value="default" class="btn btn-primary btn-block text-center">The True BSG Universe.</button>
+                    <button type="submit" name="start_game" value="random" class="btn btn-default btn-block text-center">Completely random.</button>
+
+                    <hr style="margin: 5%;">
+                    <h3>Settings</h3>
+
+                    <div class="form-group">
+                        <label for="seed">Seed</label>
+                        <input type="text" name="seed" class="form-control" id="seed" placeholder="leave blank for random">
+                    </div>
                 </form>
             </div>
         </div>
@@ -36,8 +43,6 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/static/js/bootstrap.min.js"></script>
     <!-- Jquery Validate Library -->
-    <script src="/static/js/jquery_validate/jquery.validate.js"></script>
-    <!-- Drag Scroll Library -->
     <script src="/static/js/dragscroll/dragscroll.js"></script>
 
 </body>
