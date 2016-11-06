@@ -7,14 +7,15 @@ def pythagoras(a, b):
 
 class FleetHandler(object):
 	def __init__(self):
+		self.unassigned = []
 		self.fleets = []
 
-	def generate_colonial_fleet(self, default=True):
+	def generate_colonial_fleet(self):
 		fleet = Fleet()
-		if default:
-			fleet.ships.append(Ship(0, 'Battlestar Galactica', 25000000, 3, subsystems=[
-				SubSystem('Bridge', 'command', {'manoeuvre': 10, 'warp_timer': 15, 'planning': 10, 'organisation': 10, 'skill_bonus': 10})
-			]))
+		fleet.ships.append(Ship(0, 'Battlestar Galactica', 25000000, 3, subsystems=[
+			SubSystem(0, 'Bridge', {'manoeuvre': 10, 'warp_timer': 15, 'planning': 10, 'organisation': 10, 'skill_bonus': 10}),
+			SubSystem(1, )
+		]))
 		self.fleets.append(fleet)
 
 
@@ -24,16 +25,19 @@ class Fleet(object):
 
 
 class Ship(object):
-	def __init__(self, id, name, mass, acceleration, **kwargs):
-		self.id = id
+	def __init__(self, ID, name, mass, acceleration, **kwargs):
+		self.id = ID
 		self.name = name
-		self.subsystems = []
 		self.mass = mass
 		self.acceleration = acceleration
+		self.stats = {}
+		self.subsystems = []
+
+		self.__dict__.update(kwargs)
 
 
 class SubSystem(object):
-	def __init__(self, name, type, stats):
+	def __init__(self, ID, name, stats):
+		self.id = ID
 		self.name = name
-		self.type = type
 		self.stats = stats
