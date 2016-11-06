@@ -2,7 +2,6 @@ body {
     padding-top: 54px;
 }
 
-
 .text-indent {
     text-indent: 20px;
 }
@@ -25,9 +24,17 @@ ul.list-unstyled > li{
     margin-left: 20px;
 }
 
-a:hover, a:active, a:visited, a:focus  {
-    color: #286090;
+.navbar a.text-primary:hover, .navbar a.text-primary:active, .navbar a.text-primary:focus {
+    color: #45acff !important;
     text-decoration: none !important;
+}
+
+.navbar a.btn-primary:hover, .navbar a.btn-primary:active, .navbar a.btn-primary:focus {
+    background-color: #4974cb;
+}
+
+.navbar a.nav-link.text-primary {
+    color: #0275d8;
 }
 
 .text-small p {

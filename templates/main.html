@@ -14,15 +14,15 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav id="navbar" class="navbar navbar-fixed-top navbar-dark bg-inverse">
+    <nav id="navbar" class="navbar navbar-fixed-top navbar-dark" style="background-color: #202020">
         <!-- Nav links -->
         <ul class="nav navbar-nav">
-            <li class="nav-item"> <a href="#index-container" id="index-link" class="nav-link text-info" data-toggle="collapse" aria-expanded="true" aria-controls="map-container">Index</a> </li>
+            <li class="nav-item"> <a href="#index-container" id="index-link" class="nav-link text-primary" data-toggle="collapse" aria-expanded="true" aria-controls="map-container">Index</a> </li>
             <li class="nav-item" id="map-link"> <a href="#map-container" class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="map-container">Map</a> </li>
             <span class="float-xs-right">
                 <li class="nav-item"> <p id="warp-coords" class="navbar-text text-muted" style="margin-bottom: 0px;">Warp Coords: 0, 0</p> </li>
                 <li class="nav-item"> <a id="warp" class="btn btn-outline-secondary text-muted navbar-btn next-turn disabled" role="button" aria-disabled="true">Warp</a> </li>
-                <li class="nav-item"> <a id="next-turn" class="btn btn-info navbar-btn next-turn text-white" role="button">Next Turn</a> </li>
+                <li class="nav-item"> <a id="next-turn" class="btn btn-primary navbar-btn next-turn text-white" role="button">Next Turn</a> </li>
             </span>
 
         </ul>
@@ -130,7 +130,12 @@
             world.init(player_world);
 
             /* Generates the webpages canvas, the viewport for the canvas, and the height */
-            world.generate_canvas_and_stars('star-canvas', 'star_tile', star_map);
+            var baseimg = new Image();
+            baseimg.src = '/static/images/2016_tile.png';
+
+            baseimg.onload = function () {
+                world.generate_canvas_and_stars('star-canvas', 'star_tile', star_map);
+            };
 
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
