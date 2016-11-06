@@ -1,10 +1,7 @@
 body {
-    padding-top: 70px;
+    padding-top: 54px;
 }
 
-ul.nav.navbar-nav li a span.text-primary:hover {
-    color: #286090;
-}
 
 .text-indent {
     text-indent: 20px;
@@ -37,8 +34,4 @@ a:hover, a:active, a:visited, a:focus  {
     font-size: 12px;
     margin-top: 1px;
     margin-bottom: 1px;
-}
-
-.next-turn {
-    margin-right: 30px;
 }
