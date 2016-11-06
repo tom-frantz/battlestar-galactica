@@ -62,17 +62,23 @@ var world = ( function() {
         }
     }
 
+    function __reset_star_map_canvas(e, star_map) {
+        setTimeout(function(){
+            star_map.scrollLeft((star_map[0].scrollWidth - star_map[0].clientWidth) / 2);
+            star_map.scrollTop((star_map[0].scrollHeight - star_map[0].clientHeight)/ 2);
+        }, 1);
+    }
+
     function generate_canvas_and_stars(canvas_id, tile_id, star_map) {
         __canvas_fill(canvas_id, tile_id);
         __starmap_height(star_map);
         __generate_stars(star_map);
     }
 
-    function nav_div_links_onclick(e, star_map) {
-        setTimeout(function(){
-            star_map.scrollLeft((star_map[0].scrollWidth - star_map[0].clientWidth) / 2);
-            star_map.scrollTop((star_map[0].scrollHeight - star_map[0].clientHeight)/ 2);
-        }, 1);
+    function nav_div_links_onclick(e, el, star_map) {
+        if ($(el).attr('id') === 'map-link')  {
+            __reset_star_map_canvas(e, star_map)
+        }
     }
 
     function solar_system_onclick(e, el) {
