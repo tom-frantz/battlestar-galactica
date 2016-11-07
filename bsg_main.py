@@ -13,6 +13,8 @@ def to_json(obj):
 
 # The Flask initialization.
 app = Flask(__name__)
+app.config.from_object('FLASKR_SETTINGS')
+
 player_world = world.World(galaxy.Galaxy(), events.EventHandler(), fleets.FleetHandler())
 
 
@@ -64,6 +66,5 @@ def event_finished():
 
 	return jsonify(success=True)
 
-
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run()
