@@ -36,10 +36,11 @@ class FleetHandler(object):
 			SubSystem(20, 'Computer Lab', 'computer_lab', {}),
 			SubSystem(21, 'Pilot\'s Breifing Room', 'pilot_briefing_room', {}),
 			SubSystem(22, 'Brig', 'prison', {}),
-			SubSystem(23, 'Colonial Chapel', 'religious_room', {}),
-			SubSystem(24, 'Recreational Facilities', 'recreational_room', {}),
-			SubSystem(25, 'Courtroom', 'court', {}),
-			SubSystem(26, 'Cargo Hold', 'cargo_bay', {})
+			SubSystem(23, 'Hospital', 'medical', {}),
+			SubSystem(24, 'Colonial Chapel', 'religious_room', {}),
+			SubSystem(25, 'Recreational Facilities', 'recreational_room', {}),
+			SubSystem(26, 'Courtroom', 'court', {}),
+			SubSystem(27, 'Cargo Hold', 'cargo_bay', {})
 		]))
 		self.fleets.append(fleet)
 
