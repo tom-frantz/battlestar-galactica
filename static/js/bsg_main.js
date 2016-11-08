@@ -24,7 +24,7 @@ var world = ( function() {
         ctx.fill();
     }
 
-    function __starmap_height(star_map) {
+    function starmap_height(star_map) {
         fullscreen_window_height = $(window).height() - 210;
         if (fullscreen_window_height > 2016) {
             star_map.height(2016);
@@ -71,7 +71,7 @@ var world = ( function() {
 
     function generate_canvas_and_stars(canvas_id, tile_id, star_map) {
         __canvas_fill(canvas_id, tile_id);
-        __starmap_height(star_map);
+        starmap_height(star_map);
         __generate_stars(star_map);
     }
 
@@ -129,7 +129,7 @@ var world = ( function() {
         nav_div_links: nav_div_links_onclick,
         solar_system: solar_system_onclick,
         set_destination: set_destination,
-        next_turn: next_turn_ajax
-
+        next_turn: next_turn_ajax,
+        starmap_height: starmap_height
     };
 })();

@@ -141,6 +141,10 @@
                 $('[data-toggle="tooltip"]').tooltip()
             });
 
+            $(window).on('resize', function () {
+                world.starmap_height(star_map)
+            });
+
             $(document).on('click', '.nav-item', function(e) {
                 world.nav_div_links(e, this, star_map)
             });
