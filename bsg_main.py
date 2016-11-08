@@ -35,7 +35,7 @@ def init_db():
 	db.commit()
 
 
-@app.click.command('initdb')
+@app.cli.command('initdb')
 def initdb_command():
 	# Initializes the DB
 	init_db()
@@ -83,7 +83,15 @@ def index():
 # A dummy page for any element we're trialing.
 @app.route('/trial')
 def trial():
-	return render_template('trial.html', player_world=json.dumps(player_world, default=to_json), event=player_world.event_handler.events[0].event_html_serialize(), trim_blocks=True, lstrip_blocks=True)
+	return render_template('trial.html', player_world=json.dumps(player_world, default=to_json), trim_blocks=True, lstrip_blocks=True)
+
+
+@app.route('/database_trial')
+def database_trial():
+	db = get_db()
+	db.execute('INSERT INTO players (title, text) VALUES (?, ?)', ['Walshy is', 'A MemeSlut(TM)'])
+	db.commit()
+	return ""
 
 
 # Code for a AJAX call for the next turn functions.
@@ -105,10 +113,6 @@ def event_finished():
 	# Do the event id fire thing.
 
 	return jsonify(success=True)
-
-db = get_db()
-db.execute('INSERT INTO players (title, text) VALUES (?, ?)', ['playerTitle', 'playerText'])
-db.commit()
 
 if __name__ == '__main__':
 	app.run()
