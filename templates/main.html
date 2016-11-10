@@ -13,11 +13,34 @@
 
 </head>
 <body>
+
+    <div class="modal fade" id="main_menu" tabindex="-1" role="dialog" aria-labelledby="main_menuLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header"><h4 class="modal-title">Main Menu</h4></div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xl-10 offset-xl-1">
+                                <button class="btn btn-block btn-secondary">Save Game</button>
+                                <button class="btn btn-block btn-secondary">Load Game</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary text-lg-center" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Navbar -->
     <nav id="navbar" class="navbar navbar-fixed-top navbar-dark" style="background-color: #202020">
         <!-- Nav links -->
         <ul class="nav navbar-nav">
-            <li class="nav-item"> <a href="#index-container" id="index-link" class="nav-link text-primary" data-toggle="collapse" aria-expanded="true" aria-controls="map-container">Index</a> </li>
+            <li class="nav-item"> <a class="nav-link text-primary" data-toggle="modal" data-target="#main_menu">Menu</a> </li>
+            <li class="nav-item"> <a href="#index-container" id="index-link" class="nav-link" data-toggle="collapse" aria-expanded="true" aria-controls="map-container">Index</a> </li>
             <li class="nav-item" id="map-link"> <a href="#map-container" class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="map-container">Map</a> </li>
             <span class="float-xs-right">
                 <li class="nav-item"> <p id="warp-coords" class="navbar-text text-muted" style="margin-bottom: 0px;">Warp Coords: 0, 0</p> </li>
