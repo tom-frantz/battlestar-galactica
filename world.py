@@ -6,7 +6,7 @@ class World(object):
 		self.galaxy = galaxy
 		self.event_handler = event_handler
 		self.fleet_handler = fleet_handler
-		self.initiated = False
+		self.world_initiated = False
 		self.seed = random.seed(random.randint(-4294967295, 4294967295))
 
 	def next_turn(self, user_data):
@@ -24,6 +24,6 @@ class World(object):
 	def initial_galaxy_generation(self, seed, galaxy_gen_default=True):
 		self.galaxy.initial_galaxy_generation(galaxy_gen_default)
 		# self.fleet_handler.generate_colonial_fleet(galaxy_gen_default)
-		if seed:
+		if seed or seed == 0:
 			self.seed = seed
-		self.initiated = True
+		self.world_initiated = True
