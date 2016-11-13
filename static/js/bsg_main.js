@@ -6,6 +6,7 @@
 var world = ( function() {
 
     var world, galaxy, system, selected_position, fullscreen_window_height;
+    var map_scroll_toggle = true;
 
     function __init(World) {
         world = World;
@@ -76,8 +77,11 @@ var world = ( function() {
     }
 
     function nav_div_links_onclick(e, el, star_map) {
-        if ($(el).attr('id') === 'map-link')  {
-            __reset_star_map_canvas(e, star_map)
+        if (map_scroll_toggle) {
+            if ($(el).attr('id') === 'map-link')  {
+                __reset_star_map_canvas(e, star_map);
+                map_scroll_toggle = false;
+            }
         }
     }
 
@@ -123,6 +127,26 @@ var world = ( function() {
         })
     }
 
+    function save_game_ajax(e, el, save_game_name) {
+        $.ajax({
+            type: 'POST',
+            url: '/save_game',
+            data: JSON.stringify({
+                'save_name': save_game_name
+            }),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (server_data) {
+                alert('Game Updated.');
+                console.log($('[id = "' + save_game_name + '"]'));
+                $('[id = "' + save_game_name + '"] .modified_time').text('Last Modified: ' + server_data['time']);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Error: Unable to load page: ' + thrownError);
+            }
+        })
+    }
+
     return {
         init: __init,
         generate_canvas_and_stars: generate_canvas_and_stars,
@@ -130,6 +154,7 @@ var world = ( function() {
         solar_system: solar_system_onclick,
         set_destination: set_destination,
         next_turn: next_turn_ajax,
+        save_game_ajax: save_game_ajax,
         starmap_height: starmap_height
     };
 })();
