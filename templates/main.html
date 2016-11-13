@@ -22,8 +22,25 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-xl-10 offset-xl-1">
-                                <button class="btn btn-block btn-secondary">Save Game</button>
-                                <button class="btn btn-block btn-secondary">Load Game</button>
+
+                                <div id="main_menu_body">
+                                    <button id="save_game" class="btn btn-block btn-secondary">Save Game</button>
+                                    <button id="load_game" class="btn btn-block btn-secondary">Load Game</button>
+                                </div>
+
+                                <div id="main_menu_save_menu" style="display: none;">
+                                    <!-- Saves go here. -->
+                                    <input type="text" name="save_name_text_bar" class="form-control" id="save_name_text_bar" placeholder="Save name" style="margin-bottom: 16px;">
+                                    {% for save in saves %}
+                                        <div class="card card-block card-save" id="{{ save.save_name }}">
+                                            <h3 class="card-title">{{ save.save_name }}</h3>
+                                            <p class="card-text" style="margin: 0;">Created: {{ save.create_time }}</p>
+                                            <p class="card-text modified_time"><strong>Last Modified: {{ save.modified_time }}</strong></p>
+                                        </div>
+                                    {% endfor %}
+                                    <button id="save_game_save" class="btn btn-primary">Save Game</button>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -182,6 +199,23 @@
 
             $(document).on("click", '.next-turn', function(e) {
                 world.next_turn(e, this)
+            });
+
+            $(document).on('click', '#save_game', function (e) {
+                $('#main_menu_body').slideUp();
+                setTimeout( function () {
+                    $('#main_menu_save_menu').slideDown();
+                }, 500)
+            });
+
+            $(document).on('click', '.card.card-block.card-save', function(e) {
+                $('#save_name_text_bar').val($(this).attr('id'));
+                $('.card.card-block.card-save').removeClass('card-outline-primary');
+                $(this).addClass('card-outline-primary');
+            });
+
+            $(document).on('click', '#save_game_save', function (e) {
+                world.save_game_ajax(e, this, $('#save_name_text_bar').val())
             });
         });
     </script>
