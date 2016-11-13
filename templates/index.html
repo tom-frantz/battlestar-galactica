@@ -17,7 +17,7 @@
     <div class="container-fluid">
 
         <div class="row">
-            <div class="col-lg-4 offset-lg-4" style="margin-top: 5%;">
+            <div class="col-lg-6 offset-lg-3" style="margin-top: 5%;">
 
                 <h1 class="text-center display-1" style="color: #428bca;">Battlestar Galactica</h1>
                 <h3 class="text-center">A game about genocide ... at it's finest.</h3>
@@ -32,7 +32,7 @@
         </div>
 
         <div class="row" id="load_old" style="display: none;">
-            <div class="col-lg-4 offset-lg-4">
+            <div class="col-lg-6 offset-lg-3">
                 <form method="POST" id="save_game_form">
 
                     <div id="alert" class="alert alert-danger" role="alert" style="display: none;">
@@ -42,9 +42,17 @@
                     <div class="form-group row">
                         <label for="save_name" class="col-xs-2 col-form-label">Save name</label>
                         <div class="col-xs-10">
-                            <input type="text" name="save_name" class="form-control" id="save_name" placeholder="Save name">
+                            <input type="text" name="save_name_text_bar" class="form-control" id="save_name_text_bar" placeholder="Save name" disabled>
                         </div>
                     </div>
+
+                    {% for save in saves %}
+                        <div class="card card-block card-save" id="{{ save.save_name }}">
+                            <h3 class="card-title">{{ save.save_name }}</h3>
+                            <p class="card-text" style="margin: 0;">Created: {{ save.create_time }}</p>
+                            <p class="card-text modified_time">Last Modified: {{ save.modified_time }}</p>
+                        </div>
+                    {% endfor %}
 
                     <hr style="margin: 5%;">
 
@@ -55,7 +63,7 @@
         </div>
 
         <div class="row" id="create_new" style="display: none;">
-            <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-6 offset-sm-3 col-xs-8 offset-xs-2">
+            <div class="col-lg-6 offset-lg-3">
                 <form method="POST">
 
                     <button type="submit" name="start_new_game" value="default" class="btn btn-primary btn-block text-center">The true BSG universe.</button>
@@ -83,8 +91,12 @@
 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/static/js/bootstrap.min.js"></script>
+
     <!-- Jquery Validate Library -->
     <script src="/static/js/dragscroll/dragscroll.js"></script>
+
+    <!-- Custom Javascript -->
+    <script src="/static/js/bsg_main.js"></script>
 
     <script>
         $(document).ready(function(){
@@ -103,19 +115,25 @@
                 }
             });
 
+            $(document).on('click', '.card.card-block.card-save', function(e) {
+                $('#save_name_text_bar').val($(this).attr('id'));
+                $('.card.card-block.card-save').removeClass('card-outline-primary');
+                $(this).addClass('card-outline-primary');
+            });
+
             $(document).on('click', '#load_game', function () {
                 event.preventDefault();
                 $.ajax({
                     type: 'POST',
-                    url: '/validate_save',
+                    url: '/load_game',
                     data: JSON.stringify({
-                        'save_name': $('#save_name').val()
+                        'save_name': $('#save_name_text_bar').val()
                     }),
                     dataType: 'json',
                     contentType: 'application/json',
                     success: function(server_data){
                         if (server_data['valid'] === true ) {
-                            $(document).refresh()
+                            location.reload();
                         }
                         else {
                             $('#alert').slideDown();
