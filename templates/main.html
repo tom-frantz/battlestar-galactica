@@ -24,11 +24,11 @@
                             <div class="col-xl-10 offset-xl-1">
 
                                 <div id="main_menu_body">
-                                    <button id="save_game" class="btn btn-block btn-secondary">Save Game</button>
-                                    <button id="load_game" class="btn btn-block btn-secondary">Load Game</button>
+                                    <button id="save_game" class="btn btn-block btn-secondary saves_game_menu">Save Game</button>
+                                    <button id="load_game" class="btn btn-block btn-secondary saves_game_menu">Load Game</button>
                                 </div>
 
-                                <div id="main_menu_save_menu" style="display: none;">
+                                <div id="main_menu_saves_menu" style="display: none;">
                                     <!-- Saves go here. -->
                                     <input type="text" name="save_name_text_bar" class="form-control" id="save_name_text_bar" placeholder="Save name" style="margin-bottom: 16px;">
                                     {% for save in saves %}
@@ -38,7 +38,7 @@
                                             <p class="card-text modified_time">Last Modified: {{ save.modified_time }}</p>
                                         </div>
                                     {% endfor %}
-                                    <button id="save_game_save" class="btn btn-primary">Save Game</button>
+                                    <button id="saves_menu_button" class="btn btn-primary">s</button>
                                 </div>
 
                             </div>
@@ -56,9 +56,9 @@
     <nav id="navbar" class="navbar navbar-fixed-top navbar-dark" style="background-color: #202020">
         <!-- Nav links -->
         <ul class="nav navbar-nav">
-            <li class="nav-item"> <a class="nav-link text-primary" data-toggle="modal" data-target="#main_menu">Menu</a> </li>
-            <li id="index-link" class="nav-item"> <a href="#index-container" class="nav-link" data-toggle="collapse" aria-expanded="true" aria-controls="map-container">Index</a> </li>
-            <li id="map-link" class="nav-item"> <a href="#map-container" class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="map-container">Map</a> </li>
+            <li id="main_menu_modal_link" class="nav-item"> <a class="nav-link text-primary" data-toggle="modal" data-target="#main_menu">Menu</a> </li>
+            <li id="index_link" class="nav-item"> <a href="#index-container" class="nav-link" data-toggle="collapse" aria-expanded="true" aria-controls="map-container">Index</a> </li>
+            <li id="map_link" class="nav-item"> <a href="#map-container" class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="map-container">Map</a> </li>
             <span class="float-xs-right">
                 <li class="nav-item"> <p id="warp-coords" class="navbar-text text-muted" style="margin-bottom: 0px;">Warp Coords: 0, 0</p> </li>
                 <li class="nav-item"> <a id="warp" class="btn btn-outline-secondary text-muted navbar-btn next-turn disabled" role="button" aria-disabled="true">Warp</a> </li>
@@ -201,11 +201,23 @@
                 world.next_turn(e, this)
             });
 
-            $(document).on('click', '#save_game', function (e) {
+            $(document).on('click', '#main_menu_modal_link', function (e) {
+                $('#main_menu_body').css({'display': ''});
+                $('#main_menu_saves_menu').css({'display': 'none'});
+            });
+
+            $(document).on('click', '.saves_game_menu', function (e) {
                 $('#main_menu_body').slideUp();
                 setTimeout( function () {
-                    $('#main_menu_save_menu').slideDown();
-                }, 500)
+                    $('#main_menu_saves_menu').slideDown();
+                }, 500);
+                if ($(this).attr('id') === 'save_game') {
+                    $("#saves_menu_button").text('Save Game').attr({'btn_type': 'save_game'})
+                }
+                else {
+                    $("#saves_menu_button").text('Load Game').attr({'btn_type': 'load_game'});
+                    $("#save_name_text_bar").attr({'disabled': ''})
+                }
             });
 
             $(document).on('click', '.card.card-block.card-save', function(e) {
@@ -214,8 +226,13 @@
                 $(this).addClass('card-outline-primary');
             });
 
-            $(document).on('click', '#save_game_save', function (e) {
-                world.save_game_ajax(e, this, $('#save_name_text_bar').val())
+            $(document).on('click', '#saves_menu_button', function (e) {
+                if ($(this).attr('btn_type') === 'save_game' ) {
+                    world.save_game_ajax(e, this, $('#save_name_text_bar').val())
+                }
+                else if ($(this).attr('btn_type') === 'load_game') {
+                    world.load_game_ajax(e, this, $('#save_name_text_bar').val())
+                }
             });
         });
     </script>
