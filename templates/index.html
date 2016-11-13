@@ -15,37 +15,120 @@
 <body>
 
     <div class="container-fluid">
+
         <div class="row">
-            <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-6 offset-sm-3 col-xs-8 offset-xs-2" style="margin-top: 5%">
+            <div class="col-lg-4 offset-lg-4" style="margin-top: 5%;">
+
                 <h1 class="text-center display-1" style="color: #428bca;">Battlestar Galactica</h1>
                 <h3 class="text-center">A game about genocide ... at it's finest.</h3>
                 <hr style="margin: 5%">
-                <h4>Pick your game style</h4>
-                <form method="POST">
-                    <button type="submit" name="start_game" value="default" class="btn btn-primary btn-block text-center">The True BSG Universe.</button>
-                    <button type="submit" name="start_game" value="random" class="btn btn-default btn-block text-center">Completely random.</button>
+
+                <div id="base">
+                    <button id="btn_load_old" class="btn btn-primary btn-block btn-base">Load a save</button>
+                    <button id="btn_create_new" class="btn btn-secondary btn-block btn-base">Create a new game</button>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row" id="load_old" style="display: none;">
+            <div class="col-lg-4 offset-lg-4">
+                <form method="POST" id="save_game_form">
+
+                    <div id="alert" class="alert alert-danger" role="alert" style="display: none;">
+                        <strong>Oh snap!</strong> Change a few things up and try submitting again.
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="save_name" class="col-xs-2 col-form-label">Save name</label>
+                        <div class="col-xs-10">
+                            <input type="text" name="save_name" class="form-control" id="save_name" placeholder="Save name">
+                        </div>
+                    </div>
 
                     <hr style="margin: 5%;">
-                    <h3>Settings</h3>
 
+                    <button id="load_game" type="submit" class="btn btn-primary btn-block text-lg-center">Load Game</button>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="row" id="create_new" style="display: none;">
+            <div class="col-lg-4 offset-lg-4 col-md-4 offset-md-4 col-sm-6 offset-sm-3 col-xs-8 offset-xs-2">
+                <form method="POST">
+
+                    <button type="submit" name="start_new_game" value="default" class="btn btn-primary btn-block text-center">The true BSG universe.</button>
+                    <button type="submit" name="start_new_game" value="random" class="btn btn-secondary btn-block text-center">Completely random.</button>
+
+                    <hr style="margin: 5%;">
+
+                    <h3>Settings</h3>
                     <div class="form-group row">
                         <label for="seed" class="col-xs-1 col-form-label">Seed</label>
                         <div class="col-xs-11">
-                            <input type="text" name="seed" class="form-control" id="seed" placeholder="leave blank for random">
+                            <input type="text" name="seed" class="form-control" id="seed" placeholder="Leave blank for random">
                         </div>
                     </div>
+
                 </form>
             </div>
         </div>
     </div>
 
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- jQuery and Tether(necessary for Bootstrap's JavaScript plugins) -->
     <script src="/static/js/jquery-2.2.1.min.js"></script>
+    <script src="/static/js/tether/js/tether.min.js"></script>
+
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="/static/js/bootstrap.min.js"></script>
     <!-- Jquery Validate Library -->
     <script src="/static/js/dragscroll/dragscroll.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $(document).on('click', '.btn-base', function(e){
+                $('#base').slideUp();
+                console.log($(this).attr('id'));
+                if ($(this).attr('id') === 'btn_load_old') {
+                    setTimeout( function() {
+                        $('#load_old').slideDown();
+                    }, 500);
+                }
+                else {
+                    setTimeout( function() {
+                        $('#create_new').slideDown();
+                    }, 500);
+                }
+            });
+
+            $(document).on('click', '#load_game', function () {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/validate_save',
+                    data: JSON.stringify({
+                        'save_name': $('#save_name').val()
+                    }),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function(server_data){
+                        if (server_data['valid'] === true ) {
+                            $(document).refresh()
+                        }
+                        else {
+                            $('#alert').slideDown();
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert('Error: Unable to load page: ' + thrownError);
+                    }
+                })
+            });
+
+        });
+    </script>
 
 </body>
 </html>
