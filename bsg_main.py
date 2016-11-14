@@ -75,7 +75,10 @@ def index():
 			elif request.form.get('start_new_game', None) == 'random':
 				player_world.initial_galaxy_generation(seed, False)
 		else:
-			return render_template('index.html', trim_blocks=True, lstrip_blocks=True)
+			db = get_db()
+			cur = db.execute('SELECT * FROM saves')
+			saves = cur.fetchall()
+			return render_template('index.html', saves=saves, trim_blocks=True, lstrip_blocks=True)
 
 	db = get_db()
 	cur = db.execute('SELECT * FROM saves')
@@ -93,7 +96,11 @@ def save_game():
 	jquery_data = request.get_json()
 
 	time = datetime.now()
-	time = str(time.day) + '/' + str(time.month) + '/' + str(time.year) + ' ' + str(time.hour) + ':' + str(time.minute)
+	if time.minute < 10:
+		time_minute = '0' + str(time.minute)
+	else:
+		time_minute = str(time.minute)
+	time = str(time.day) + '/' + str(time.month) + '/' + str(time.year) + ' ' + str(time.hour) + ':' + time_minute
 
 	db = get_db()
 	cur = db.execute('SELECT save_name FROM saves')
@@ -104,13 +111,14 @@ def save_game():
 			db.execute('UPDATE saves SET pickle=?, modified_time=? WHERE save_name=?;', (pickle.dumps(player_world), time, jquery_data['save_name']))
 			db.commit()
 			return jsonify(time=time)
-	db.execute('INSERT INTO saves (save_name, pickle, create_time, modified_time, save_settings) VALUES (?, ?, ?, ?, ?);', (jquery_data['save_name'], pickle.dumps(player_world), time, time, '{"seed": ' + str(player_world.seed) + '}') )
+	db.execute('INSERT INTO saves (save_name, pickle, create_time, modified_time, save_settings) VALUES (?, ?, ?, ?, ?);',
+			   (jquery_data['save_name'], pickle.dumps(player_world), time, time, '{"seed": ' + str(player_world.seed) + '}') )
 	db.commit()
 	return jsonify(time=time)
 
 
 # Code to check if a save is valid. Is done in index.html
-@app.route('/validate_save', methods=['POST'])
+@app.route('/load_game', methods=['POST'])
 def validate_save():
 	global player_world
 	jquery_data = request.get_json()
@@ -121,16 +129,11 @@ def validate_save():
 
 	if player_save:
 		player_world = pickle.loads(player_save['pickle'])
+		print(player_world.world_initiated)
+		print('Save Valid')
 		return jsonify(valid=True)
+	print("Save Invalid")
 	return jsonify(valid=False)
-
-
-@app.route('/load_game', methods=['POST'])
-def load_game():
-	global player_world
-	jquery_data = request.get_json()
-
-	return jsonify()
 
 
 # Code for a AJAX call for the next turn functions.
