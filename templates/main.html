@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Battlestar Galactica</title>
 
     <!-- Bootstrap stylesheet -->
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/simple-sidebar.css" rel="stylesheet">
     <!-- FontAwesome stylesheet -->
     <link href="/static/font-awesome-4.6.1/css/font-awesome.min.css" rel="stylesheet">
     <!-- Custom stylesheet -->
@@ -57,6 +58,7 @@
         <!-- Nav links -->
         <ul class="nav navbar-nav">
             <li id="main_menu_modal_link" class="nav-item"> <a class="nav-link text-primary" data-toggle="modal" data-target="#main_menu">Menu</a> </li>
+            <li id="main_menu_sidebar_link" class="nav-item"> <a class="nav-link text-primary">Sidebar</a> </li>
             <li id="index_link" class="nav-item"> <a href="#index-container" class="nav-link" data-toggle="collapse" aria-expanded="true" aria-controls="map-container">Index</a> </li>
             <li id="map_link" class="nav-item"> <a href="#map-container" class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="map-container">Map</a> </li>
             <span class="float-xs-right">
@@ -73,75 +75,88 @@
         <img src="/static/images/2016_tile.png" alt="star_tile" id="star_tile">
     </div>
 
-    <!-- Fluid container for body -->
-    <div class="container-fluid">
-
-        <!-- Index page -->
-        <div id="index-container" aria-expanded="true" class="collapse in">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="display-1">Index</h1>
-                    <hr>
-                    <h2>Some Heading</h2>
-                    <p>Lorem Ipsum Dolor some other text lmao</p>
-                </div>
-            </div>
+    <div id="wrapper" class="toggled">
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">Topper Text</li>
+                <li><a href="#">Dank Link</a></li>
+                <li><p>Sikko Sidebar Text</p></li>
+            </ul>
         </div>
 
-        <!-- Map page -->
-        <div id="map-container" class="collapse" aria-expanded="false">
-            <div class="row">
+        <!-- Fluid container for body -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
 
-                <div id="map-header" class="col-md-12">
-                    <h1 class="display-1">Map Page</h1>
-                    <hr>
-                </div>
-
-                <div id="map-galaxy-canvas" class="col-md-8">
-                    <div id="star-map" class="dragscroll" style="overflow: scroll; position: relative; margin-bottom: 15px;">
-                        <canvas id="star-canvas" width="2016" height="2016"></canvas>
-                        <!-- Location = (32 * x) + 32 | x = [0, 60] for perfect 16 pixel gaps between 16 pixel sprites. Midpoint is 992, 992 -->
+                <!-- Index page -->
+                <div id="index-container" aria-expanded="true" class="collapse in">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h1 class="display-1">Index</h1>
+                            <hr>
+                            <h2>Some Heading</h2>
+                            <p>Lorem Ipsum Dolor some other text lmao</p>
+                        </div>
                     </div>
                 </div>
 
-                <div id="map-galaxy-side-bar" class="col-md-4" style="bottom: 100px; margin-top: 100px;">
+                <!-- Map page -->
+                <div id="map-container" class="collapse" aria-expanded="false">
+                    <div class="row">
 
-                    <h1>System Info</h1>
-                    <h4><small>System Name: </small><span id="system-name"></span></h4>
-                    <h4><small>Global Coordinates: </small><span id="system-global-position"></span></h4>
-                    <h4><small>Local Coordinates: </small><span id="system-local-position"></span></h4>
-                    <h4><small>Star Type: </small><span id="system-star-type"></span></h4>
-                    <h4><small>Warp Chance: </small><span id="system-warp-chance"></span></h4>
+                        <div id="map-header" class="col-md-12">
+                            <h1 class="display-1">Map Page</h1>
+                            <hr>
+                        </div>
 
-                    <hr class="margin-right-15">
+                        <div id="map-galaxy-canvas" class="col-md-8">
+                            <div id="star-map" class="dragscroll" style="overflow: scroll; position: relative; margin-bottom: 15px;">
+                                <canvas id="star-canvas" width="2016" height="2016"></canvas>
+                                <!-- Location = (32 * x) + 32 | x = [0, 60] for perfect 16 pixel gaps between 16 pixel sprites. Midpoint is 992, 992 -->
+                            </div>
+                        </div>
 
-                    <h2>Celestial Bodies</h2>
-                    <h3>Planets:</h3>
+                        <div id="map-galaxy-side-bar" class="col-md-4" style="bottom: 100px; margin-top: 100px;">
 
-                    <button id='btn-destination' class="btn btn-default btn-block">Set Destination</button>
+                            <h1>System Info</h1>
+                            <h4><small>System Name: </small><span id="system-name"></span></h4>
+                            <h4><small>Global Coordinates: </small><span id="system-global-position"></span></h4>
+                            <h4><small>Local Coordinates: </small><span id="system-local-position"></span></h4>
+                            <h4><small>Star Type: </small><span id="system-star-type"></span></h4>
+                            <h4><small>Warp Chance: </small><span id="system-warp-chance"></span></h4>
 
+                            <hr class="margin-right-15">
+
+                            <h2>Celestial Bodies</h2>
+                            <h3>Planets:</h3>
+
+                            <button id='btn-destination' class="btn btn-default btn-block">Set Destination</button>
+
+                        </div>
+
+                        <div id="map-system-view" class="col-md-8">
+
+                        </div>
+
+                        <div id="map-system-side-bar" class="col-md-4">
+
+                        </div>
+                    </div>
                 </div>
 
-                <div id="map-system-view" class="col-md-8">
+                <!-- Fleet Page -->
+                <div id="fleet-container" class="collapse" aria-expanded="false">
+                    <div class="row">
+                        <div>
 
+                        </div>
+                    </div>
                 </div>
 
-                <div id="map-system-side-bar" class="col-md-4">
-
-                </div>
             </div>
         </div>
-
-        <!-- Fleet Page -->
-        <div id="fleet-container" class="collapse" aria-expanded="false">
-            <div class="row">
-                <div>
-
-                </div>
-            </div>
-        </div>
-
     </div>
+
 
     <!-- Bootstrap Dependencies -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -234,6 +249,12 @@
                     world.load_game_ajax(e, this, $('#save_name_text_bar').val())
                 }
             });
+
+            $(document).on('click', '#main_menu_sidebar_link', function(e) {
+                e.preventDefault();
+                $('#wrapper').toggleClass('toggled')
+            });
+
         });
     </script>
 </body>

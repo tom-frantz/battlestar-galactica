@@ -102,7 +102,7 @@ var world = ( function() {
 
     function set_destination(e) {
         selected_position = system['global_position'];
-        $('#warp').removeClass('disabled').removeClass('text-muted').addClass('text-white');
+        $('#warp').removeClass('disabled').removeClass('text-muted btn-outline-secondary').addClass('text-white btn-primary');
         $('#warp-coords').text('Warp Coords: ' + selected_position[0] + ', ' + selected_position[1]).removeClass('text-muted').addClass('text-white');
     }
 
@@ -147,6 +147,30 @@ var world = ( function() {
         })
     }
 
+    function load_game_ajax(e, el, load_game_name) {
+        $.ajax({
+            type: 'POST',
+            url: '/load_game',
+            data: JSON.stringify({
+                'load_name': load_game_name
+            }),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (server_data) {
+                if (server_data['valid'] === true) {
+                    alert('Load game successful.');
+                    location.reload();
+                }
+                else {
+                    alert('Load game unsuccessful.')
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert('Error: Unable to load page: ' + thrownError);
+            }
+        })
+    }
+
     return {
         init: __init,
         generate_canvas_and_stars: generate_canvas_and_stars,
@@ -155,6 +179,7 @@ var world = ( function() {
         set_destination: set_destination,
         next_turn: next_turn_ajax,
         save_game_ajax: save_game_ajax,
+        load_game_ajax: load_game_ajax,
         starmap_height: starmap_height
     };
 })();

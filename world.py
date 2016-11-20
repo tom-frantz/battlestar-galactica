@@ -1,6 +1,7 @@
 import math
 import random
 
+
 class World(object):
 	def __init__(self, galaxy, event_handler, fleet_handler):
 		self.galaxy = galaxy

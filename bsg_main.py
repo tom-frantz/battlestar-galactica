@@ -112,7 +112,7 @@ def save_game():
 			db.commit()
 			return jsonify(time=time)
 	db.execute('INSERT INTO saves (save_name, pickle, create_time, modified_time, save_settings) VALUES (?, ?, ?, ?, ?);',
-			   (jquery_data['save_name'], pickle.dumps(player_world), time, time, '{"seed": ' + str(player_world.seed) + '}') )
+			   (jquery_data['save_name'], pickle.dumps(player_world), time, time, '{"seed": ' + str(player_world.seed) + '}'))
 	db.commit()
 	return jsonify(time=time)
 

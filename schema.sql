@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS players;
+DROP TABLE IF EXISTS saves;
 CREATE TABLE players (
-  'id' integer PRIMARY KEY AUTOINCREMENT,
-  'title' text,
-  'text' text
+  'id'     INTEGER PRIMARY KEY AUTOINCREMENT,
+  'player' TEXT NOT NULL,
+  'pickle' TEXT NOT NULL
 );
