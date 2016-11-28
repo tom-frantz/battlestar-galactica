@@ -1,43 +1,6 @@
+import constants
 import random
 import roman
-
-
-# STATIC VARS.
-SYSTEM_NAMES = ('Abydos', 'Aegis', 'Aldebaran', 'Amel', 'Aurelia', 'Balaho', 'Ballybran', 'Belzagor', 'Chiron', 'Chthon', 'Corneria', 'Cyteen', 'Demeter', 'Deucalion', 'Dosadi', 'Eayn', 'Erna', 'Etheria', 'Fhloston', 'Finisterre', 'Furya', 'Gallifrey', 'Gor', "Gorta")
-SYSTEM_NAMES_PREFIXES = ('Al', 'Omi', 'Bah')
-SYSTEM_NAMES_SUFFIXES = ('Prime', 'Alpha', 'Beta', 'Delta', 'Gamma', 'Minor')
-
-# There needs to be at least two entries per var to make sure the random.choice works properly
-STARS = (
-	['Blue Dwarf', ['/static/images/stars/B_D_1.png']],
-	['Blue Giant', ['/static/images/stars/B_G_1.png']],
-	['Blue Main', ['/static/images/stars/B_M_1.png']],
-	['Red Dwarf', ['/static/images/stars/R_D_1.png']],
-	['Red Giant', ['/static/images/stars/R_G_1.png']],
-	['Red Main', ['/static/images/stars/R_M_1.png']],
-	['Red Super Giant', ['/static/images/stars/R_SG_1.png']],
-	['Yellow Main', ['/static/images/stars/Y_M_1.png']]
-)
-
-PLANETS = (
-	['Barren', ['/static/images/planets/BAR_1.png']],
-	['Barren', ['/static/images/planets/BAR_1.png']]
-)
-
-MOONS = (
-	['Rocky', ['/static/images/moons/ROC_1.png']],
-	['Rocky', ['/static/images/moons/ROC_1.png']]
-)
-
-ASTEROIDS = (
-	['Small Belt', ['/static/images/asteroids/SMA_1.png']],
-	['Small Belt', ['/static/images/asteroids/SMA_1.png']]
-)
-
-COMETS = (
-	['Ice', ['/static/images/comets/ICE.png']],
-	['Ice', ['/static/images/comets/ICE.png']]
-)
 
 
 class Galaxy(object):
@@ -58,8 +21,8 @@ class Galaxy(object):
 				Planet('Picon', 1),
 				Planet('Caprica', 2),
 				Planet('Gemenon', 3),
-				Planet('Tauron', 4, moons=[TerrestrialBody('Minos', MOONS, 0)]),
-				CelestialBody('Eberos Asteroid Belt', ASTEROIDS, 5),
+				Planet('Tauron', 4, moons=[TerrestrialBody('Minos', constants.galaxy_gen['MOONS'], 0)]),
+				CelestialBody('Eberos Asteroid Belt', constants.galaxy_gen['ASTEROIDS'], 5),
 				Planet('Zeus', 6),
 				Planet('Persephone', 7)
 			]))
@@ -67,14 +30,14 @@ class Galaxy(object):
 				Planet('Troy', 0),
 				Planet('Leonis', 1),
 				Planet('Pallas', 2),
-				CelestialBody('Ouranos Asteroid Belt', ASTEROIDS, 3),
-				Planet('Virgon', 4, moons=[TerrestrialBody('Hibernia', MOONS, 0)]),
+				CelestialBody('Ouranos Asteroid Belt', constants.galaxy_gen['ASTEROIDS'], 3),
+				Planet('Virgon', 4, moons=[TerrestrialBody('Hibernia', constants.galaxy_gen['MOONS'], 0)]),
 				Planet('Hera', 5)
 			]))
 			self.system_list.append(SolarSystem((-2, 2), "Helios Gamma", total_planets=6, bodies=[
 				Planet('Thanatos', 0),
-				CelestialBody('Acheron Asteroid Belt', ASTEROIDS, 1),
-				Planet('Libran', 2, moons=[TerrestrialBody('Herse', MOONS, 0), TerrestrialBody('Pandrossos', MOONS, 1)]),
+				CelestialBody('Acheron Asteroid Belt', constants.galaxy_gen['ASTEROIDS'], 1),
+				Planet('Libran', 2, moons=[TerrestrialBody('Herse', constants.galaxy_gen['MOONS'], 0), TerrestrialBody('Pandrossos', constants.galaxy_gen['MOONS'], 1)]),
 				Planet('Scorpia', 3),
 				Planet('Sagittaron', 4),
 				Planet('Ophion', 5)
@@ -82,14 +45,14 @@ class Galaxy(object):
 			self.system_list.append(SolarSystem((-3, 3), "Helios Delta", total_planets=7, bodies=[
 				Planet('Phoebe', 0),
 				Planet('Styx', 1),
-				CelestialBody('Aeolus Asteroid Belt', ASTEROIDS, 2),
+				CelestialBody('Aeolus Asteroid Belt', constants.galaxy_gen['ASTEROIDS'], 2),
 				Planet('Aerilon', 3),
 				Planet('Hestia', 4),
 				Planet('Canceron', 5),
 				Planet('Aquaria', 6)
 			]))
 		else:
-			solar_system = SolarSystem((0, 0), random.choice(SYSTEM_NAMES))
+			solar_system = SolarSystem((0, 0), random.choice(constants.galaxy_gen['SYSTEM_NAMES']))
 			solar_system.generate_bodies()
 			self.system_list.append(solar_system)
 		self.__create_solar_systems([-90, 90], [-90, 90])
@@ -124,13 +87,13 @@ class Galaxy(object):
 					if not system_too_close:
 						name_chance = random.randint(1, 20)
 						if name_chance == 10:
-							system_name = random.choice(SYSTEM_NAMES_PREFIXES) + ' ' + random.choice(SYSTEM_NAMES) + ' ' + random.choice(SYSTEM_NAMES_SUFFIXES)
+							system_name = random.choice(constants.galaxy_gen['SYSTEM_NAMES_PREFIXES']) + ' ' + random.choice(constants.galaxy_gen['SYSTEM_NAMES']) + ' ' + random.choice(constants.galaxy_gen['SYSTEM_NAMES_SUFFIXES'])
 						elif name_chance == 9:
-							system_name = random.choice(SYSTEM_NAMES_PREFIXES) + ' ' + random.choice(SYSTEM_NAMES)
+							system_name = random.choice(constants.galaxy_gen['SYSTEM_NAMES_PREFIXES']) + ' ' + random.choice(constants.galaxy_gen['SYSTEM_NAMES'])
 						elif name_chance == 8:
-							system_name = random.choice(SYSTEM_NAMES) + ' ' + random.choice(SYSTEM_NAMES_SUFFIXES)
+							system_name = random.choice(constants.galaxy_gen['SYSTEM_NAMES']) + ' ' + random.choice(constants.galaxy_gen['SYSTEM_NAMES_SUFFIXES'])
 						else:
-							system_name = random.choice(SYSTEM_NAMES)
+							system_name = random.choice(constants.galaxy_gen['SYSTEM_NAMES'])
 						solar_system = SolarSystem((x, y), system_name)
 						self.system_list.append(solar_system)
 						print(self.system_list[self.system_list.index(solar_system)].name, self.system_list[self.system_list.index(solar_system)].global_position)
@@ -159,7 +122,7 @@ class SolarSystem(object):
 		self.name = name
 
 		# Choosing a star and assigning it.
-		star = random.choice(STARS)
+		star = random.choice(constants.galaxy_gen['STARS'])
 		self.type = star[0]
 		self.file = star[1]
 
@@ -176,7 +139,7 @@ class SolarSystem(object):
 				body_name = self.name + " " + roman.toRoman(orbit_index + 1)
 				if random.randint(1, asteroid_chance) == 1:
 					# Generate asteroids
-					self.bodies.append(CelestialBody(body_name, ASTEROIDS, orbit_index))
+					self.bodies.append(CelestialBody(body_name, constants.galaxy_gen['ASTEROIDS'], orbit_index))
 				else:
 					# generate planet
 					planet = Planet(body_name, orbit_index)
@@ -234,11 +197,11 @@ class TerrestrialBody(CelestialBody):
 
 class Planet(TerrestrialBody):
 	def __init__(self, name, orbit, **kwargs):
-		super().__init__(name, PLANETS, orbit)
+		super().__init__(name, constants.galaxy_gen['PLANETS'], orbit)
 		self.moons = []
 		self.__dict__.update(kwargs)
 
 	def generate_moons(self):
 		for orbit_index in range(0, random.randint(0, 4)):
 			name = self.name + " - Moon " + str(orbit_index + 1)
-			self.moons.append(TerrestrialBody(name, MOONS, orbit_index))
+			self.moons.append(TerrestrialBody(name, constants.galaxy_gen['MOONS'], orbit_index))
