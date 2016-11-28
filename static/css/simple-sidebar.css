@@ -27,7 +27,7 @@
     position: fixed;
     left: 250px;
     width: 0;
-    height: calc(100% - 55px);
+    height: calc(100% - 54px);
     margin-left: -250px;
     overflow-y: hidden;
     overflow-x: hidden;
@@ -55,11 +55,15 @@
 
 /* Sidebar Styles */
 
-#sidebar-content {
+.sidebar-content {
     position: relative;
     height: 100%;
     width: 100%;
-    border: 1px solid green;
+    color: #FFFFFF;
+}
+
+#sidebar-content {
+
 }
 
 .sidebar-nav {
@@ -108,13 +112,8 @@
 }
 
 .sidebar-bottom {
-    border: 1px solid red;
     position: absolute;
     bottom: 0;
-}
-
-.sidebar-bottom p {
-    color: #FFF;
 }
 
 @media(min-width:768px) {

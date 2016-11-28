@@ -26,7 +26,7 @@ var world = ( function() {
     }
 
     function starmap_height(star_map) {
-        fullscreen_window_height = $(window).height() - 210;
+        fullscreen_window_height = $(window).height() - 248;
         if (fullscreen_window_height > 2016) {
             star_map.height(2016);
         } else {
