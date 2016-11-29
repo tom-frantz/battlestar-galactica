@@ -50,11 +50,11 @@
             <li id="index_link" class="nav-item"><a href="#index-container" class="nav-link" data-toggle="collapse" aria-expanded="true" aria-controls="index-container">Index</a></li>
             <li id="map_link" class="nav-item"><a href="#map-container" class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="map-container">Navigation</a></li>
             <li id="fleet_link" class="nav-item"><a href="#fleet-container" class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="fleet_container">Fleet</a></li>
-                <span class="float-xs-right">
-                    <li class="nav-item"><p id="warp-coords" class="navbar-text text-muted" style="margin-bottom: 0px;">Warp Coords: 0, 0</p></li>
-                    <li class="nav-item"><a id="warp" class="btn btn-outline-secondary text-muted navbar-btn next-turn disabled" role="button" aria-disabled="true">Warp</a></li>
-                    <li class="nav-item"><a id="next-turn" class="btn btn-primary navbar-btn next-turn text-white" role="button">Next Turn</a></li>
-                </span>
+            <span class="float-xs-right">
+                <li class="nav-item"><p id="warp-coords" class="navbar-text text-muted" style="margin-bottom: 0px;">Warp Coords: 0, 0</p></li>
+                <li class="nav-item"><a id="warp" class="btn btn-outline-secondary text-muted navbar-btn next-turn disabled" role="button" aria-disabled="true">Warp</a></li>
+                <li class="nav-item"><a id="next-turn" class="btn btn-primary navbar-btn next-turn text-white" role="button">Next Turn</a></li>
+            </span>
 
         </ul>
     </nav>
@@ -135,19 +135,33 @@
 
                         <hr class="margin-right-15">
 
-                        <h2>Celestial Bodies</h2>
-                        <h3>Planets:</h3>
-
                         <button id='btn-destination' class="btn btn-default btn-block">Set Destination</button>
 
                     </div>
 
-                    <div id="map-system-view" class="col-md-8">
-
-                    </div>
-
-                    <div id="map-system-side-bar" class="col-md-4">
-
+                    <div id="map-system-table" class="col-md-12">
+                        <div class="card">
+                            <ul class="list-group list-group-flush">
+                                <div class="card-header background-white">
+                                    <a data-toggle="collapse" href="#collapse1" aria-expanded="true" aria-controls="collapse1">Planet I</a>
+                                </div>
+                                <div id="collapse1" class="collapse in">
+                                    <div class="card-block" style="border-bottom: 1px solid rgba(0,0,0,.125);">
+                                        Meme Dream
+                                    </div>
+                                </div>
+                            </ul>
+                            <ul class="list-group list-group-flush">
+                                <div class="card-header background-white">
+                                    <a class="collapsed" data-toggle="collapse" href="#collapse2" aria-expanded="true" aria-controls="collapse2">Planet II</a>
+                                </div>
+                                <div id="collapse2" class="collapse">
+                                    <div class="card-block">
+                                        Meme Dream
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -156,7 +170,7 @@
             <div id="fleet-container" class="collapse" aria-expanded="false">
                 <div class="row">
                     <div class="col-md-12">
-                        <h1 class="display-1">Fleet Management</h1>
+                        <h1 class="display-1" style="display: inline-block;">Fleet Management</h1>
                         <hr>
                         <h2>Some Heading</h2>
                         <p>Some Description.</p>
