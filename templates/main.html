@@ -15,37 +15,26 @@
 </head>
 <body>
 
-    <div id="main_menu" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="main_menuLabel" aria-hidden="true">
+    <div id="save_menu" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="save_menu" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header"><h4 class="modal-title">Main Menu</h4></div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-xl-10 offset-xl-1">
-
-                                <div id="main_menu_body">
-                                    <button id="save_game" class="btn btn-block btn-secondary saves_game_menu">Save Game</button>
-                                    <button id="load_game" class="btn btn-block btn-secondary saves_game_menu">Load Game</button>
-                                </div>
-
-                                <div id="main_menu_saves_menu" style="display: none;">
-                                    <!-- Saves go here. -->
-                                    <input type="text" name="save_name_text_bar" class="form-control" id="save_name_text_bar" placeholder="Save name" style="margin-bottom: 16px;">
-                                    {% for save in saves %}
-                                        <div class="card card-block card-save" id="{{ save.save_name }}">
-                                            <h3 class="card-title">{{ save.save_name }}</h3>
-                                            <p class="card-text" style="margin: 0;">Created: {{ save.create_time }}</p>
-                                            <p class="card-text modified_time">Last Modified: {{ save.modified_time }}</p>
-                                        </div>
-                                    {% endfor %}
-                                    <button id="saves_menu_button" class="btn btn-primary">s</button>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
+                <div class="modal-header">
+                    <h4 class="modal-title">Save Menu</h4>
                 </div>
+
+                <div class="modal-body">
+                    <!-- Saves go here. -->
+                    <input type="text" name="save_name_text_bar" class="form-control" id="save_name_text_bar" placeholder="Save name" style="margin-bottom: 16px;">
+                    {% for save in saves %}
+                        <div class="card card-block card-save" id="{{ save.save_name }}">
+                            <h3 class="card-title">{{ save.save_name }}</h3>
+                            <p class="card-text" style="margin: 0;">Created: {{ save.create_time }}</p>
+                            <p class="card-text modified_time">Last Modified: {{ save.modified_time }}</p>
+                        </div>
+                    {% endfor %}
+                    <button id="saves_menu_button" class="btn btn-primary">s</button>
+                </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary text-lg-center" data-dismiss="modal">Close</button>
                 </div>
@@ -57,15 +46,15 @@
     <nav id="navbar" class="navbar navbar-fixed-top navbar-dark" style="background-color: #202020">
         <!-- Nav links -->
         <ul class="nav navbar-nav">
-            <li id="main_menu_modal_link" class="nav-item"> <a class="nav-link text-primary" data-toggle="modal" data-target="#main_menu">Menu</a> </li>
-            <li id="main_menu_sidebar_link" class="nav-item"> <a class="nav-link text-primary">Sidebar</a> </li>
-            <li id="index_link" class="nav-item"> <a href="#index-container" class="nav-link" data-toggle="collapse" aria-expanded="true" aria-controls="map-container">Index</a> </li>
-            <li id="map_link" class="nav-item"> <a href="#map-container" class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="map-container">Map</a> </li>
-            <span class="float-xs-right">
-                <li class="nav-item"> <p id="warp-coords" class="navbar-text text-muted" style="margin-bottom: 0px;">Warp Coords: 0, 0</p> </li>
-                <li class="nav-item"> <a id="warp" class="btn btn-outline-secondary text-muted navbar-btn next-turn disabled" role="button" aria-disabled="true">Warp</a> </li>
-                <li class="nav-item"> <a id="next-turn" class="btn btn-primary navbar-btn next-turn text-white" role="button">Next Turn</a> </li>
-            </span>
+            <li id="sidebar_link" class="nav-item"><a class="nav-link">Sidebar</a></li>
+            <li id="index_link" class="nav-item"><a href="#index-container" class="nav-link" data-toggle="collapse" aria-expanded="true" aria-controls="index-container">Index</a></li>
+            <li id="map_link" class="nav-item"><a href="#map-container" class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="map-container">Navigation</a></li>
+            <li id="fleet_link" class="nav-item"><a href="#fleet-container" class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="fleet_container">Fleet</a></li>
+                <span class="float-xs-right">
+                    <li class="nav-item"><p id="warp-coords" class="navbar-text text-muted" style="margin-bottom: 0px;">Warp Coords: 0, 0</p></li>
+                    <li class="nav-item"><a id="warp" class="btn btn-outline-secondary text-muted navbar-btn next-turn disabled" role="button" aria-disabled="true">Warp</a></li>
+                    <li class="nav-item"><a id="next-turn" class="btn btn-primary navbar-btn next-turn text-white" role="button">Next Turn</a></li>
+                </span>
 
         </ul>
     </nav>
@@ -79,15 +68,15 @@
         <div id="sidebar">
             <div class="sidebar-content">
                 <ul class="sidebar-nav">
-                    <li class="sidebar-brand">Topper Text</li>
+                    <li class="sidebar-brand" style="margin-top: 27px;">Topper Text</li>
                     <li><a href="#">Dank Link</a></li>
                     <li><a href="#">Second Dank Link</a></li>
                 </ul>
                 <div class="sidebar-bottom" style="bottom: 0;">
                     <ul class="sidebar-nav" style="position: relative; margin-bottom: 52px;">
                         <li class="sidebar-brand">Menu:</li>
-                        <li><a href="#">Save Game</a></li>
-                        <li><a href="#">Load Game</a></li>
+                        <li><a id="save_game" class="save_menu_link" data-toggle="modal" data-target="#save_menu">Save Game</a></li>
+                        <li><a id="load_game" class="save_menu_link" data-toggle="modal" data-target="#save_menu">Load Game</a></li>
                     </ul>
                 </div>
             </div>
@@ -100,7 +89,7 @@
             <div id="index-container" aria-expanded="true" class="collapse in">
                 <div class="row">
                     <div class="col-md-12">
-                        <h1 class="display-1">Index</h1>
+                        <h1 class="display-1" style="display: inline-block;">Index</h1>
                         <hr>
                         <h2>Some Heading</h2>
                         <p>Lorem Ipsum Dolor some other text lmao</p>
@@ -113,7 +102,8 @@
                 <div class="row">
 
                     <div id="map-header" class="col-md-12">
-                        <h1 class="display-1">Map Page</h1>
+                        <h1 class="display-1" style="display: inline-block;">Navigation</h1>
+                        <button class="btn btn-secondary float-md-right">Hide</button>
                         <hr>
                     </div>
 
@@ -165,7 +155,13 @@
             <!-- Fleet Page -->
             <div id="fleet-container" class="collapse" aria-expanded="false">
                 <div class="row">
-                    <div>
+                    <div class="col-md-12">
+                        <h1 class="display-1">Fleet Management</h1>
+                        <hr>
+                        <h2>Some Heading</h2>
+                        <p>Some Description.</p>
+                    </div>
+                    <div class="col-md-12">
 
                     </div>
                 </div>
@@ -240,15 +236,13 @@
                 $('#main_menu_saves_menu').css({'display': 'none'});
             });
 
-            $(document).on('click', '.saves_game_menu', function (e) {
-                $('#main_menu_body').slideUp();
-                setTimeout( function () {
-                    $('#main_menu_saves_menu').slideDown();
-                }, 500);
+            $(document).on('click', '.save_menu_link', function (e) {
+                console.log($(this).attr('id'));
                 if ($(this).attr('id') === 'save_game') {
-                    $("#saves_menu_button").text('Save Game').attr({'btn_type': 'save_game'})
+                    $("#saves_menu_button").text('Save Game').attr({'btn_type': 'save_game'});
+                    $('#save_name_text_bar').removeAttr('disabled');
                 }
-                else {
+                else if ($(this).attr('id') === 'load_game') {
                     $("#saves_menu_button").text('Load Game').attr({'btn_type': 'load_game'});
                     $("#save_name_text_bar").attr({'disabled': ''})
                 }
@@ -269,7 +263,7 @@
                 }
             });
 
-            $(document).on('click', '#main_menu_sidebar_link', function(e) {
+            $(document).on('click', '#sidebar_link', function(e) {
                 e.preventDefault();
                 $('#content-wrapper').toggleClass('toggled')
             });
