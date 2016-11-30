@@ -98,6 +98,35 @@ var world = ( function() {
         $('#system-local-position').text("("+ system['local_position'][0] +", "+ system['local_position'][1] +")");
         $('#system-star-type').text(system['type']);
         $('#system-warp-chance').text(Math.sqrt (Math.pow(system['local_position'][0], 2) + Math.pow(system['local_position'][1], 2) ));
+
+        var planets_list_card = $('#planets-list-card');
+        planets_list_card.slideUp();
+
+        setTimeout( function() {
+            planets_list_card.html('');
+            for (var planet in system['bodies']) {
+                var plan = system['bodies'][planet];
+                var plan_name = plan['name'].split(' ').join('_');
+                var plan_type = 'Barren Dankness';
+                planets_list_card.append(
+                    '<div class="list-group list-group-flush">' +
+                        '<div class="card-header background-white">' +
+                            '<a class="collapsed" data-toggle="collapse" href="#' + plan_name + '" aria-expanded="true" aria-controls="' + plan_name + '">' + plan_name + '</a>' +
+                        '</div>' +
+                        '<div id="' + plan_name + '" class="collapse">' +
+                            '<div class="card-block" style="border-bottom: 1px solid rgba(0,0,0,.125);">' +
+                                'Type: ' + plan_type +
+                            '</div>' +
+                        '</div>' +
+                    '</div>'
+                );
+            }
+            var scroll_to = planets_list_card.offset().top + planets_list_card.height();
+            planets_list_card.slideDown();
+            $('html, body').animate({
+                scrollTop: scroll_to
+            }, 1000);
+        }, 500);
     }
 
     function set_destination(e) {
