@@ -140,27 +140,8 @@
                     </div>
 
                     <div id="map-system-table" class="col-md-12">
-                        <div class="card">
-                            <ul class="list-group list-group-flush">
-                                <div class="card-header background-white">
-                                    <a data-toggle="collapse" href="#collapse1" aria-expanded="true" aria-controls="collapse1">Planet I</a>
-                                </div>
-                                <div id="collapse1" class="collapse in">
-                                    <div class="card-block" style="border-bottom: 1px solid rgba(0,0,0,.125);">
-                                        Meme Dream
-                                    </div>
-                                </div>
-                            </ul>
-                            <ul class="list-group list-group-flush">
-                                <div class="card-header background-white">
-                                    <a class="collapsed" data-toggle="collapse" href="#collapse2" aria-expanded="true" aria-controls="collapse2">Planet II</a>
-                                </div>
-                                <div id="collapse2" class="collapse">
-                                    <div class="card-block">
-                                        Meme Dream
-                                    </div>
-                                </div>
-                            </ul>
+                        <div id="planets-list-card" class="card">
+                            <!-- Javascript will fill when solar systems are clicked. -->
                         </div>
                     </div>
                 </div>
@@ -230,19 +211,19 @@
             });
 
             $(document).on('click', '.nav-item', function(e) {
-                world.nav_div_links(e, this, star_map)
+                world.nav_div_links(e, this, star_map);
             });
 
             $(document).on("click", '.solar-system', function(e) {
-                world.solar_system(e, this)
+                world.solar_system(e, this);
             });
 
             $(document).on('click', '#btn-destination', function(e) {
-                world.set_destination(e)
+                world.set_destination(e);
             });
 
             $(document).on("click", '.next-turn', function(e) {
-                world.next_turn(e, this)
+                world.next_turn(e, this);
             });
 
             $(document).on('click', '#main_menu_modal_link', function (e) {
@@ -258,7 +239,7 @@
                 }
                 else if ($(this).attr('id') === 'load_game') {
                     $("#saves_menu_button").text('Load Game').attr({'btn_type': 'load_game'});
-                    $("#save_name_text_bar").attr({'disabled': ''})
+                    $("#save_name_text_bar").attr({'disabled': ''});
                 }
             });
 
@@ -270,16 +251,16 @@
 
             $(document).on('click', '#saves_menu_button', function (e) {
                 if ($(this).attr('btn_type') === 'save_game' ) {
-                    world.save_game_ajax(e, this, $('#save_name_text_bar').val())
+                    world.save_game_ajax(e, this, $('#save_name_text_bar').val());
                 }
                 else if ($(this).attr('btn_type') === 'load_game') {
-                    world.load_game_ajax(e, this, $('#save_name_text_bar').val())
+                    world.load_game_ajax(e, this, $('#save_name_text_bar').val());
                 }
             });
 
             $(document).on('click', '#sidebar_link', function(e) {
                 e.preventDefault();
-                $('#content-wrapper').toggleClass('toggled')
+                $('#content-wrapper').toggleClass('toggled');
             });
 
         });
