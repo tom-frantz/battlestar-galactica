@@ -36,11 +36,12 @@ var world = ( function() {
 
     function __generate_stars(star_map) {
         for (var sys in galaxy['system_list']) {
-            var local_position = [galaxy['system_list'][sys]['global_position'][0] - galaxy['current_position'][0], galaxy['system_list'][sys]['global_position'][1] - galaxy['current_position'][1]];
-            galaxy['system_list'][sys].local_position = local_position
+            var system = galaxy['system_list'][sys];
+            var local_position = [system['global_position'][0] - galaxy['current_position'][0], system['global_position'][1] - galaxy['current_position'][1]];
+            system.local_position = local_position;
 
             if (local_position[0] >= -30 && local_position[0] <= 30 && local_position[1] >= -30 && local_position[1] <= 30) {
-                var src = galaxy['system_list'][sys]['file'][0];
+                var src = system['file'][0];
                 src.split(' ').join('_');
 
                 var el = $("<img>").attr({
@@ -49,14 +50,14 @@ var world = ( function() {
                     class: "solar-system",
                     "data-toggle": "tooltip",
                     "data-container": "body",
-                    title: "(" + local_position[0] + ", " + local_position[1] + ")",
-                    id: "(" + galaxy['system_list'][sys]['global_position'][0] + ", " + galaxy['system_list'][sys]['global_position'][1] + ")",
-                    'global-x': galaxy['system_list'][sys]['global_position'][0],
-                    'global-y': galaxy['system_list'][sys]['global_position'][1]
+                    title: "(" + system['local_position'][0] + ", " + system['local_position'][1] + ")",
+                    id: "(" + system['global_position'][0] + ", " + system['global_position'][1] + ")",
+                    'global-x': system['global_position'][0],
+                    'global-y': system['global_position'][1]
                 }).css({
                     position: 'absolute',
-                    left: (local_position[0] + 30) * 32 + 32,
-                    top: (-local_position[1] + 30) * 32 + 32
+                    left: (system['local_position'][0] + 30) * 32 + 32,
+                    top: (-system['local_position'][1] + 30) * 32 + 32
                 });
                 star_map.append(el);
             }
@@ -93,30 +94,26 @@ var world = ( function() {
                 system = galaxy['system_list'][sys];
             }
         }
-        $('#system-name').text(system['name']);
-        $('#system-global-position').text("("+ system['global_position'][0] +", "+ system['global_position'][1] +")");
-        $('#system-local-position').text("("+ system['local_position'][0] +", "+ system['local_position'][1] +")");
-        $('#system-star-type').text(system['type']);
-        $('#system-warp-chance').text(Math.sqrt (Math.pow(system['local_position'][0], 2) + Math.pow(system['local_position'][1], 2) ));
 
         var planets_list_card = $('#planets-list-card');
         planets_list_card.slideUp();
 
         setTimeout( function() {
             planets_list_card.html('');
-            for (var planet in system['bodies']) {
-                var plan = system['bodies'][planet];
-                var plan_name = plan['name'].split(' ').join('_');
-                var plan_type = 'Barren Dankness';
+            for (var plan in system['bodies']) {
+                var planet = system['bodies'][plan];
+                var planet_name_joined = planet['name'].split(' ').join('_');
                 planets_list_card.append(
                     '<div class="list-group list-group-flush">' +
                         '<div class="card-header background-white">' +
-                            '<a class="collapsed" data-toggle="collapse" href="#' + plan_name + '" aria-expanded="true" aria-controls="' + plan_name + '">' + plan_name + '</a>' +
+                            '<a class="collapsed" data-toggle="collapse" href="#' + planet_name_joined + '" aria-expanded="true" aria-controls="' + planet_name_joined + '">' + planet['name'] + '</a>' +
                         '</div>' +
-                        '<div id="' + plan_name + '" class="collapse">' +
+                        '<div id="' + planet_name_joined + '" class="collapse">' +
                             '<div class="card-block" style="border-bottom: 1px solid rgba(0,0,0,.125);">' +
-                                'Type: ' + plan_type +
-                            '</div>' +
+                                '<ul> <li>Name: ' + planet['name'] +
+                                '</li><li>Type: ' + planet['type'] +
+                                '</li><li>Orbit: ' + planet['orbit'] +
+                            '</li></ul></div>' +
                         '</div>' +
                     '</div>'
                 );
