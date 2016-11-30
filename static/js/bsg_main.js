@@ -92,8 +92,15 @@ var world = ( function() {
         for (var sys in galaxy['system_list']) {
             if (galaxy['system_list'][sys]['global_position'][0] === global_position[0] && galaxy['system_list'][sys]['global_position'][1] === global_position[1]) {
                 system = galaxy['system_list'][sys];
+                break;
             }
         }
+
+        $('#system-name').text(system['name']);
+        $('#system-global-position').text("("+ system['global_position'][0] +", "+ system['global_position'][1] +")");
+        $('#system-local-position').text("("+ system['local_position'][0] +", "+ system['local_position'][1] +")");
+        $('#system-star-type').text(system['type']);
+        $('#system-warp-chance').text(Math.sqrt (Math.pow(system['local_position'][0], 2) + Math.pow(system['local_position'][1], 2) ));
 
         var planets_list_card = $('#planets-list-card');
         planets_list_card.slideUp();
