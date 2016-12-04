@@ -175,7 +175,7 @@ class CelestialBody(object):
 		self.file = random.choice(body[1])
 
 		# 0 to n for objects that orbit sun (Planets and asteroid belts), and -1 for comets. Moons have 0 to n for their orbits around parent planet.
-		self.parent_body = 'Star'
+		self.parent_body = 'star'
 		self.orbit = orbit
 		self.__dict__.update(kwargs)
 

@@ -7,11 +7,21 @@ var world = ( function() {
 
     var world, galaxy, system, selected_position, fullscreen_window_height;
     var map_scroll_toggle = true;
+    var next_turn_data = {};
 
     function __init(World) {
         world = World;
         galaxy = world['galaxy'];
         console.log(galaxy);
+
+        next_turn_data = {
+            actions: [
+                ['warp', {
+                    'selected_position': [1, 1],
+                    'fleet': world['fleet_handler']['fleets'][0]
+                }]
+            ]
+        };
     }
 
     function __canvas_fill(canvas_id, tile_id) {

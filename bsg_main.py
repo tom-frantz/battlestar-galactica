@@ -140,7 +140,6 @@ def validate_save():
 @app.route('/next_turn', methods=['POST'])
 def next_turn():
 	jquery_data = request.get_json()
-	print(jquery_data['save_name'])
 
 	player_world.next_turn(jquery_data)
 
