@@ -53,7 +53,7 @@
             <span class="float-xs-right">
                 <li class="nav-item"><p id="warp-coords" class="navbar-text text-muted" style="margin-bottom: 0px;">Warp Coords: 0, 0</p></li>
                 <li class="nav-item"><a id="warp" class="btn btn-outline-secondary text-muted navbar-btn next-turn disabled" role="button" aria-disabled="true">Warp</a></li>
-                <li class="nav-item"><a id="next-turn" class="btn btn-primary navbar-btn next-turn text-white" role="button">Next Turn</a></li>
+                <li class="nav-item"><a id="pause-button" class="btn btn-primary navbar-btn">Pause</a></li>
             </span>
 
         </ul>
@@ -99,52 +99,72 @@
 
             <!-- Map page -->
             <div id="map-container" class="collapse" aria-expanded="false">
-                <div class="row">
+                <div id="map-header" class="col-md-12">
+                    <h1 class="display-1">Navigation</h1>
+                    <hr>
+                </div>
 
-                    <div id="map-header" class="col-md-12">
-                        <h1 class="display-1" style="display: inline-block;">Navigation</h1>
-                        <button class="btn btn-secondary float-md-right">Hide</button>
-                        <hr>
-                    </div>
+                <ul class="nav nav-tabs" style="margin-bottom: 10px;">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#galaxy-map-container" role="tab">Galaxy Map</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#system-map" role="tab">System Map</a>
+                    </li>
+                </ul>
 
-                    <div id="map-galaxy-canvas" class="col-md-8">
-                        <div id="star-map" class="dragscroll" style="overflow: scroll; position: relative; margin-bottom: 15px;">
-                            <canvas id="star-canvas" width="2016" height="2016"></canvas>
-                            <!-- Location = (32 * x) + 32 | x = [0, 60] for perfect 16 pixel gaps between 16 pixel sprites. Midpoint is 992, 992 -->
+                <div class="tab-content">
+                    <div class="tab-pane fade in active" id="galaxy-map-container">
+                        <div class="row">
+
+                            <div id="map-galaxy-canvas" class="col-md-8">
+                                <i id="re-center" class="fa fa-circle-thin text-white" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="re-center" style="position: absolute; bottom: 55px; left: 40px; z-index: 100;"></i>
+                                <div id="galaxy-map" class="dragscroll" style="overflow: scroll; position: relative; margin-bottom: 15px;">
+                                    <canvas id="star-canvas" width="2016" height="2016"></canvas>
+
+                                    <!-- Location = (32 * x) + 32 | x = [0, 60] for perfect 16 pixel gaps between 16 pixel sprites. Midpoint is 992, 992 -->
+                                </div>
+                            </div>
+
+                            <div id="map-galaxy-side-bar" class="col-md-4">
+
+                                <h1>System Info</h1>
+                                <h4>
+                                    <small>System Name:</small>
+                                    <span id="system-name"></span></h4>
+                                <h4>
+                                    <small>Global Coordinates:</small>
+                                    <span id="system-global-position"></span></h4>
+                                <h4>
+                                    <small>Local Coordinates:</small>
+                                    <span id="system-local-position"></span></h4>
+                                <h4>
+                                    <small>Star Type:</small>
+                                    <span id="system-star-type"></span></h4>
+                                <h4>
+                                    <small>Warp Chance:</small>
+                                    <span id="system-warp-chance"></span></h4>
+
+                                <hr class="margin-right-15">
+
+                                <button id='btn-destination' class="btn btn-default btn-block">Set Destination</button>
+
+                            </div>
+
+                        </div>
+
+                        <div id="map-system-table" class="col-md-12">
+                            <div id="planets-list-card" class="card">
+                                <!-- Javascript will fill when solar systems are clicked. -->
+                            </div>
                         </div>
                     </div>
 
-                    <div id="map-galaxy-side-bar" class="col-md-4" style="bottom: 100px; margin-top: 100px;">
-
-                        <h1>System Info</h1>
-                        <h4>
-                            <small>System Name:</small>
-                            <span id="system-name"></span></h4>
-                        <h4>
-                            <small>Global Coordinates:</small>
-                            <span id="system-global-position"></span></h4>
-                        <h4>
-                            <small>Local Coordinates:</small>
-                            <span id="system-local-position"></span></h4>
-                        <h4>
-                            <small>Star Type:</small>
-                            <span id="system-star-type"></span></h4>
-                        <h4>
-                            <small>Warp Chance:</small>
-                            <span id="system-warp-chance"></span></h4>
-
-                        <hr class="margin-right-15">
-
-                        <button id='btn-destination' class="btn btn-default btn-block">Set Destination</button>
-
-                    </div>
-
-                    <div id="map-system-table" class="col-md-12">
-                        <div id="planets-list-card" class="card">
-                            <!-- Javascript will fill when solar systems are clicked. -->
-                        </div>
+                    <div class="tab-pane fade" id="system-map">
+                        <p>Banker</p>
                     </div>
                 </div>
+
             </div>
 
             <!-- Fleet Page -->
@@ -181,86 +201,64 @@
     <script src="/static/js/dragscroll/dragscroll.js"></script>
 
     <!-- Main JavaScript file -->
-    <script src="/static/js/bsg_main.js"></script>
+    <script src="/static/js/world.js"></script>
+
+    <!-- Javascript for handling $.on() events -->
+    <script src="/static/js/handlers.js"></script>
 
     <script>
 
         $(document).ready(function(){
-            var player_world = {{ player_world|safe }};
-            var system;
-            var star_map = $('#star-map');
+            var galaxy_map = $('#galaxy-map');
 
-            world.init(player_world);
+            world.init({{ player_world|safe }});
+            handlers.init(world);
 
             /* Generates the webpages canvas, the viewport for the canvas, and the height */
             var baseimg = new Image();
             baseimg.src = '/static/images/2016_tile.png';
 
             baseimg.onload = function () {
-                world.generate_canvas_and_stars('star-canvas', 'star_tile', star_map);
+                handlers.create_canvas($('#star-canvas'), $('#star_tile'), galaxy_map, world);
             };
 
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
-            });
+            // The toggle to fire tooltips.
+            $('[data-toggle="tooltip"]').tooltip();
 
             $(window).on('resize', function () {
-                world.starmap_height(star_map);
-                var height = $(document).height() - 54;
-                $('#sidebar').height(height);
+                handlers.resize_window(galaxy_map);
             });
 
-            $(document).on('click', '.nav-item', function(e) {
-                world.nav_div_links(e, this, star_map);
+            $(document).on('click', '.nav-item', function() {
+                handlers.nav_click(this, galaxy_map);
             });
 
-            $(document).on("click", '.solar-system', function(e) {
-                world.solar_system(e, this);
+            $(document).on("click", '.solar-system', function() {
+                handlers.star_click(this, world);
             });
 
-            $(document).on('click', '#btn-destination', function(e) {
-                world.set_destination(e);
+            $(document).on('click', '#btn-destination', function() {
+                handlers.set_destination_click(world);
             });
 
-            $(document).on("click", '.next-turn', function(e) {
-                world.next_turn(e, this);
+            $(document).on('click', '.save_menu_link', function () {
+                handlers.saves_menu_link_click(this)
             });
 
-            $(document).on('click', '#main_menu_modal_link', function (e) {
-                $('#main_menu_body').css({'display': ''});
-                $('#main_menu_saves_menu').css({'display': 'none'});
-            });
-
-            $(document).on('click', '.save_menu_link', function (e) {
-                console.log($(this).attr('id'));
-                if ($(this).attr('id') === 'save_game') {
-                    $("#saves_menu_button").text('Save Game').attr({'btn_type': 'save_game'});
-                    $('#save_name_text_bar').removeAttr('disabled');
-                }
-                else if ($(this).attr('id') === 'load_game') {
-                    $("#saves_menu_button").text('Load Game').attr({'btn_type': 'load_game'});
-                    $("#save_name_text_bar").attr({'disabled': ''});
-                }
-            });
-
-            $(document).on('click', '.card.card-block.card-save', function(e) {
-                $('#save_name_text_bar').val($(this).attr('id'));
-                $('.card.card-block.card-save').removeClass('card-outline-primary');
-                $(this).addClass('card-outline-primary');
+            $(document).on('click', '.card.card-block.card-save', function() {
+                handlers.saves_card_click(this)
             });
 
             $(document).on('click', '#saves_menu_button', function (e) {
-                if ($(this).attr('btn_type') === 'save_game' ) {
-                    world.save_game_ajax(e, this, $('#save_name_text_bar').val());
-                }
-                else if ($(this).attr('btn_type') === 'load_game') {
-                    world.load_game_ajax(e, this, $('#save_name_text_bar').val());
-                }
+                handlers.saves_button_click(e, this)
             });
 
             $(document).on('click', '#sidebar_link', function(e) {
-                e.preventDefault();
-                $('#content-wrapper').toggleClass('toggled');
+                handlers.toggle_sidebar_click(e)
+            });
+
+            $(document).on('click', '#re-center', function () {
+               handlers.re_center_map_content(galaxy_map)
             });
 
         });
