@@ -16,7 +16,7 @@ class Galaxy(object):
 		self.system_list = []
 		# Generates the base planets if selected to do so.
 		if default:
-			self.system_list.append(SolarSystem((0, 0), "Helios Alpha", total_planets=8, bodies=[
+			self.system_list.append(SolarSystem((0, 0), "Helios Alpha", total_planets=8, bodies_generated=True, bodies=[
 				Planet('Icarus', 0),
 				Planet('Picon', 1),
 				Planet('Caprica', 2),
@@ -26,7 +26,7 @@ class Galaxy(object):
 				Planet('Zeus', 6),
 				Planet('Persephone', 7)
 			]))
-			self.system_list.append(SolarSystem((1, 1), "Helios Beta", total_planets=6, bodies=[
+			self.system_list.append(SolarSystem((1, 1), "Helios Beta", total_planets=6, bodies_generated=True, bodies=[
 				Planet('Troy', 0),
 				Planet('Leonis', 1),
 				Planet('Pallas', 2),
@@ -34,7 +34,7 @@ class Galaxy(object):
 				Planet('Virgon', 4, moons=[TerrestrialBody('Hibernia', constants.galaxy_gen['MOONS'], 0)]),
 				Planet('Hera', 5)
 			]))
-			self.system_list.append(SolarSystem((-2, 2), "Helios Gamma", total_planets=6, bodies=[
+			self.system_list.append(SolarSystem((-2, 2), "Helios Gamma", total_planets=6, bodies_generated=True, bodies=[
 				Planet('Thanatos', 0),
 				CelestialBody('Acheron Asteroid Belt', constants.galaxy_gen['ASTEROIDS'], 1),
 				Planet('Libran', 2, moons=[TerrestrialBody('Herse', constants.galaxy_gen['MOONS'], 0), TerrestrialBody('Pandrossos', constants.galaxy_gen['MOONS'], 1)]),
@@ -42,7 +42,7 @@ class Galaxy(object):
 				Planet('Sagittaron', 4),
 				Planet('Ophion', 5)
 			]))
-			self.system_list.append(SolarSystem((-3, 3), "Helios Delta", total_planets=7, bodies=[
+			self.system_list.append(SolarSystem((-3, 3), "Helios Delta", total_planets=7, bodies_generated=True, bodies=[
 				Planet('Phoebe', 0),
 				Planet('Styx', 1),
 				CelestialBody('Aeolus Asteroid Belt', constants.galaxy_gen['ASTEROIDS'], 2),
@@ -53,9 +53,9 @@ class Galaxy(object):
 			]))
 		else:
 			solar_system = SolarSystem((0, 0), random.choice(constants.galaxy_gen['SYSTEM_NAMES']))
-			solar_system.generate_bodies()
 			self.system_list.append(solar_system)
 		self.__create_solar_systems([-90, 90], [-90, 90])
+		self.generate_bodies([-90, 90], [-90, 90])
 
 	def galaxy_chunk_generation(self):
 		gen_list = []
@@ -77,13 +77,13 @@ class Galaxy(object):
 				system_chance = random.randint(0, chance)
 				if system_chance == 0:
 
-					# Check if the generated system is too close to any other created systems.
+					# Check if the generated selected_system is too close to any other created systems.
 					system_too_close = False
 					for system in self.system_list:
 						if -1 <= x - system.global_position[0] <= 1 and -1 <= y - system.global_position[1] <= 1:
 							system_too_close = True
 
-					# Name and create the system
+					# Name and create the selected_system
 					if not system_too_close:
 						name_chance = random.randint(1, 20)
 						if name_chance == 10:
@@ -100,16 +100,17 @@ class Galaxy(object):
 						total_count += 1
 		print('Total Count:', total_count)
 
-	def generate_bodies(self, x_bounds, y_bounds, other_bounds):
+	def generate_bodies(self, x_bounds, y_bounds, other_bounds=False):
 		for solar_system in self.system_list:
 			if solar_system.global_position[0] in range(x_bounds[0], x_bounds[1] + 1) \
-			and solar_system.global_position[1] in range(y_bounds[0], y_bounds[1 + 1]):
+			and solar_system.global_position[1] in range(y_bounds[0], y_bounds[1] + 1):
 				solar_system.generate_bodies()
 			else:
-				for bound in other_bounds:
-					if solar_system.global_position[0] in range(bound[0][0], bound[0][1] + 1) \
-					and solar_system.global_position[1] in range(bound[1][0], bound[1][1] + 1):
-						solar_system.generate_bodies()
+				if other_bounds:
+					for bound in other_bounds:
+						if solar_system.global_position[0] in range(bound[0][0], bound[0][1] + 1) \
+						and solar_system.global_position[1] in range(bound[1][0], bound[1][1] + 1):
+							solar_system.generate_bodies()
 
 
 class SolarSystem(object):
@@ -133,7 +134,7 @@ class SolarSystem(object):
 		self.__dict__.update(kwargs)
 
 	def generate_bodies(self, asteroid_chance=10):
-		# Generate planets and asteroids for a solar system. Call when necessary, not on generation of the system.
+		# Generate planets and asteroids for a solar selected_system. Call when necessary, not on generation of the selected_system.
 		if not self.bodies_generated:
 			for orbit_index in range(0, self.total_planets):
 				body_name = self.name + " " + roman.toRoman(orbit_index + 1)
@@ -146,10 +147,8 @@ class SolarSystem(object):
 					planet.generate_moons()
 					self.bodies.append(planet)
 
-				print(self.bodies[orbit_index].name)
 
-
-# Basis for Comets, Asteroids, Planets, Moons or any other object located within a system.
+# Basis for Comets, Asteroids, Planets, Moons or any other object located within a selected_system.
 # Instantiate this for asteroid belts and for comets.
 class CelestialBody(object):
 	def __init__(self, name, BODY, orbit, **kwargs):

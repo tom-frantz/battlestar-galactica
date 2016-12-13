@@ -7,6 +7,7 @@ class World(object):
 		self.galaxy = galaxy
 		self.event_handler = event_handler
 		self.fleet_handler = fleet_handler
+
 		self.world_initiated = False
 		self.seed = random.seed(random.randint(-4294967295, 4294967295))
 		self.next_turn_actions = {
@@ -32,19 +33,18 @@ class World(object):
 		a = parameters['selected_position'][0] - self.galaxy.current_position[0]
 		b = parameters['selected_position'][1] - self.galaxy.current_position[1]
 
-		c = math.sqrt((a ** 2) + (b ** 2))
-		warp_probability = int(math.floor(c * 2.5))
-		warp_success_threshold = random.randint(50, 100)
+		warp_range = math.sqrt((a ** 2) + (b ** 2))
+		warp_success_threshold = random.randint(20, 40)
 
-		if warp_probability <= warp_success_threshold:
+		if warp_range <= warp_success_threshold:
 			self.__warp_success(parameters)
-		elif warp_probability - warp_success_threshold < 10:
+		elif warp_range - warp_success_threshold < 4:
 			# Add in stuff for undesired orbit, near other body
 			self.__warp_success(parameters)
-		elif warp_probability - warp_success_threshold < 25:
+		elif warp_range - warp_success_threshold < 10:
 			# Add stuff for unstable orbit, headed to/from body
 			self.__warp_success(parameters)
-		elif warp_probability - warp_success_threshold < 50:
+		elif warp_range - warp_success_threshold < 20:
 			# Add stuff for fleet being spread out.
 			self.__warp_success(parameters)
 		else:
