@@ -107,16 +107,19 @@ var handlers = ( function () {
         console.log(world.get_selected_system());
         var selected_system = world.get_selected_system();
 
-        $('#system-name').text(selected_system.name);
-        $('#system-global-position').text("("+ selected_system.global_position[0] +", "+ selected_system.global_position[1] +")");
-        $('#system-local-position').text("("+ selected_system['local_position'][0] +", "+ selected_system['local_position'][1] +")");
-        $('#system-star-type').text(selected_system['type']);
-        $('#system-warp-chance').text(Math.sqrt (Math.pow(selected_system['local_position'][0], 2) + Math.pow(selected_system['local_position'][1], 2) ));
-
         var planets_list_card = $('#planets-list-card');
-        planets_list_card.slideUp();
+        var solar_system_details = $("#map-galaxy-side-bar");
+
+        planets_list_card.fadeOut();
+        solar_system_details.fadeOut();
 
         setTimeout( function() {
+            $('#system-name').text(selected_system.name);
+            $('#system-global-position').text("("+ selected_system.global_position[0] +", "+ selected_system.global_position[1] +")");
+            $('#system-local-position').text("("+ selected_system['local_position'][0] +", "+ selected_system['local_position'][1] +")");
+            $('#system-star-type').text(selected_system['type']);
+            $('#system-warp-chance').text(Math.sqrt (Math.pow(selected_system['local_position'][0], 2) + Math.pow(selected_system['local_position'][1], 2) ));
+
             planets_list_card.html('');
             for (var plan in selected_system['bodies']) {
                 var planet = selected_system['bodies'][plan];
@@ -136,7 +139,8 @@ var handlers = ( function () {
                     '</div>'
                 );
             }
-            planets_list_card.slideDown(400);
+            planets_list_card.fadeIn(400);
+            solar_system_details.fadeIn(400);
         }, 500);
     }
 
