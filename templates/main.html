@@ -52,8 +52,8 @@
             <li id="fleet_link" class="nav-item"><a href="#fleet-container" class="nav-link" data-toggle="collapse" aria-expanded="false" aria-controls="fleet_container">Fleet</a></li>
             <span class="float-xs-right">
                 <li class="nav-item"><p id="warp-coords" class="navbar-text text-muted" style="margin-bottom: 0px;">Warp Coords: 0, 0</p></li>
-                <li class="nav-item"><a id="warp" class="btn btn-outline-secondary text-muted navbar-btn next-turn disabled" role="button" aria-disabled="true">Warp</a></li>
-                <li class="nav-item"><a id="pause-button" class="btn btn-primary navbar-btn">Pause</a></li>
+                <li class="nav-item"><a id="warp-button" class="btn btn-outline-secondary text-muted navbar-btn disabled" role="button" aria-disabled="true">Warp</a></li>
+                <li class="nav-item"><a id="pause-button" class="btn btn-primary text-white navbar-btn">Pause</a></li>
             </span>
 
         </ul>
@@ -259,6 +259,10 @@
 
             $(document).on('click', '#re-center', function () {
                handlers.re_center_map_content(galaxy_map)
+            });
+
+            $(document).on('click', '#pause-button', function () {
+               handlers.pause_button(this, world);
             });
 
         });

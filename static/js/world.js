@@ -6,7 +6,7 @@
 var world = (function () {
     // Need to make a function to grab all the systems in the local area. [-30, -30] to [30, 30]
 
-    var player_world, selected_system;
+    var player_world, selected_system, timer;
 
     var local_systems_list = [];
     var map_scroll_toggle = true;
@@ -39,6 +39,10 @@ var world = (function () {
         }
     }
 
+    function __game_loop() {
+
+    }
+    
     function next_turn_ajax(e, el) {
         $.ajax({
             type: 'POST',
@@ -104,6 +108,16 @@ var world = (function () {
         })
     }
 
+    function play_game() {
+        timer = setInterval(__game_loop, 1000);
+    }
+
+    function pause_game() {
+        clearInterval(timer)
+    }
+
+    // Get and put functions
+
     function get_player_world() {
         return player_world;
     }
@@ -125,6 +139,8 @@ var world = (function () {
         next_turn: next_turn_ajax,
         save_game_ajax: save_game_ajax,
         load_game_ajax: load_game_ajax,
+        play_game: play_game,
+        pause_game: pause_game,
 
         // Functions to grab/put variables.
         player_world: get_player_world,

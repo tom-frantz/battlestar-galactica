@@ -187,6 +187,17 @@ var handlers = ( function () {
         __center_scroll_galaxy_map(galaxy_map)
     }
 
+    function pause_button(trigger, world) {
+        trigger = $(trigger);
+        if (trigger.text() === "Pause" ) {
+            trigger.text("Play");
+            world.pause_game();
+        } else if (trigger.text() === "Play") {
+            trigger.text("Pause");
+            world.play_game();
+        }
+    }
+
     return {
         init: __init,
         create_canvas: create_canvas,
@@ -198,6 +209,7 @@ var handlers = ( function () {
         saves_card_click: saves_card_click,
         saves_button_click: saves_button_click,
         toggle_sidebar_click: toggle_sidebar_click,
-        re_center_map_content: re_center_map_content
+        re_center_map_content: re_center_map_content,
+        pause_button: pause_button
     }
 })();
