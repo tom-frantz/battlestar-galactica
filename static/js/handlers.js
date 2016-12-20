@@ -80,7 +80,7 @@ var handlers = ( function () {
     }
 
     function resize_window(galaxy_map) {
-        this.__set_galaxy_map_height(galaxy_map);
+        __set_galaxy_map_height(galaxy_map);
         var sidebar_height = $(document).height() - 54;
         $('#sidebar').height(sidebar_height);
     }
