@@ -8,9 +8,13 @@ var handlers = ( function () {
 
     var local_systems_list;
 
+    var galaxy_map = $('#galaxy-map');
+
     function __init(world) {
         map_scroll_toggle = true;
         local_systems_list = world.local_systems_list();
+        var tick = world.get_tick();
+        $("#date-time").text(tick.getDate() + '/' + tick.getMonth() + '/' + tick.getFullYear() + " " + tick.getHours() + ":00")
     }
 
     function __draw_tiled_canvas(target_canvas_el, target_tile_el) {
@@ -24,7 +28,7 @@ var handlers = ( function () {
         ctx.fill();
     }
 
-    function __set_galaxy_map_height(galaxy_map) {
+    function __set_galaxy_map_height() {
         // Sets the galaxy map height to the remainder of the height.
         var window_height = $(window).height() - 313;
         if (window_height >= 2016) {
@@ -34,11 +38,11 @@ var handlers = ( function () {
         }
     }
 
-    function __generate_stars(galaxy_map, solar_systems_list) {
+    function __generate_stars(solar_systems_list) {
         // Only pass in solar systems within the local limits. [-30, -30] to [30, 30]
         for (var solar_system in solar_systems_list) {
             var system = solar_systems_list[solar_system];
-            var src = system['file'][0];
+            var src = system['file'];
             src.split(' ').join('_');
 
             var el = $("<img>").attr({
@@ -61,31 +65,27 @@ var handlers = ( function () {
         }
     }
 
-    function __center_scroll_galaxy_map(galaxy_map) {
+    function __center_scroll_galaxy_map() {
         // Scrolls to the center of the galaxy_map for view of current location.
         var scroll_to_hor = ( (2016 - galaxy_map.width()) / 2 );
         var scroll_to_ver = ( (2016 - galaxy_map.height()) / 2 );
         galaxy_map.animate({ scrollTop: scroll_to_ver, scrollLeft:scroll_to_hor})
     }
 
-    function create_canvas(target_canvas, target_tile, galaxy_map, world) {
+    function create_canvas() {
         // Creates canvas and stars for the navigation menu
-        var target_canvas_el = target_canvas[0];
-        var target_tile_el = target_tile[0];
-
-        console.log(galaxy_map);
-        __draw_tiled_canvas(target_canvas_el, target_tile_el);
+        __draw_tiled_canvas($('#star-canvas')[0], $('#star_tile')[0]);
         __set_galaxy_map_height(galaxy_map);
-        __generate_stars(galaxy_map, local_systems_list, world.player_world().fleet_handler['fleets'][0]);
+        __generate_stars(local_systems_list);
     }
 
-    function resize_window(galaxy_map) {
+    function resize_window() {
         __set_galaxy_map_height(galaxy_map);
         var sidebar_height = $(document).height() - 54;
         $('#sidebar').height(sidebar_height);
     }
 
-    function nav_click(trigger, galaxy_map) {
+    function nav_click(trigger) {
         if (map_scroll_toggle) {
             if ($(trigger).attr('id') === 'map_link')  {
                 setTimeout(__center_scroll_galaxy_map(galaxy_map), 400);
