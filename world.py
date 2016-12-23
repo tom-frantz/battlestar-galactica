@@ -15,6 +15,7 @@ class World(object):
 		}
 
 	def initial_galaxy_generation(self, seed, galaxy_gen_default=True):
+		# TODO This functionality needs to be merged within the __init methods.
 		self.galaxy.initial_galaxy_generation(galaxy_gen_default)
 		self.fleet_handler.generate_battlestar(local_location='Caprica')
 		if seed or seed == 0:
@@ -22,6 +23,7 @@ class World(object):
 		self.world_initiated = True
 
 	def next_turn(self, json_data):
+		# TODO Remove this for an event handler method.
 		for action in json_data['actions']:
 			action_function = json_data['actions'][action]
 			try:
@@ -30,6 +32,7 @@ class World(object):
 				print('Key not recognised in "self.next_turn_actions": ' + str(error))
 
 	def warp(self, parameters):
+		# FIXME Everything to do with warp.
 		a = parameters['selected_position'][0] - self.galaxy.current_position[0]
 		b = parameters['selected_position'][1] - self.galaxy.current_position[1]
 
@@ -52,6 +55,7 @@ class World(object):
 			warp_success = False
 
 	def __warp_success(self, parameters):
+		# TODO Complete this shit.
 		if parameters['fleet']['primary_fleet']:
 			self.galaxy.current_position = parameters['selected_position']
 			current_chunk = [math.floor((self.galaxy.current_position[0] + 30) / 60), math.floor((self.galaxy.current_position[1] + 30) / 60)]

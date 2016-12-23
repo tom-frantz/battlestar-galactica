@@ -8,6 +8,7 @@ class Galaxy(object):
 		self.chunks_loaded = [[-1, 1], [-1, 0], [-1, 1], [0, -1], [0, 0], [0, 1], [1, -1], [1, 0], [1, 1]]
 		# Change this to a list for ease of access. Solar systems have name/global coords for information lost.
 		self.system_list = []
+		# TODO Move to fleets, and set to fleet with BSG.
 		self.current_position = [0, 0]
 		self.current_chunk = [0, 0]
 
@@ -16,6 +17,7 @@ class Galaxy(object):
 		self.system_list = []
 		# Generates the base planets if selected to do so.
 		if default:
+			# TODO Remove possibly?
 			self.system_list.append(SolarSystem((0, 0), "Helios Alpha", total_planets=8, bodies_generated=True, bodies=[
 				Planet('Icarus', 0),
 				Planet('Picon', 1),
@@ -71,9 +73,8 @@ class Galaxy(object):
 
 	def __create_solar_systems(self, x_bounds, y_bounds, chance=20):
 		total_count = 0
-		# +1 is to ensure that the range works properly and does not cut out the extra border.
-		for x in range(x_bounds[0], x_bounds[1] + 1):
-			for y in range(y_bounds[0], y_bounds[1] + 1):
+		for x in range(x_bounds[0], x_bounds[1]):
+			for y in range(y_bounds[0], y_bounds[1]):
 				system_chance = random.randint(0, chance)
 				if system_chance == 0:
 
@@ -125,7 +126,7 @@ class SolarSystem(object):
 		# Choosing a star and assigning it.
 		star = random.choice(constants.galaxy_gen['STARS'])
 		self.type = star[0]
-		self.file = star[1]
+		self.file = random.choice(star[1])
 
 		# History of the star.
 		self.visited = 'never'
@@ -154,6 +155,7 @@ class CelestialBody(object):
 	def __init__(self, name, BODY, orbit, **kwargs):
 		self.name = name
 
+		# TODO Create random abundances per planet.
 		# for resources, [Abundance, Amount available]. Can increase amount available from planets and moons.
 		self.resources = {
 			'water': [random.randint(0, 1), 100],

@@ -7,6 +7,8 @@ class FleetHandler(object):
 		self.fleets = []
 
 	def generate_battlestar(self, **kwargs):
+		# TODO Change 'primary_fleet' to be recognized with a BSG in it.
+		# TODO Set the stats for the battlestar.
 		fleet = Fleet([0, 0], 'Caprica', primary_fleet=True)
 		fleet.ships.append(Ship(0, 'Battlestar Galactica', 2700, 5040, 25000000, 3, subsystems=[
 			SubSystem(0, 'Bridge', 'command/navigation', {'manoeuvre': 10, 'warp_timer': 15, 'planning': 10, 'organisation': 10, 'skill_bonus': 10}),
