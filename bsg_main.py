@@ -145,6 +145,9 @@ def next_turn():
 
 	return jsonify(success=True)
 
+@app.route('/trial')
+def trial():
+	return render_template("trial2.html")
 
 if __name__ == '__main__':
 	app.run()
