@@ -8,8 +8,7 @@ class Galaxy(object):
 		self.chunks_loaded = [[-1, 1], [-1, 0], [-1, 1], [0, -1], [0, 0], [0, 1], [1, -1], [1, 0], [1, 1]]
 		# Change this to a list for ease of access. Solar systems have name/global coords for information lost.
 		self.system_list = []
-		# TODO Move to fleets, and set to fleet with BSG.
-		self.current_position = [0, 0]
+		# DONE Move Global Coords to fleets, and set to fleet with BSG.
 		self.current_chunk = [0, 0]
 
 	def initial_galaxy_generation(self, default=True):
