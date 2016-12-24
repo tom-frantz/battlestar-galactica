@@ -6,29 +6,37 @@
 var world = (function () {
     // Need to make a function to grab all the systems in the local area. [-30, -30] to [30, 30]
 
-    var player_world, selected_system, timer;
+    var player_world, selected_system, timer, tick;
+
+    var event_queue = [];
+
+    var update_events = {
+        'resources': function (resources) {
+
+        },
+        'fleet_locations': function (fleet_location) {
+
+        }
+    };
 
     var local_systems_list = [];
     var map_scroll_toggle = true;
-    var next_turn_data = {};
+
+    function Event(event_id, ticks, tick_measure, params) {
+        this.ticks_until_completion =  ticks;
+        this.event_id = event_id; // The name of the method it will fire
+        this.tick_measure = tick_measure; // 'monthly', 'daily', 'hourly' ...
+        this.event_params = params;
+    }
 
     function __init(World) {
         player_world = World;
-        console.log('World: '); console.log(player_world);
-
-        next_turn_data = {
-            actions: [
-                ['warp', {
-                    'selected_position': [1, 1],
-                    'fleet': player_world['fleet_handler']['fleets'][0]
-                }]
-            ]
-        };
 
         for (var solar_system in player_world['galaxy']['system_list']) {
             player_world['galaxy']['system_list'][solar_system].local_position = [
-                player_world['galaxy']['system_list'][solar_system]['global_position'][0] - player_world['galaxy']['current_position'][0],
-                player_world['galaxy']['system_list'][solar_system]['global_position'][1] - player_world['galaxy']['current_position'][1]
+                // TODO Change from global position in world to primary fleet's location.
+                player_world['galaxy']['system_list'][solar_system]['global_position'][0] - player_world['fleet_handler']['fleets'][0][0],
+                player_world['galaxy']['system_list'][solar_system]['global_position'][1] - player_world['fleet_handler']['fleets'][0][1]
             ];
 
             var system = player_world['galaxy']['system_list'][solar_system];
@@ -37,10 +45,42 @@ var world = (function () {
                 local_systems_list.push(system)
             }
         }
+
+        tick = new Date ('1942', '7', '23', '8', '0', '0', '0')
+    }
+
+    function __update_game_times() {
+        $("#date-time").text(tick.getDate() + '/' + tick.getMonth() + '/' + tick.getFullYear() + " " + tick.getHours() + ":00")
     }
 
     function __game_loop() {
+        // IN PROGRESS AJAX back the data that needs to be processed.
+        $.ajax({
+            type: 'POST',
+            url: '/event_loop',
+            data: JSON.stringify(event_queue),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (server_data) {
+                // IN PROGRESS Process information and redisplay on the clientside.
+                // Returns 'event_name' and 'params' for each update_event sent back from the server.
 
+                // Sets the new tick
+                tick = server_data['tick'];
+
+                // Clears out the event queue for new data inputs
+                event_queue = [];
+
+                // Refreshes values from the server.
+                for (var event in server_data) {
+                    var current_event = server_data[event];
+                    update_events[current_event['event_name']](current_event['params'])
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {alert('Error: Unable to load page: ' + thrownError);}
+        });
+        // IN PROGRESS Update the HTML page with relevant information (DO IN AJAX).
+        __update_game_times();
     }
     
     function next_turn_ajax(e, el) {
@@ -58,10 +98,8 @@ var world = (function () {
                     location.reload();
                 }
             },
-            error: function (xhr, ajaxOptions, thrownError) {
-                alert('Error: Unable to load page: ' + thrownError);
-            }
-        })
+            error: function (xhr, ajaxOptions, thrownError) {alert('Error: Unable to load page: ' + thrownError);}
+        });
     }
 
     function save_game_ajax(e, el, save_game_name) {
@@ -116,7 +154,8 @@ var world = (function () {
         clearInterval(timer)
     }
 
-    // Get and put functions
+    // TODO Get and put functions within one function per var.
+    // E.G. A function to put and get the selected system.
 
     function get_player_world() {
         return player_world;
@@ -134,6 +173,10 @@ var world = (function () {
         selected_system = selected_sys;
     }
 
+    function get_tick() {
+        return tick
+    }
+
     return {
         init: __init,
         next_turn: next_turn_ajax,
@@ -146,6 +189,7 @@ var world = (function () {
         player_world: get_player_world,
         local_systems_list: get_local_systems_list,
         get_selected_system: get_selected_system,
-        put_selected_system: put_selected_system
+        put_selected_system: put_selected_system,
+        get_tick: get_tick
     };
 })();

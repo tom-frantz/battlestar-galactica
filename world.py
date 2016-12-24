@@ -1,16 +1,28 @@
 import math
 import random
+from datetime import datetime, timedelta
 
+
+class Event(object):
+	def __init__(self, event_id, ticks, tick_measure, params):
+		self.ticks_until_completion =  ticks
+		self.event_id = event_id # The name of the method it will fire
+		self.tick_measure = tick_measure # 'monthly', 'daily', 'hourly' ...
+		self.event_params = params
 
 class World(object):
-	def __init__(self, galaxy, event_handler, fleet_handler):
+	def __init__(self, galaxy, event_handler, fleet_handler, tick):
 		self.galaxy = galaxy
 		self.event_handler = event_handler
 		self.fleet_handler = fleet_handler
 
 		self.world_initiated = False
 		self.seed = random.seed(random.randint(-4294967295, 4294967295))
-		self.next_turn_actions = {
+
+		self.tick = tick
+		self.event_queue = []
+
+		self.clientside_events = {
 			'warp': self.warp
 		}
 
@@ -22,37 +34,46 @@ class World(object):
 			self.seed = seed
 		self.world_initiated = True
 
-	def next_turn(self, json_data):
-		# TODO Remove this for an event handler method.
-		for action in json_data['actions']:
-			action_function = json_data['actions'][action]
-			try:
-				getattr(self, action_function[0])(action_function[1])
-			except KeyError as error:
-				print('Key not recognised in "self.next_turn_actions": ' + str(error))
+	def __tick_event(self, event):
+		event.ticks_until_completion -= 1
+		if event.ticks_until_completion == 0:
+			getattr(self.clientside_events, event['event_id'])(event['event_params'])
+			self.event_queue.remove(event)
 
-	def warp(self, parameters):
-		# FIXME Everything to do with warp.
-		a = parameters['selected_position'][0] - self.galaxy.current_position[0]
-		b = parameters['selected_position'][1] - self.galaxy.current_position[1]
+	def event_loop(self, clientside_events):
+		# DONE Event management from ajax call
+		for event in clientside_events:
+			cur_event = clientside_events[event]
+			self.event_queue.append(Event(cur_event['event_id'], cur_event['ticks_until_completion'], cur_event['tick_measure'], cur_event['event_params']))
 
-		warp_range = math.sqrt((a ** 2) + (b ** 2))
-		warp_success_threshold = random.randint(20, 40)
-
-		if warp_range <= warp_success_threshold:
-			self.__warp_success(parameters)
-		elif warp_range - warp_success_threshold < 4:
-			# Add in stuff for undesired orbit, near other body
-			self.__warp_success(parameters)
-		elif warp_range - warp_success_threshold < 10:
-			# Add stuff for unstable orbit, headed to/from body
-			self.__warp_success(parameters)
-		elif warp_range - warp_success_threshold < 20:
-			# Add stuff for fleet being spread out.
-			self.__warp_success(parameters)
+		tick_old_day = self.tick.days
+		tick_old_month = self.tick.month
+		self.tick = self.tick + timedelta(hours=1)
+		if self.tick.month != tick_old_month:
+			for event in self.event_queue:
+				self.__tick_event(event)
+		elif self.tick.days != tick_old_day:
+			for event in self.event_queue:
+				if event.tick_measure != 'monthly':
+					self.__tick_event(event)
 		else:
-			# Fleet Dies, warp into planet/sun
-			warp_success = False
+			for event in self.event_queue:
+				if event.tick_measure == 'hourly':
+					self.__tick_event(event)
+
+		# TODO The maintenance costs, etc for every hour/day/month.
+
+	def warp(self, params):
+		# Params given: 'target_fleet_id', 'target_location', 'current_location'
+		for fleet in self.fleet_handler['fleets']:
+			if fleet.fleet_id == params['target_fleet_id']:
+				target_fleet = fleet
+				break
+		target_location = params['target_location']
+		current_location = params['current_location']
+		# TODO Everything to do with warp.
+
+		self.clientside_updates_list['Refresh'] = True
 
 	def __warp_success(self, parameters):
 		# TODO Complete this shit.
