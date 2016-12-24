@@ -10,10 +10,10 @@ class EventHandler(object):
 	def __init__(self):
 		self.events = []
 		for event_file in EVENTS_LIST:
-			self.events.append(Event(event_file))
+			self.events.append(StoryEvent(event_file))
 
 
-class Event(object):
+class StoryEvent(object):
 	def __init__(self, event):
 		self.ID = event.event['ID']
 		self.title = event.event['title']
