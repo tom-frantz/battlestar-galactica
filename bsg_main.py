@@ -5,7 +5,7 @@ import sqlite3
 import json
 import os
 import pickle
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import world
 from modules import events, fleets
@@ -16,7 +16,7 @@ def to_json(obj):
 	return obj.__dict__
 
 
-player_world = world.World(galaxy.Galaxy(), events.EventHandler(), fleets.FleetHandler())
+player_world = world.World(galaxy.Galaxy(), events.EventHandler(), fleets.FleetHandler(), datetime(1942, 7, 23, 8, 0, 0, 0))
 
 # The Flask initialization.
 app = Flask(__name__)
@@ -86,10 +86,20 @@ def index():
 
 	if request.method == 'POST':
 		pass
-	return render_template('main.html', player_world=json.dumps(player_world, default=to_json), saves=saves, trim_blocks=True, lstrip_blocks=True)
+	return render_template('main.html', player_world=json.dumps(player_world, default=to_json), saves=saves,
+						   trim_blocks=True, lstrip_blocks=True)
 
 
-# To create a save game or modify it. Is done in main.html
+@app.route('/event_loop', methods=['GET'])
+def events_fired():
+	global player_world
+	event_queue = request.get_json()
+
+	player_world.event_loop(event_queue)
+	return jsonify(player_world=player_world)
+
+
+# To create a save game or modify it. Is executed in main.html
 @app.route('/save_game', methods=['POST'])
 def save_game():
 	global player_world
@@ -108,16 +118,18 @@ def save_game():
 
 	for save in saves:
 		if jquery_data['save_name'] == save['save_name']:
-			db.execute('UPDATE saves SET pickle=?, modified_time=? WHERE save_name=?;', (pickle.dumps(player_world), time, jquery_data['save_name']))
+			db.execute('UPDATE saves SET pickle=?, modified_time=? WHERE save_name=?;',
+					   (pickle.dumps(player_world), time, jquery_data['save_name']))
 			db.commit()
 			return jsonify(time=time)
-	db.execute('INSERT INTO saves (save_name, pickle, create_time, modified_time, save_settings) VALUES (?, ?, ?, ?, ?);',
-			   (jquery_data['save_name'], pickle.dumps(player_world), time, time, '{"seed": ' + str(player_world.seed) + '}'))
+	db.execute(
+		'INSERT INTO saves (save_name, pickle, create_time, modified_time, save_settings) VALUES (?, ?, ?, ?, ?);',
+		(jquery_data['save_name'], pickle.dumps(player_world), time, time, '{"seed": ' + str(player_world.seed) + '}'))
 	db.commit()
 	return jsonify(time=time)
 
 
-# Code to check if a save is valid. Is done in index.html
+# Code to check if a save is valid. Is executed in index.html
 @app.route('/load_game', methods=['POST'])
 def validate_save():
 	global player_world
@@ -144,6 +156,11 @@ def next_turn():
 	player_world.next_turn(jquery_data)
 
 	return jsonify(success=True)
+
+
+@app.route('/trial')
+def trial():
+	return render_template("trial2.html")
 
 
 if __name__ == '__main__':

@@ -7,7 +7,8 @@ class FleetHandler(object):
 		self.fleets = []
 
 	def generate_battlestar(self, **kwargs):
-		fleet = Fleet([0, 0], 'Caprica', primary_fleet=True)
+		# TODO Set the stats for the battlestar.
+		fleet = Fleet('Colonial Fleet', [0, 0], 'Caprica', primary_fleet=True)
 		fleet.ships.append(Ship(0, 'Battlestar Galactica', 2700, 5040, 25000000, 3, subsystems=[
 			SubSystem(0, 'Bridge', 'command/navigation', {'manoeuvre': 10, 'warp_timer': 15, 'planning': 10, 'organisation': 10, 'skill_bonus': 10}),
 			SubSystem(1, 'Ion Engines', 'propulsion', {'thrust_max': 3, 'thrust_average': 0.5, 'manoeuvre': 10, 'base_fuel_consumption': 1}),
@@ -44,7 +45,8 @@ class FleetHandler(object):
 
 
 class Fleet(object):
-	def __init__(self, global_location, orbit_location, **kwargs):
+	def __init__(self, fleet_id, global_location, orbit_location, **kwargs):
+		self.fleet_id = fleet_id
 		self.primary_fleet = False
 		self.ships = []
 		# global_location = [x coord, y coord]
