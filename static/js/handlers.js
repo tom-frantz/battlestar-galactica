@@ -11,8 +11,9 @@ var handlers = ( function () {
     var galaxy_map = $('#galaxy-map');
 
     function __init(world) {
+        console.log('Handlers initialized.');
         map_scroll_toggle = true;
-        local_systems_list = world.local_systems_list();
+        local_systems_list = world.get_local_systems_list();
         var tick = world.get_tick();
         $("#date-time").text(tick.getDate() + '/' + tick.getMonth() + '/' + tick.getFullYear() + " " + tick.getHours() + ":00")
     }
@@ -40,10 +41,12 @@ var handlers = ( function () {
 
     function __generate_stars(solar_systems_list) {
         // Only pass in solar systems within the local limits. [-30, -30] to [30, 30]
+        console.log('Starting Star Generation.');
+        console.log(solar_systems_list);
         for (var solar_system in solar_systems_list) {
             var system = solar_systems_list[solar_system];
             var src = system['file'];
-            src.split(' ').join('_');
+            src = src.split(' ').join('_');
 
             var el = $("<img>").attr({
                 src: src,

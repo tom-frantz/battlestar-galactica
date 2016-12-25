@@ -29,7 +29,7 @@ class World(object):
 	def initial_galaxy_generation(self, seed, galaxy_gen_default=True):
 		# TODO This functionality needs to be merged within the __init methods.
 		self.galaxy.initial_galaxy_generation(galaxy_gen_default)
-		self.fleet_handler.generate_battlestar(local_location='Caprica')
+		self.fleet_handler.generate_battlestar()
 		if seed or seed == 0:
 			self.seed = seed
 		self.world_initiated = True

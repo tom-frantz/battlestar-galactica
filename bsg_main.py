@@ -5,7 +5,7 @@ import sqlite3
 import json
 import os
 import pickle
-from datetime import datetime, timedelta
+import datetime
 
 import world
 from modules import events, fleets
@@ -13,10 +13,14 @@ import modules.galaxy_gen as galaxy
 
 
 def to_json(obj):
-	return obj.__dict__
+	try:
+		return obj.__dict__
+	except AttributeError:
+		epoch = datetime.datetime.utcfromtimestamp(0)
+		return (obj - epoch).total_seconds() * 1000.0
 
 
-player_world = world.World(galaxy.Galaxy(), events.EventHandler(), fleets.FleetHandler(), datetime(1942, 7, 23, 8, 0, 0, 0))
+player_world = world.World(galaxy.Galaxy(), events.EventHandler(), fleets.FleetHandler(), datetime.datetime(1942, 7, 23, 8, 0, 0, 0))
 
 # The Flask initialization.
 app = Flask(__name__)
@@ -84,8 +88,6 @@ def index():
 	cur = db.execute('SELECT * FROM saves')
 	saves = cur.fetchall()
 
-	if request.method == 'POST':
-		pass
 	return render_template('main.html', player_world=json.dumps(player_world, default=to_json), saves=saves,
 						   trim_blocks=True, lstrip_blocks=True)
 

@@ -30,13 +30,14 @@ var world = (function () {
     }
 
     function __init(World) {
+        console.log('World initialized.');
         player_world = World;
 
         for (var solar_system in player_world['galaxy']['system_list']) {
             player_world['galaxy']['system_list'][solar_system].local_position = [
                 // TODO Change from global position in world to primary fleet's location.
-                player_world['galaxy']['system_list'][solar_system]['global_position'][0] - player_world['fleet_handler']['fleets'][0][0],
-                player_world['galaxy']['system_list'][solar_system]['global_position'][1] - player_world['fleet_handler']['fleets'][0][1]
+                player_world['galaxy']['system_list'][solar_system]['global_position'][0] - player_world['fleet_handler']['fleets'][0]['global_position'][0],
+                player_world['galaxy']['system_list'][solar_system]['global_position'][1] - player_world['fleet_handler']['fleets'][0]['global_position'][1]
             ];
 
             var system = player_world['galaxy']['system_list'][solar_system];
@@ -187,7 +188,7 @@ var world = (function () {
 
         // Functions to grab/put variables.
         player_world: get_player_world,
-        local_systems_list: get_local_systems_list,
+        get_local_systems_list: get_local_systems_list,
         get_selected_system: get_selected_system,
         put_selected_system: put_selected_system,
         get_tick: get_tick
