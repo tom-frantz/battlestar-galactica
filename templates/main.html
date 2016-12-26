@@ -174,38 +174,12 @@
                     <hr>
                 </div>
 
-                <ul class="nav nav-tabs" style="margin-bottom: 10px;">
-                    {#{% for fleet in player_world['fleet_handler']['fleets'] %}
-                        {% set current_fleet = player_world['fleet_handler']['fleets'][fleet] %}
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#{{ current_fleet['id'] }}" role="tab">{{ current_fleet['id'] }}</a>
-                        </li>
-                    {% endfor %}#}
+                <ul id="fleet_navigation_tabs" class="nav nav-tabs" style="margin-bottom: 10px;">
+                    <!-- This will be filled on the handlers.js init. -->
                 </ul>
 
-                <div class="tab-content">
-                    {#{% for fleet in player_world['fleet_handler']['fleets'] %}
-                        {% set current_fleet = ['fleet_handler']['fleets'][fleet] %}
-                        <div class="tab-pane fade" id="{{ current_fleet['id'] }}">
-                            <div class="col-md-12">
-                                <div id="planets-list-card" class="card">
-                                    {% for ship in current_fleet['ships'] %}
-                                        {% set current_ship = current_fleet['ships'][ship] %}
-                                        <div class="list-group list-group-flush">
-                                            <div class="card-header background-white">
-                                                <a class="collapsed" data-toggle="collapse" href="#ship_{{ current_ship['id'] }}">{{ current_ship['name'] }}</a>
-                                            </div>
-                                            <div id="ship_{{ current_ship['id'] }}" class="collapse">
-                                                <div class="card-block" style="border-bottom: 1px solid rgba(0,0,0,.125);">
+                <div id="fleet_content_tabs" class="tab-content">
 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}#}
                 </div>
 
             </div>
@@ -247,7 +221,7 @@
             baseimg.src = '/static/images/2016_tile.png';
 
             baseimg.onload = function () {
-                handlers.create_canvas();
+                handlers.generate_html(world.player_world());
             };
 
             // The toggle to fire tooltips.
