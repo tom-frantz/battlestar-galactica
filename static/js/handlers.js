@@ -42,13 +42,12 @@ var handlers = ( function () {
     function __generate_stars(solar_systems_list) {
         // Only pass in solar systems within the local limits. [-30, -30] to [30, 30]
         console.log('Starting Star Generation.');
-        console.log(solar_systems_list);
         for (var solar_system in solar_systems_list) {
             var system = solar_systems_list[solar_system];
             var src = system['file'];
             src = src.split(' ').join('_');
 
-            var el = $("<img>").attr({
+            var el = $("<img>", {
                 src: src,
                 alt: "star",
                 class: "solar-system",
@@ -66,6 +65,44 @@ var handlers = ( function () {
 
             galaxy_map.append(el);
         }
+        console.log('Completed Star Generation.');
+    }
+
+    function __generate_fleet_cards(player_world) {
+        console.log('Starting fleet card generation');
+        var fleet_navs = $('#fleet_navigation_tabs');
+        var fleet_content = $('#fleet_content_tabs');
+
+        for (var fleet in player_world['fleet_handler']['fleets']) {
+            var current_fleet = player_world['fleet_handler']['fleets'][fleet];
+            console.log('current fleet :');
+            console.log(current_fleet);
+            var current_fleet_id = current_fleet['fleet_id'].split(' ').join('_');
+            var nav_div = $('<li class="nav-item"></li>').append(
+                '<a class="nav-link" data-toggle="tab" href="#' + current_fleet_id + '" role="tab">' + current_fleet['fleet_id'] + '</a>'
+            );
+            fleet_navs.append(nav_div);
+
+            var tab_content_master = $('<div class="tab-pane fade" id="' + current_fleet_id + '"></div>');
+            tab_content_master.append('<div class="col-md-12"></div>');
+            var card_target = $('<div id="fleets' + current_fleet_id + '-list-card" class="card">');
+            tab_content_master.append(card_target);
+
+            for (var ship in current_fleet['ships']) {
+                console.log('Current Ship: ');
+                var current_ship = current_fleet['ships'][ship];
+                console.log(current_ship);
+                var current_ship_id = current_ship['id'];
+                var ship_card = $('<div class="list-group list-group-flush"></div>');
+                ship_card.append('<div class="card-header background-white"><a class="collapsed" data-toggle="collapse" href="#ship_' + current_ship_id + '">' + current_ship["name"] + '</a></div>');
+                // TODO Add content per ship for stats and the likes.
+                ship_card.append('<div id="ship_' + current_ship["id"] + '" class="collapse"><div class="card-block" style="border-bottom: 1px solid rgba(0,0,0,.125);">content</div></div>');
+                console.log(ship_card);
+                card_target.append(ship_card);
+            }
+
+            fleet_content.append(tab_content_master)
+        }
     }
 
     function __center_scroll_galaxy_map() {
@@ -75,11 +112,12 @@ var handlers = ( function () {
         galaxy_map.animate({ scrollTop: scroll_to_ver, scrollLeft:scroll_to_hor})
     }
 
-    function create_canvas() {
+    function generate_html(player_world) {
         // Creates canvas and stars for the navigation menu
         __draw_tiled_canvas($('#star-canvas')[0], $('#star_tile')[0]);
         __set_galaxy_map_height(galaxy_map);
         __generate_stars(local_systems_list);
+        __generate_fleet_cards(player_world);
     }
 
     function resize_window() {
@@ -203,7 +241,7 @@ var handlers = ( function () {
 
     return {
         init: __init,
-        create_canvas: create_canvas,
+        generate_html: generate_html,
         resize_window: resize_window,
         nav_click: nav_click,
         star_click: star_click,
